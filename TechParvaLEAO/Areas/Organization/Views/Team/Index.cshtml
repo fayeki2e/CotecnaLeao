@@ -1,0 +1,80 @@
+﻿@model IEnumerable<TechParvaLEAO.Areas.Organization.Models.Team>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Team List</h1>
+
+<p>
+    <a class="btn btn-sm btn-success" asp-action="Create">Create New</a>
+      <button onclick="exportData('TeamData' ,'TeamList')" class="btn btn-sm btn-info">
+    <span class="fa fa-download"></span>
+    Download Excel
+</button>
+
+</p>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            
+            <div class="card-body collapse" id="filter-for-search">
+                <form class="form-horizontal" action="" method="post">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="name">Employee Name</label>
+                                <div class="col-md-9">
+                                    @Html.TextBox("TeamName", "", htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessage("TeamName", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            
+                        </div>
+                    
+                  
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<table class="table" id="TeamData">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.TeamName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Deactivated)
+            </th>
+            
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TeamName)
+                </td>
+                  <td>
+                   @* @Html.DisplayFor(modelItem =>  item.Deactivated )*@
+                         @(item.Deactivated ? "Yes" : "No")
+
+                </td>
+
+        
+                
+                <td>
+                 
+                      <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Deactive" asp-route-id="@item.Id">Deactive</a>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

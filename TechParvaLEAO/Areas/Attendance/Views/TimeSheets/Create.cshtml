@@ -1,0 +1,192 @@
+﻿@using TechParvaLEAO.Areas.Attendance.Models
+@model TechParvaLEAO.Areas.Attendance.Models.TimeSheetViewModel
+
+@{
+    ViewBag.Title = "Enter Timesheet Data";
+}
+<h2>Select Employee to Enter Timesheet Data</h2>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="animated fadeIn">
+    <div class="row">
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <strong>Employee</strong> Selection
+                </div>
+                <div class="card-body">
+                    <form class="form-horizontal" id="timesheet_form" action="" method="post">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-md-3 col-form-label" for="emp-name">Employee</label>
+                                    <div class="col-md-9">
+                                        @Html.DropDownList("EmployeeId", null, "select employee", htmlAttributes: new { @class = "form-control employee", @onchange = "LoadEmployeedetails()" })
+                                        @Html.ValidationMessageFor(model => model.EmployeeId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    @Html.LabelFor(model => model.WeekNumber, htmlAttributes: new { @class = "col-md-3 col-form-label" })
+                                    <div class="col-md-9">
+                                        @Html.EditorFor(model => model.WeekNumber, new { htmlAttributes = new { @class = "form-control startdate",Type="week" } })
+                                        @Html.ValidationMessageFor(model => model.WeekNumber, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div id="emp-details">
+                                    <div id="emp_pablo">
+                                        <div class="form-group row">
+                                            <label class="col-md-3 col-form-label" for="employee_code">
+                                                Employee
+                                                Code
+                                            </label>
+                                            <div class="col-md-9">
+                                                <input class="form-control" id="Behalf_Emp_Code" disabled />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-3 col-form-label" for="employee_designation">
+                                                Employee
+                                                Designation
+                                            </label>
+                                            <div class="col-md-9">
+                                                <input class="form-control" id="Behalf_Emp_Designation" disabled />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+            <div class="table-responsive">
+                @if (Model != null)
+                {
+                    @Html.HiddenFor(x => Model.StartDate)
+                    @Html.HiddenFor(x => Model.EndDate)
+                    @Html.HiddenFor(x => Model.WeekInYear)
+                    @Html.HiddenFor(x => Model.WeekInMonth)
+
+                    <table class="table table-responsive-sm table-bordered table-striped table-sm">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">SR</th>
+                                <th rowspan="2">Day</th>
+                                <th rowspan="2">Date</th>
+                                <th rowspan="2">Job No</th>
+                                <th rowspan="2">Business Activity</th>
+                                <th colspan="2">Time</th>
+                                <th rowspan="2">Worked Hours</th>
+                                <!--th rowspan="2">Action</th>-->
+                            </tr>
+                            <tr>
+                                <th>IN</th>
+                                <th>OUT</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.TimeSheetEntries != null)
+                            {
+                                for (var i = 0; i < Model.TimeSheetEntries.Count(); i++)
+                                {
+                                    var color = "#e6ffb3";
+                                    if (Model.TimeSheetEntries[i].IsWeekOff)
+                                    {
+                                        color = "#ffa366";
+                                    }else if(Model.TimeSheetEntries[i].IsHoliday)
+                                    {
+                                        color = "gold";
+                                    }else if(Model.TimeSheetEntries[i].IsHalfDay)
+                                    {
+                                        color = "#FFFF99";
+                                    }
+                            <tr style="background-color:@color">
+                                @Html.HiddenFor(x => Model.TimeSheetEntries[i].Weekday)
+                                @Html.HiddenFor(x => Model.TimeSheetEntries[i].Date)
+                                @Html.HiddenFor(x => Model.TimeSheetEntries[i].IsWeekOff)
+                                @Html.HiddenFor(x => Model.TimeSheetEntries[i].IsHoliday)
+                                @Html.HiddenFor(x => Model.TimeSheetEntries[i].IsHalfDay)
+                                @Html.HiddenFor(x => Model.TimeSheetEntries[i].IsLeave)
+                                @Html.HiddenFor(x => Model.TimeSheetEntries[i].IsHalfDayLeave)
+                                <td>@(i + 1)</td>
+                                <td>
+                                    @Html.DisplayFor(x => Model.TimeSheetEntries[i].Weekday)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(x => Model.TimeSheetEntries[i].Date)
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(x => Model.TimeSheetEntries[i].JobNumber, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.TimeSheetEntries[i].JobNumber, "", new { @class = "text-danger" })
+
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(x => Model.TimeSheetEntries[i].Client, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.TimeSheetEntries[i].Client, "", new { @class = "text-danger" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(x => Model.TimeSheetEntries[i].InTime, new { @type = "time", @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.TimeSheetEntries[i].InTime, "", new { @class = "text-danger" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(x => Model.TimeSheetEntries[i].OutTime, new { @type = "time", @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.TimeSheetEntries[i].OutTime, "", new { @class = "text-danger" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(x => Model.TimeSheetEntries[i].HoursWorked, new { @type = "time", @class = "form-control", @readonly = "readonly" })
+                                </td>
+                            </tr>
+                                }
+                            }
+                            
+                        </tbody>
+                    </table>
+                }
+                <div id="orderItems">
+                    <table class="table table-responsive" id="orderdetailsItems"></table>
+                    <span id="orderItemError" style="color:red"></span>
+                </div>
+                <nav>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input id="submit" name="Submit" type="submit" value="Submit" class="btn btn-default" />
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- /.col-->
+</div>
+<!-- /.row-->
+}
+
+<div>
+    @Html.ActionLink("Back to List", "OnBehalfTimesheets")
+</div>
+
+@section Scripts {
+    <script src="~/js/Timesheet.js"></script>
+}
+<style>
+    span.error {
+        display: block;
+        visibility: hidden;
+        color: red;
+        font-size: 90%;
+    }
+
+    tr.error {
+        background-color: rgba(255,0,0,0.35);
+    }
+</style>
+
+

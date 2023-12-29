@@ -1,0 +1,136 @@
+﻿@model TechParvaLEAO.Areas.Expense.Models.PaymentRequest
+
+@{
+    ViewData["Title"] = "FinancePendingAdvanceInDetail";
+}
+
+<div>
+    <div class="float-left">
+        <a class="navbar-brand" href="#">
+            <img class="navbar-brand-full" src="~/img/cotecna.png" width="276" height="80"
+                 alt="CotecnaUI Logo">
+        </a>
+    </div>
+    <div class="float-right">
+        <table class="table table-responsive-sm table-bordered table-striped table-sm">
+            <tbody>
+                <tr>
+                    <td>Reference No.:</td>
+                    <td>@Html.DisplayFor(model => model.RequestNumber)</td>
+                </tr>
+                <tr>
+                    <td>Effective date:</td>
+                    <td>@Html.DisplayFor(model => model.PaymentRequestCreatedDate)</td>
+                </tr>
+                <tr>
+                    <td>Author & Administrator:</td>
+                    <td>@Html.DisplayFor(model => model.PaymentRequestCreatedBy.Name)</td>
+                </tr>
+                <tr>
+                    <td>Approved By:</td>
+                    <td>@Html.DisplayFor(model => model.PaymentRequestActionedBy.Name)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="table-responsive">
+    <h4 class="text-center">
+        Advance Form
+    </h4>
+    <dl>
+        <table class="table table-responsive-sm table-bordered table-striped table-sm">
+            <tbody>
+                <tr>
+                    <td colspan="3">Branch</td>
+                    <td>@Html.DisplayFor(model => model.Location.Name)</td>
+                </tr>
+                <tr>
+                    <td colspan="3">NAME</td>
+                    <td>@Html.DisplayFor(model => model.Employee.Name)</td>
+                </tr>
+                <tr>
+                    <td>DESIGNATION</td>
+                    <td>@Html.DisplayFor(model => model.Employee.Designation.Name)</td>
+                    <td>Emp Code</td>
+                    <td>@Html.DisplayFor(model => model.Employee.EmployeeCode)</td>
+                </tr>
+                <tr>
+                    <td>PERIOD</td>
+                    <td>@Html.DisplayFor(model => model.FinancialYear.Code)</td>
+                    <td>Advance Claim Reference No</td>
+                    <td>@Html.DisplayFor(model => model.RequestNumber)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="table table-responsive-sm table-bordered table-striped table-sm">
+            <tbody>
+                <tr>
+                    <td colspan="2">SUBMITTED BY : </td>
+                    <td colspan="2">APPROVED  BY :</td>
+                </tr>
+                <tr>
+                    <td>NAME /SIGNATURE :</td>
+                    <td>@Html.DisplayFor(model => model.Employee.Name)-@Html.DisplayFor(model => model.Employee.EmployeeCode)</td>
+                    <td>NAME /SIGNATURE :</td>
+                    <td>@Html.DisplayFor(model => model.PaymentRequestActionedBy.Name)-@Html.DisplayFor(model => model.PaymentRequestActionedBy.EmployeeCode)</td>
+                </tr>
+                <tr>
+                    <td>DATE :</td>
+                    <td>@Html.DisplayFor(model => model.PaymentRequestCreatedDate)</td>
+                    <td>DATE :</td>
+                    <td>@Html.DisplayFor(model => model.ActionDate)</td>
+                </tr>
+                <tr>
+                    <td>Data Submitted By :</td>
+                    <td>@Html.DisplayFor(model => model.PaymentRequestCreatedBy.Name)-@Html.DisplayFor(model => model.PaymentRequestCreatedBy.EmployeeCode)</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="table table-responsive-sm table-bordered table-striped table-sm">
+            <tbody>
+                <tr>
+                    <td colspan="2">SUBMITTED BY : </td>
+                    <td colspan="2">APPROVED  BY :</td>
+                </tr>
+                <tr>
+                    <td>Amount :</td>
+                    <td>@Html.DisplayFor(model => model.Amount)</td>
+                    @{
+                        var ForexAmount = Model.ForexAmountDisplay();
+                    }
+
+                    <td>Forex Amount :</td>
+                    <td> @Html.DisplayFor(model => ForexAmount)</td>
+                </tr>
+                <tr>
+                    <td>Exchange Rate :</td>
+                    <td> @Html.DisplayFor(model => model.ExchangeRate)</td>
+                    <td>ACTION DATE :</td>
+                    <td>@Html.DisplayFor(model => model.ActionDate)</td>
+                </tr>
+                <tr>
+                    <td>INR Amount :</td>
+                    @{
+                        var INRAmount = Model.INRAmountDisplay();
+                    }
+                    <td>@Html.DisplayFor(model => INRAmount)</td>
+                    <td>Settlment Mode</td>
+                    <td>@Html.DisplayFor(model => model.SettlementMode)</td>
+                </tr>
+                <tr>
+                    <td>BALANCE Amount:</td>
+                    <td>@Html.DisplayFor(model => model.BalanceAmount)</td>
+                    <td>Currency</td>
+                    <td>@Html.DisplayFor(model => model.Currency.Name)</td>
+                </tr>
+            </tbody>
+        </table>
+    </dl>
+</div>
+<div>
+    <!--<a asp-action="AdvancePendingApprovalList">Back to List</a>-->
+</div>

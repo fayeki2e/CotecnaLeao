@@ -1,0 +1,149 @@
+﻿@model IEnumerable<TechParvaLEAO.Areas.Attendance.Models.TimeSheet>
+@using TechParvaLEAO.Authorization
+@using TechParvaLEAO.Areas.Attendance.Models
+
+@{
+    ViewBag.Title = "Index";
+}
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <strong>December</strong> 2018
+                        <span>
+                            <strong>
+                                <i id="date"></i>
+                            </strong>
+                        </span>
+                    </div>
+                    <div class="card-body">
+                        <form class="form-horizontal" action="" method="post">
+                            <div class="row">
+                                <div class="col-md-12">
+
+                                    <div class="tab-content" id="nav-tabContent">
+                                        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+
+                                            <nav>
+
+                                                <ul class="pagination">
+                                                    @if (User.IsInRole(AuthorizationRoles.TIMESHEET))
+                                                    {
+                                                        <li class="page-item">
+                                                            <p class="page-link">
+                                                                @Html.ActionLink("Add Timesheet", "Create")
+                                                            </p>
+
+                                                        </li>
+                                                    }
+
+                                                    <div class="ml-auto p-2">
+                                                        <ul class="pagination">
+                                                            @if (User.IsInRole(AuthorizationRoles.MANAGER))
+                                                            {
+                                                                <span data-toggle="tooltip" data-placement="top" data-original-title="Select All">
+                                                                    <li class="btn btn-ghost btn-md">
+
+                                                                        <input type="checkbox" value="" style="zoom:1.5;" id="select-all">
+                                                                    </li>
+                                                                </span>
+                                                                <li>&nbsp;</li>
+                                                                <li>&nbsp;</li>
+                                                                <li>&nbsp;</li>
+                                                                <li>&nbsp;</li>
+                                                                <li>&nbsp;</li>
+                                                                <li>&nbsp;</li>
+
+                                                                <li class="page-item" onclick="return false">
+                                                                    <a class="btn btn-primary btn-md" href="#" id="approve_btn">Approve</a>
+                                                                </li>
+                                                            }
+                                                        </ul>
+                                                    </div>
+
+                                                </ul>
+
+                                            </nav>
+
+                                            <div class="table-responsive">
+                                                <table class="table table-responsive-sm table-bordered table-striped table-sm">
+
+                                                    <thead>
+                                                        <tr>
+                                                            <th rowspan="2">Select</th>
+                                                            <th rowspan="2">Employee Name</th>
+                                                            <th rowspan="2">Employee Code</th>
+                                                            <th rowspan="2">Designation</th>
+                                                            <th rowspan="2">Working Hrs</th>
+                                                            <th rowspan="2">Overtime Hrs</th>
+                                                            <th rowspan="2">Action</th>
+                                                        </tr>
+
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var item in Model)
+                                                        {
+                                                            <tr>
+                                                                <td>
+                                                                    <input type="checkbox" value="" id="">
+                                                                </td>
+                                                                <td>
+                                                                    @Html.DisplayFor(modelItem => item.Employee.Name)
+                                                                </td>
+                                                                <td>
+                                                                    @Html.DisplayFor(modelItem => item.Employee.EmployeeCode)
+                                                                </td>
+                                                                <td>
+                                                                    @Html.DisplayFor(modelItem => item.Employee.Designation.Name)
+                                                                </td>
+                                                                <td>
+                                                                    @Html.DisplayFor(modelItem => item.TotalWorkHours)
+                                                                </td>
+                                                                <td>
+                                                                    @Html.DisplayFor(modelItem => item.OvertimeAmount)
+                                                                </td>
+                                                                <td>
+                                                                    @Html.ActionLink("View", "MonthDetails", new { id = item.Id }, new { @class = "btn btn-primary btn-sm" })
+                                                                    @if (item.Status == TimesheetStatus.PENDING.ToString() && ((bool)ViewData["CanApproveReject"] == true))
+                                                                    {
+                                                                        @Html.ActionLink("Reject", "Reject", new { id = item.Id }, new { @class = "btn btn-danger btn-sm" })}
+                                                                    else if (item.Status == TimesheetStatus.APPROVED.ToString() || item.Status == TimesheetStatus.REJECTED.ToString())
+                                                                    {<text>Action is not available</text>}
+                                                                </td>
+                                                                <!--
+                                                                <td>
+                                                                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                                                                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                                                                </td>
+                                                                -->
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+
+                                                <nav>
+                                                </nav>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+                <!-- /.col-->
+            </div>
+            <!-- /.row-->
+
+        </div>
+        <!-- /.row-->
+
+    </div>
+</div>

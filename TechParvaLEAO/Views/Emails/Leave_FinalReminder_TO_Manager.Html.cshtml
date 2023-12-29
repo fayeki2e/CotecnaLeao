@@ -1,0 +1,43 @@
+﻿Content-Type: text/html; charset=utf-8
+@{
+    Layout = null;
+}
+@model TechParvaLEAO.Models.NotificationEmailViewModel
+@using System.Globalization
+
+FINAL REMINDER
+<br />
+Dear @Model.LeaveRequestDataList.First().ReportingManager,
+<br />
+<br />
+Your action on the leave applications of below listed employees is pending.
+<br />
+<br />
+<table border="1">
+    <tr>
+        <td>Emp. Code</td>
+        <td>Employee Name</td>
+        <td>From Date</td>
+        <td>To Date</td>
+        <td>No of days</td>
+        <td>Applied Date</td>
+        <td>Type</td>
+    </tr>
+    @foreach (var leaveRequest in Model.LeaveRequestDataList)
+    {
+        <tr>
+            <td>@leaveRequest.EmployeeCode</td>
+            <td>@leaveRequest.Employee</td>
+            <td>@leaveRequest.FromDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</td>
+            <td>@leaveRequest.ToDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</td>
+            <td>@leaveRequest.NumberOfDays</td>
+            <td>@leaveRequest.CreatedDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</td>
+            <td>@leaveRequest.LeaveType</td>
+        </tr>
+    }
+</table>
+<br />
+Note: the request will be rejected on non approval within 3 days of application.
+<br />
+<br />
+Best Regards

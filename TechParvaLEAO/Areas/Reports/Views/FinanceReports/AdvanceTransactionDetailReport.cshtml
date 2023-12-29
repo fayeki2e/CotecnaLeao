@@ -1,0 +1,308 @@
+﻿@model IEnumerable<TechParvaLEAO.Areas.Reports.Models.AdvanceTransactionDetailReportVm>
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@using X.PagedList.Mvc.Common;
+
+@{
+    ViewData["Title"] = "Advance Transactions Report";
+}
+
+<h1>Advance Transactions Report</h1>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <strong>Report Filter</strong>
+                <span data-toggle="tooltip" data-placement="top" data-original-title="click for Filter">
+                    &nbsp;
+                    <a class="btn btn-info btn-sm" data-toggle="collapse"
+                       data-target="#filter-for-search"><i class="fa fa-angle-double-down"></i></a>
+                </span>
+            </div>
+            <div class="card-body collapse" id="filter-for-search">
+                <form class="form-horizontal" action="" method="get">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="expenseClaim-from-date">Advance Request From Date</label>
+                                <div class="col-md-9">
+                                    @Html.Editor("AdvanceFromDate", new { htmlAttributes = new { @class = "form-control", type = "date" } })
+                                    @Html.ValidationMessage("AdvanceFromDate", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="expenseClaim-to-date">Advance Request To Date</label>
+                                <div class="col-md-9">
+                                    @Html.Editor("AdvanceToDate", new { htmlAttributes = new { @class = "form-control", type = "date" } })
+                                    @Html.ValidationMessage("AdvanceToDate", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="expenseClaim-to-date">Branch</label>
+                                <div class="col-md-9">
+                                    @Html.DropDownList("Branch", (SelectList)ViewData["Branch"], "Select", new { @class = "form-control" })
+                                    @Html.ValidationMessage("Branch", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-9">
+                                    <button class="btn btn-md btn-primary" type="submit">
+                                        <i class="fa fa-dot-circle-o"></i> Search
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+ 
+    
+		<div class="row">
+    <div class="col-md-12">
+
+        <div id="dataGrid"></div>
+    </div>
+
+</div>
+
+ 
+
+
+<script type="text/javascript" src="~/lib/DevExtreme/jquery-3.5.1.min.js"></script>
+<script type="text/javascript" src="~/lib/DevExtreme/exceljs.js"></script>
+<script type="text/javascript" src="~/lib/DevExtreme/jspdf.min.js"></script>
+<script type="text/javascript" src="~/lib/DevExtreme/jspdf.plugin.autotable.min.js"></script>
+<script type="text/javascript" src="~/lib/DevExtreme/FileSaver.js"></script>
+
+<script>
+
+    function get_AdvanceTransactionDetailReport()
+    {
+           $.ajax(
+            {
+                method: "POST",
+                url: '@Url.Action("AdvanceTransactionDetailReport", "AdvanceTransactionDetailReport")',
+                data: {},
+                success: function (data) {
+                   const PaidLeaveBalanceReport_data = data;
+                 //  console.log(data);
+                   get_grid(data);
+                },
+                error: function (msg) {
+                  
+                }
+            });
+    }
+
+
+function get_grid(data)
+{ 
+const gridInstance = $('#dataGrid').dxDataGrid({
+    dataSource: data,
+    keyExpr: 'id',
+    allowColumnReordering: true,
+    allowColumnResizing: true,
+    columnAutoWidth: true,
+    showBorders: true,
+    filterRow: {
+    visible: true,
+    applyFilter: 'auto',
+    },
+     filterPanel: { visible: false },              
+     headerFilter: { 
+     visible: true,
+     allowSearch: true
+        },
+    searchPanel: { visible: false,
+    highlightCaseSensitive: true},
+    columnChooser: {
+    enabled: false,
+    },
+    columnFixing: {
+      enabled: false,
+    },
+     export: {
+      enabled: true,
+      allowExportSelectedData: true,
+    },
+    columns: [ 
+             {
+              caption: 'Month',
+              dataField: 'month',
+                    dataType: 'date',
+      format: 'dd/MM/yyyy',  
+              allowFiltering: true,      
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+     
+             {
+              caption: 'Advance Request Number',
+              dataField: 'paymentRequestNumber',
+              dataType: 'String',
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+             {
+              caption: 'Comment',
+              dataField: 'comment',
+              dataType: 'String',
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+             {
+              caption: 'Branch',
+              dataField: 'branch',
+              dataType: 'String',
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+             {
+              caption: 'Employee Code',
+              dataField: 'employeeCode',
+              dataType: 'String',
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+             {
+              caption: 'Employee Name',
+              dataField: 'employeeName',
+              dataType: 'String',
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+
+             {
+              caption: 'Amount',
+              dataField: 'amount',
+              dataType: 'String',
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+             {
+              caption: 'Currency',
+              dataField: 'currency',
+              dataType: 'String',
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+            {
+              caption: 'Business Activity',
+              dataField: 'businessActivity',
+              dataType: 'String',
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+            {
+              caption: 'Customer Market',
+              dataField: 'customerMarket',
+              dataType: 'String',
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+            {
+              caption: 'Status',
+              dataField: 'status',
+              dataType: 'String',
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+             {
+              caption: 'Approved/Rejected By',
+              dataField: 'approveRejectedBy',
+              dataType: 'String',
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+             {
+              caption: 'Rejection Reason',
+              dataField: 'rejectedReason',
+              dataType: 'String',
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+       ],
+        toolbar: {
+      items: [
+        'groupPanel',
+        {
+          widget: 'dxButton',
+          location: 'after',
+          options: {
+            icon: 'exportpdf',
+            text: 'Export to PDF',
+            onClick() {
+              const doc = new jsPDF();
+          
+
+              DevExpress.pdfExporter.exportDataGrid({
+                jsPDFDocument: doc,
+                component: gridInstance,
+              }).then(() => {
+                doc.save('AdvanceTransactionDetailReport.pdf');
+              });
+            },
+          },
+        },
+        {
+          widget: 'dxButton',
+          location: 'after',
+          options: {
+            icon: 'exportexcel',
+            text: 'Export to Excel',
+            onClick() {
+          const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('AdvanceTransactionDetailReport');
+      
+
+
+      DevExpress.excelExporter.exportDataGrid({
+        component: gridInstance,
+        worksheet,
+        autoFilterEnabled: true,
+      }).then(() => {
+        workbook.xlsx.writeBuffer().then((buffer) => {
+          saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'AdvanceTransactionDetailReport.xlsx');
+        });
+      });
+       
+            },
+          },
+        },
+        'searchPanel',
+      ],
+    },
+
+
+  }).dxDataGrid('instance');
+  
+ 
+}
+
+</script>
+
+
+
+<script>
+	$(document).ready(function() { 	 
+	get_AdvanceTransactionDetailReport();
+	});
+</script>
+
+ 

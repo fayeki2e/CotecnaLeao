@@ -1,0 +1,55 @@
+﻿@using TechParvaLEAO.Areas.Organization.Models;
+@model TechParvaLEAO.Areas.Organization.Models.EmployeeWeeklyOff
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Employee Weekly Off</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="FormDate" class="control-label"></label>
+                <input asp-for="FormDate" class="form-control" type="date" />
+                <span asp-validation-for="FormDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ToDate" class="control-label"></label>
+                <input asp-for="ToDate" class="form-control" type="date" />
+                <span asp-validation-for="ToDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WeeklyOffDay" class="control-label"></label>
+                <select asp-for="WeeklyOffDay" class="form-control"></select>
+                <span asp-validation-for="WeeklyOffDay" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OtherWeeklyOffDay" class="control-label"></label>
+                @Html.DropDownListFor(Model => Model.OtherWeeklyOffDay, new SelectList(Enum.GetValues(typeof(DayOfWeek))), "select", htmlAttributes: new { @class = "form-control " })
+            </div>
+            <div class="form-group">
+                <label asp-for="OtherWeeklyOffRule" class="control-label"></label>
+                @Html.DropDownListFor(Model => Model.OtherWeeklyOffRule, new SelectList(Enum.GetValues(typeof(WorkDayType))), "select", htmlAttributes: new { @class = "form-control " })
+            </div>
+            <div class="form-group">
+                <label asp-for="EmployeeId" class="control-label"></label>
+                <select asp-for="EmployeeId" class="form-control" asp-items="ViewBag.EmployeeId"></select>
+                <span asp-validation-for="EmployeeId" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

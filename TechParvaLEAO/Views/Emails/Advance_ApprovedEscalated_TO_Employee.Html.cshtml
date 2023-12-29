@@ -1,0 +1,31 @@
+﻿Content-Type: text/html; charset=utf-8
+@{
+    Layout = null;
+}
+@model TechParvaLEAO.Models.NotificationEmailViewModel
+@using System.Globalization
+
+
+Dear @Model.PaymentRequestData.Employee,
+<br />
+<br />
+An advance request submitted is approved by @Model.PaymentRequestData.ActionByEmployee.
+<br />
+<br />
+The same is escalated to @Model.PaymentRequestData.NextActionByEmployee for validation as per authority Matrix.
+<br />
+<br />
+<table border="1">
+    <tr>
+        <td>Advance Request No:</td>
+        <td>Amount:</td>
+        <td>Comment:</td>
+    </tr>
+    <tr>
+        <td> @Model.PaymentRequestData.RequestNumber</td>
+        <td> @Model.PaymentRequestData.Currency  @Model.PaymentRequestData.Amount</td>
+        <td>@Model.PaymentRequestData.Comment</td>
+    </tr>
+</table>
+<br />
+Best Regards

@@ -1,0 +1,262 @@
+﻿@model IEnumerable<TechParvaLEAO.Areas.Reports.Models.ExpenseTransactionDetailReportVm>
+
+@{
+    ViewData["Title"] = "Expense Transaction Detail Report";
+    var search = (TechParvaLEAO.Areas.Reports.Models.FinanceReportSearchVm)ViewData["Search"];
+}
+
+<h1>Expense Transaction Detail Report</h1>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <strong>Report Filter</strong>
+                <span data-toggle="tooltip" data-placement="top" data-original-title="click for Filter">
+                    &nbsp;
+                    <a class="btn btn-info btn-sm" data-toggle="collapse"
+                       data-target="#filter-for-search"><i class="fa fa-angle-double-down"></i></a>
+                </span>
+            </div>
+            <div class="card-body collapse" id="filter-for-search">
+                <form class="form-horizontal" action="" method="get">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="expenseClaim-from-date">Approve/ Reject From</label>
+                                <div class="col-md-9">
+                                    @Html.Editor("ExpenseFromDate", new { htmlAttributes = new { @class = "form-control", type = "date" } })
+                                    @Html.ValidationMessage("ExpenseFromDate", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="expenseClaim-to-date">Approve/ Reject To</label>
+                                <div class="col-md-9">
+                                    @Html.Editor("ExpenseToDate", new { htmlAttributes = new { @class = "form-control", type = "date" } })
+                                    @Html.ValidationMessage("ExpenseToDate", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="expenseClaim-to-date">Branch</label>
+                                <div class="col-md-9">
+                                    @Html.DropDownList("Branch", (SelectList)ViewData["Branch"], "Select", new { @class = "form-control" })
+                                    @Html.ValidationMessage("Branch", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-responsive">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Month)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ExpenseDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Comment)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.OperationNumber)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Description)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ExpenseHead)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Branch)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.BusinessActivity)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CustomerMarket)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PaymentRequestNumber)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ApprovedRejected)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Status)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Amount)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.SubmittedBy)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ApproveRejectedBy)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ApproveRejectEscalatedTo)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ApproveRejectEscalated)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.RejectionReason)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.AdjustedAgainst)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Currency)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Amount)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.AmountOfAdvance)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ForexRate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.SupportingsInSystem)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.HardcopySubmitted)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.NumberOfLineItems)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CreditCard)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EmployeeStatus)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EmployeeName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EmployeeCode)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ReportingManager)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @{if (Model.Count() == 0)
+                    {
+                        <tr><td>No Data Found</td></tr>
+                    }
+                }
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(model => item.Month)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.ExpenseDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.Comment)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.OperationNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.ExpenseHead)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.Branch)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.BusinessActivity)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.CustomerMarket)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.PaymentRequestNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.ApprovedRejected)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.Status)
+                        </td>
+                        <td align="right">
+                            @Html.DisplayFor(model => item.Currency) @Html.DisplayFor(model => item.Amount)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.SubmittedBy)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.ApproveRejectedBy)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.ApproveRejectEscalatedTo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.ApproveRejectEscalated)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.RejectionReason)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.AdjustedAgainst)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.Currency)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.Amount)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.AmountOfAdvance)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.ForexRate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.SupportingsInSystem)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.HardcopySubmitted)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.NumberOfLineItems)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.CreditCard)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.EmployeeStatus)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.EmployeeName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.EmployeeCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.ReportingManager)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,86 @@
+﻿@using TechParvaLEAO.Authorization
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <strong>Search</strong>
+                <span data-toggle="tooltip" data-placement="top" data-original-title="click for Filter">
+                    &nbsp;
+                    <a class="btn btn-info btn-sm" data-toggle="collapse"
+                       data-target="#filter-for-search"><i class="fa fa-angle-double-down"></i></a>
+                </span>
+            </div>
+            <div class="card-body collapse" id="filter-for-search">
+                <form class="form-horizontal" action="" method="post">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <!--**************Employee***********-->
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="expenseClaim-from-date">From Date</label>
+                                <div class="col-md-9">
+                                    @Html.Editor("FromDate", new { htmlAttributes = new { @class = "form-control", type = "date" } })
+                                    @Html.ValidationMessage("FromDate", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="expenseClaim-to-date">To Date</label>
+                                <div class="col-md-9">
+                                    @Html.Editor("ToDate", new { htmlAttributes = new { @class = "form-control", type = "date" } })
+                                    @Html.ValidationMessage("ToDate", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="name">Status</label>
+                                <div class="col-md-9">
+                                    <select class="form-control" id="Status" name="Status">
+                                        <option value="">Select</option>
+                                        <option value="PENDING">Pending</option>
+                                        <option value="APPROVED">Approved</option>
+                                        <option value="REJECTED">Rejected</option>
+                                        <option value="CANCELED">Cancelled</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!--**************Manager***********-->
+                        </div>
+                        <div class="col-md-6">
+                            @if (User.IsInRole(AuthorizationRoles.MANAGER) || User.IsInRole(AuthorizationRoles.HR) || User.IsInRole(AuthorizationRoles.LOCATION_COORDINATOR))
+                            {
+                                <div class="form-group row">
+                                    <label class="col-md-3 col-form-label" for="name">Approved By</label>
+                                    <div class="col-md-9">
+                                        @Html.TextBox("ApprovedBy", "", htmlAttributes: new { @class = "form-control" })
+                                        @Html.ValidationMessage("ApprovedBy", "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 col-form-label" for="name">Employee Name</label>
+                                    <div class="col-md-9">
+                                        @Html.TextBox("EmployeeName", "", htmlAttributes: new { @class = "form-control" })
+                                        @Html.ValidationMessage("EmployeeName", "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 col-form-label" for="name">Employee Code</label>
+                                    <div class="col-md-9">
+                                        @Html.TextBox("EmployeeCode", "", htmlAttributes: new { @class = "form-control" })
+                                        @Html.ValidationMessage("EmployeeCode", "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-9">
+                                <button class="btn btn-md btn-primary" type="submit">
+                                    <i class="fa fa-dot-circle-o"></i> Search
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

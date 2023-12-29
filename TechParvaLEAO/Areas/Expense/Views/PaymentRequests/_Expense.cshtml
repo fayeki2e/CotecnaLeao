@@ -1,0 +1,332 @@
+﻿@model IEnumerable<TechParvaLEAO.Areas.Expense.Models.PaymentRequest>
+@using TechParvaLEAO.Authorization
+@using TechParvaLEAO.Areas.Expense.Models
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@using X.PagedList.Mvc.Common;
+
+<form>
+    <div class="col-lg-12" id="latest-reuimbersment-claims">
+        <div class="card">
+            <div class="card-header">
+                <i class="fa fa-align-justify"></i>Reuimbersment Settlement
+            </div>
+            <div class="card-body">
+                @if ((bool)ViewData["CanApproveReject"] && User.IsInRole(AuthorizationRoles.MANAGER))
+                {
+                    <nav>
+
+                        <ul class="pagination">
+                            <li data-toggle="tooltip" data-placement="top" data-original-title="Select All">
+                                <input type="checkbox" name="paymentrequestId" value="" id="select-all" style="zoom:1.5;">
+                            </li>
+                            <li>&nbsp;</li>
+                            <li>&nbsp;</li>
+                            <li>&nbsp;</li>
+                            <li>&nbsp;</li>
+                            <li>&nbsp;</li>
+                            <li>&nbsp;</li>
+                            <li class="page-item">
+                                <input type="submit" formaction="/Expense/PaymentRequests/Approve" value="Approve" class="btn btn-success btn-md" id="approve_btn" />
+                            </li>
+                        </ul>
+                    </nav>
+                }
+            <div class="table-responsive">
+                <table class="table table-responsive-sm table-bordered table-striped table-sm">
+                    <thead>
+                        <tr>
+                            @if (
+                         User.IsInRole(AuthorizationRoles.MANAGER)
+                         && (bool)ViewData["CanApproveReject"])
+                            {
+                                <th rowspan="2">Select</th>
+                            }
+                            <th>Expense Claim No</th>
+                            <th>Create Date</th>
+                            <th>Employee Code</th>
+                            <th>Employee Name</th>
+                            <th>Designation</th>
+                            <th>Claimed Amount</th>
+                            <th>History</th>
+                            <th>Comment</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                        <tr>
+                            @if (
+                         User.IsInRole(AuthorizationRoles.MANAGER)
+                         && (bool)ViewData["CanApproveReject"])
+                            {
+                                <td>
+                                    @if ((
+                                string.Equals(item.Status, PaymentRequestStatus.PENDING.ToString()) ||
+                                string.Equals(item.Status, PaymentRequestStatus.APPROVED_ESCALATED.ToString())
+                                ) && item.PaymentRequestActionedById == (int)ViewData["LoggedInEmployeeId"])
+                                    {
+                                        <input type="checkbox" class="checkBoxClass" name="paymentrequestId" value="@item.Id">
+                                    }
+                                </td>
+                            }
+
+                            <td>
+                                <a href="/Expense/PaymentRequests/ExpenseDetails/@item.Id">
+                                    @Html.DisplayFor(modelItem => item.RequestNumber)
+                                </a>
+                            </td>
+                            <td>@Html.DisplayFor(modelItem => item.PaymentRequestCreatedDate)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Employee.EmployeeCode)</td>
+                            <td><a href="#" data-toggle="collapse" data-target="#PreUnsettl-@item.Id">@Html.DisplayFor(modelItem => item.Employee.Name)</a></td>
+                            <td>@Html.DisplayFor(modelItem => item.Employee.Designation.Name)</td>
+                            <td><a href="#" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#ExpenseHead-@item.Id">@Html.DisplayFor(modelItem => item.Currency.Name) @Html.DisplayFor(modelItem => item.Amount)</a></td>
+                            <td>
+                                <a href="#" class="btn btn-success btn-sm" data-toggle="collapse"
+                                   data-target="#PaymentDetails-@item.Id">
+                                    <span data-toggle="tooltip" data-placement="top" data-original-title="click for Details">
+                                        Payment Details &nbsp;
+                                        <i class="fa fa-angle-double-down"></i>
+                                    </span>
+                                </a>
+                            </td>
+                            <td>@Html.DisplayFor(modelItem => item.Comment)</td>
+                            <td>
+                                @if (string.Equals(item.Status, PaymentRequestStatus.APPROVED.ToString()))
+                                {
+                                    <a href="#" class="btn btn-success btn-sm" data-toggle="collapse" data-target="#PreUnsettl-@item.Id">
+                                        <span data-toggle="tooltip" data-placement="top" data-original-title="click for Details">
+                                            @Html.DisplayFor(modelItem => item.Status) &nbsp;
+                                            <i class="fa fa-angle-double-down"></i>
+                                        </span>
+                                    </a>}
+                                else if (string.Equals(item.Status, PaymentRequestStatus.PENDING.ToString()) ||
+                                    string.Equals(item.Status, PaymentRequestStatus.APPROVED_ESCALATED.ToString()))
+                                {
+                                    <a href="#" class="btn btn-warning btn-sm" data-toggle="collapse"
+                                       data-target="#PreUnsettl-@item.Id">
+                                        <span data-toggle="tooltip" data-placement="top" data-original-title="click for Details">
+                                            @Html.DisplayFor(modelItem => item.Status)
+                                            <i class="fa fa-angle-double-down"></i>
+                                        </span>
+                                        &nbsp;
+                                    </a>
+                                }
+                                else if (string.Equals(item.Status, PaymentRequestStatus.REJECTED.ToString()))
+                                {
+                                    <a href="#" class="btn btn-danger btn-sm" data-toggle="collapse"
+                                       data-target="#PreUnsettl-@item.Id">
+                                        <span data-toggle="tooltip" data-placement="top" data-original-title="click for Details">
+                                            @Html.DisplayFor(modelItem => item.Status)
+                                            <i class="fa fa-angle-double-down"></i>
+                                        </span>
+                                        &nbsp;
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a href="#" class="btn btn-danger btn-sm" data-toggle="collapse"
+                                       data-target="#PreUnsettl-@item.Id">
+                                        <span data-toggle="tooltip" data-placement="top" data-original-title="click for Details">
+                                            @Html.DisplayFor(modelItem => item.Status)
+                                            <i class="fa fa-angle-double-down"></i>
+                                        </span>
+                                        &nbsp;
+                                    </a>
+                                }
+                            </td>
+                            <td>
+                                @if (User.IsInRole(AuthorizationRoles.MANAGER))
+                                {
+                                    @if ((bool)ViewData["CanApproveReject"] && (
+                             (string.Equals(item.Status, PaymentRequestStatus.PENDING.ToString()) ||
+                             string.Equals(item.Status, PaymentRequestStatus.APPROVED_ESCALATED.ToString()))
+                             && item.PaymentRequestActionedById == (int)ViewData["LoggedInEmployeeId"]))
+                                    {
+
+                                        @Html.ActionLink("Approve", "Approve", "PaymentRequests", new { id = item.Id }, new { @class = "btn btn-success btn-sm" })
+                                        @Html.ActionLink("Reject", "Reject", "PaymentRequests", new { id = item.Id }, new { @class = "btn btn-danger btn-sm" })
+
+                                    }
+                                }
+                                @if (User.IsInRole(AuthorizationRoles.FINANCE) && string.Equals(item.Status, PaymentRequestStatus.APPROVED.ToString()))
+                                {
+                                    @Html.ActionLink("SupportingReceived", "SupportingReceived", "PaymentRequests", new { id = item.Id }, new { @class = "btn btn-success btn-sm" })
+                                }
+                                else
+                                {
+                                    @if (ViewData["LoggedInEmployeeId"] != null && (item.PaymentRequestCreatedBy.Id == (int)ViewData["LoggedInEmployeeId"] || item.Employee.Id == (int)ViewData["LoggedInEmployeeId"]))
+                                    {
+                                        @Html.ActionLink("Copy", "Expense", "PaymentRequests", new { id = item.Id }, new { @class = "btn btn-success btn-sm" })
+                                    }
+                                }
+
+                            </td>
+                        </tr>
+                            <tr id="PaymentDetails-@item.Id" class="collapse">
+                                <th colspan="2">
+                                    Payment Details
+                                </th>
+                                <th colspan="10">
+                                    <div>
+                                        <div class="table-responsive">
+                                            <div class="table-responsive">
+                                                <table>
+                                                    <thead>
+                                                        <tr>
+                                                            <th>By</th>
+                                                            <th>Designation</th>
+                                                            <th>Approved Date</th>
+                                                            <th>Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var action in item.ApprovalActions)
+                                                        {
+                                                            <tr>
+                                                                <td>@Html.DisplayFor(modelItem => action.ActionBy.Name)</td>
+                                                                <td><span class="badge badge-info">@Html.DisplayFor(modelItem => action.ActionBy.Designation.Name)</span></td>
+                                                                <td>@Html.DisplayFor(modelItem => action.Timestamp)</td>
+                                                                <td>@Html.DisplayFor(modelItem => action.Action)</td>
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                            <table>
+                                                <thead>
+                                                    <tr>
+                                                        <th>Payment By</th>
+                                                        <th>Designation</th>
+                                                        <th>Payment Date</th>
+                                                        <th>Amount</th>
+                                                        <th>To Account</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>@Html.DisplayFor(modelItem => item.PostedBy.Name)</td>
+                                                        <td>
+                                                            <span class="badge badge-info">@Html.DisplayFor(modelItem => item.PostedBy.Designation.Name)</span>
+                                                        </td>
+                                                        <td>@Html.DisplayFor(modelItem => item.PostedOn)</td>
+                                                        <td>@Html.DisplayFor(modelItem => item.Currency.Name) @Html.DisplayFor(modelItem => item.Amount)</td>
+                                                        <td></td>
+                                                    </tr>
+
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                    </div>
+                                </th>
+                            </tr>
+                            <tr id="ExpenseHead-@item.Id" class="collapse">
+                                <th colspan="2">
+                                    Expense Head
+                                </th>
+                                <th colspan="14">
+                                    <div>
+                                        <div class="table-responsive">
+                                            <table>
+                                                <thead>
+                                                    <tr>
+                                                        <th>Head</th>
+                                                        <th>Amount</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var data in item.LineItems)
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                <span class="badge badge-info">@Html.DisplayFor(modelItem => data.ExpenseHead.ExpenseHeadDesc)</span>
+                                                            </td>
+                                                            <td>@Html.DisplayFor(modelItem => item.Currency.Name) @Html.DisplayFor(modelItem => data.Amount)</td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table>
+                                                <thead>
+                                                    <tr>
+                                                        <th>Supporting</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var data in item.GetSupportingDocuments())
+                                                    {
+                                                        <tr>
+                                                            <td><a href="/@Html.DisplayFor(modelItem => data)" target="_blank">@Html.DisplayFor(modelItem => data)</a></td>
+                                                        </tr>
+                                                    }
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                </th>
+                            </tr>
+                            <tr id="PreUnsettl-@item.Id" class="collapse">
+                                <td colspan="12">
+                                    <div class="table-responsive">
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>NO</th>
+                                                    <th>Advance Request No.</th>
+                                                    <th>Apply Date</th>
+                                                    <th>Comment</th>
+                                                    <th>Approve / Reject Date</th>
+                                                    <th>Approve / Reject Reason</th>
+                                                    <th>Approved By</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>@Html.DisplayFor(modelItem => item.Id)</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.RequestNumber)</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.PaymentRequestCreatedDate)</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.Comment)</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.ActionDate)</td>
+                                                    <td>
+                                                        <p class="text-success">@Html.DisplayFor(modelItem => item.RejectionReasons.Reason)</p>
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.PaymentRequestActionedBy.Name)<br>
+                                                        <span class="badge badge-info">@Html.DisplayFor(modelItem => item.PaymentRequestActionedBy.Designation.Name)</span>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+
+                        }
+                    </tbody>
+                </table>
+                @Html.PagedListPager((IPagedList)Model, page => Url.Action((String)ViewData["PageLinkURL"], "PaymentRequests", new { area = "Expense", id=page}), new PagedListRenderOptionsBase
+       {
+                    PageClasses = new string[] { "page-link" },
+                    UlElementClasses = new string[] { "pagination" },
+                    LiElementClasses = new string[] { "page-item" },
+                    DisplayItemSliceAndTotal = false,
+       })
+
+            </div>
+            </div>
+            <div class="card-footer">
+            </div>
+        </div>
+    </div>
+</form>
+@section scripts {
+    <script src="~/js/common.js"></script>
+}

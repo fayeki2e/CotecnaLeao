@@ -1,0 +1,23 @@
+﻿Content-Type: text/html; charset=utf-8
+@{
+    Layout = null;
+}
+@model TechParvaLEAO.Models.NotificationEmailViewModel
+@using System.Globalization
+
+Dear @Model.LeaveRequestData.ReportingManager,<br />
+<br />
+@Model.LeaveRequestData.CategoryType Leave of
+@Model.LeaveRequestData.Employee-@Model.LeaveRequestData.EmployeeCode for
+ the period @Model.LeaveRequestData.FromDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)
+@if (@Model.LeaveRequestData.HalfDayStart)
+{<span> (Half day Afternoon)</span>}
+ to
+@Model.LeaveRequestData.ToDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)
+@if (Model.LeaveRequestData.HalfDayEnd)
+{<span> (Half Day Morning)</span>} - (@Model.LeaveRequestData.NumberOfDays day/s) has been cancelled.<br />
+<br />
+Reason for cancellation – @Model.LeaveRequestData.CancelReason.
+<br />
+<br />
+Best Regards

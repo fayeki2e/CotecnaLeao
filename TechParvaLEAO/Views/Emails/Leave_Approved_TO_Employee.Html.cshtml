@@ -1,0 +1,38 @@
+﻿Content-Type: text/html; charset=utf-8
+@{
+    Layout = null;
+}
+@model TechParvaLEAO.Models.NotificationEmailViewModel
+@using System.Globalization
+
+
+Dear  @Model.LeaveRequestData.Employee - @Model.LeaveRequestData.EmployeeCode ,<br />
+<br />
+Your leave application for period  @Model.LeaveRequestData.FromDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)
+@if (@Model.LeaveRequestData.HalfDayStart)
+{<span> (Half day Afternoon)</span>}
+ to
+@Model.LeaveRequestData.ToDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)
+@if (Model.LeaveRequestData.HalfDayEnd)
+{<span> (Half Day Morning)</span>}  has been approved.<br />
+<br />
+<table border="1">
+    <tr>
+        <td>Leave Eligibility</td>
+        <td>Carried Forward</td>
+        <td>Total Opening Balance</td>
+        <td>Leave Utilized</td>
+        <td>Leave Balance</td>
+        <td>LWP days</td>
+    </tr>
+    <tr>
+        <td>@Model.LeaveRequestData.LeaveEligibility</td>
+        <td>@Model.LeaveRequestData.LeaveCarriedForward</td>
+        <td>@Model.LeaveRequestData.LeavesOpeningBalance</td>
+        <td>@Model.LeaveRequestData.LeavesUtilized</td>
+        <td>@Model.LeaveRequestData.LeavesBalance</td>
+        <td>@Model.LeaveRequestData.LWPDays</td>
+    </tr>
+</table>
+<br />
+    Best Regards

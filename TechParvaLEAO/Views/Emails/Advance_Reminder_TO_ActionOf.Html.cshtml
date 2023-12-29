@@ -1,0 +1,34 @@
+﻿Content-Type: text/html; charset=utf-8
+@{
+    Layout = null;
+}
+@model TechParvaLEAO.Models.NotificationEmailViewModel
+@using System.Globalization
+
+
+Dear @Model.PaymentRequestDataList.First().ReportingManager<br />
+<br />
+Following advance requests are pending for your validation <br />
+<table border="1">
+    <tr>
+        <td>Sr No:</td>
+        <td>Date of Request:</td>
+        <td>Advance Request No:</td>
+        <td>Employee Name:</td>
+        <td>Amount:</td>
+        <td>Comment:</td>
+    </tr>
+    @foreach (var paymentRequest in Model.PaymentRequestDataList)
+    {
+        <tr>
+            <td>@paymentRequest.Id</td>
+            <td>@paymentRequest.CreatedDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</td>
+            <td>@paymentRequest.RequestNumber</td>
+            <td>@paymentRequest.Employee</td>
+            <td>@paymentRequest.Currency  @paymentRequest.Amount</td>
+            <td>@paymentRequest.Comment</td>
+        </tr>
+    }
+</table>
+<br />
+Best Regards

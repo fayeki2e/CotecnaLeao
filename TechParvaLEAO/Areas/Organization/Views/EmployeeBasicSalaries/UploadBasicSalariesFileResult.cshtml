@@ -1,0 +1,62 @@
+﻿@model IEnumerable<TechParvaLEAO.Areas.Organization.Models.ViewModels.BasicSalaryDataImportResult>
+
+@{
+    ViewData["Title"] = "Employee Basic Salaries Result";
+}
+
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="card">
+            <div class="card-header">
+                <i class="fa fa-align-justify"></i>Status of Employee Basic Salary Upload
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.EmployeeCode)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.FromDate)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ToDate)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Salary)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Result)
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.EmployeeCode)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.FromDate)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ToDate)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Salary)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Result)
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

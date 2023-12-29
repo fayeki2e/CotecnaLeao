@@ -1,0 +1,305 @@
+﻿@model TechParvaLEAO.Areas.Leave.Models.ViewModels.NewLeaveViewModel
+@{
+    ViewBag.Title = "LeaveRequestForm";
+}
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <strong>Leave</strong> Managment
+                        <div class="down-arrow-btn" style="float: right;">
+                            <button class="btn btn-primary" type="button" data-toggle="collapse"
+                                    data-target="#primaryInfo"
+                                    aria-expanded="false" aria-controls="primaryInfo">
+                                <i class="fa fa-angle-double-down" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body collapse" id="primaryInfo">
+                        <div>
+                            <br>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <strong>Information</strong>
+                                        </div>
+                                        <div class="card-body">
+                                            <form class="form-horizontal" method="post">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group row">
+                                                            <label class="col-md-4 col-form-label"
+                                                                   for="employee-name">Employee Name</label>
+                                                            <div class="col-md-8">
+                                                                <span class="form-control">@Model.EmployeeName</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label class="col-md-4 col-form-label"
+                                                                   for="employee-code">Employee Code</label>
+                                                            <div class="col-md-8">
+                                                                <span class="form-control">@Model.EmployeeCode</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label class="col-md-4 col-form-label"
+                                                                   for="leave-approver">Leave Approver</label>
+                                                            <div class="col-md-8">
+                                                                <span class="form-control">@Model.LeaveApprover</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-6">
+
+                                                        <div class="table-responsive">
+                                                            <table class="table table-bordered">
+                                                                <tr>
+                                                                    <th>Annual leave Eligibility</th>
+                                                                    <td>@Model.AnnualLeaveEligibility</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>Leaves Utilized</th>
+                                                                    <td>@Model.LeavesUtilized</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>Leaves Pending</th>
+                                                                    <td>@Model.LeavesPendingApproval</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>Leaves without Pay(LWP)</th>
+                                                                    <td>@Model.LeavesWithoutPay</td>
+                                                                </tr>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <!-- /.col-->
+                                </div>
+                                <!-- /.row-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.col-->
+            </div>
+            <!-- /.row-->
+        </div>
+        <form id="RequestLeaveForm" enctype="multipart/form-data" method="post">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fa fa-align-justify"></i>Leave Application
+                        </div>
+                        <div class="card-body">
+                            @Html.Hidden("LoggedInEmployeeId", ViewData["Employee_Loggedin"])
+                            @Html.Hidden("DraftId", @Model.DraftId)
+                            @Html.Hidden("Employee_CanApplyOnBehalf", ViewData["Employee_CanApplyOnBehalf"])
+                            <span>@Html.ValidationSummary(false, "", new { @class = "text-danger" })</span>
+
+                            <div class="row">
+                                <div class="col-md-6 mycontainer">
+                                    <div class="form-group row">
+                                        <label class="col-md-3 col-form-label required" for="leave-type">
+                                            Leave
+                                            Type
+                                        </label>
+                                        <div class="col-md-9">
+                                            @Html.DropDownListFor(m=>m.LeaveTypeId, (IEnumerable<SelectListItem>)ViewData["LeaveTypeId"], "select Leave Type", htmlAttributes: new
+                                       {
+                                           @class = "form-control",
+                                           @onchange = "LoadCategories(this); LoadCompOffs();GetLeaveNumberOfDays();"
+                                       })
+                                            @Html.ValidationMessageFor(model => model.LeaveTypeId, "", new { @class = "text-danger" })
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-md-3 col-form-label required" for="leave-type">
+                                            Category
+                                        </label>
+                                        <div class="col-md-9">
+                                            @Html.DropDownListFor(m => m.LeaveCategoryId, (IEnumerable<SelectListItem>)ViewData["LeaveCategoryId"], "select Leave Category", htmlAttributes: new
+                                       {
+                                           @class = "form-control leaveCategory",
+                                           @onchange = "LoadSubCategory(this); CheckPlannedLeave();GetLeaveNumberOfDays();"
+                                       })
+                                            <span class="error1">please select category as Planned.</span>
+                                            @Html.ValidationMessageFor(model => model.LeaveCategoryId, "", new { @class = "text-danger" })
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-md-3 col-form-label required">
+                                            Sub Category
+                                        </label>
+                                        <div class="col-md-9">
+                                            @Html.DropDownListFor(m => m.LeaveSubCategoryId, (IEnumerable<SelectListItem>)ViewData["LeaveSubCategoryId"], "select Leave Sub Category", htmlAttributes: new
+                                       {
+                                           @class = "form-control leaveSubCategory",
+                                                @onchange = "CheckMedical(); CheckMaternityLeave();GetLeaveNumberOfDays();",
+
+                                       })
+                                            @Html.ValidationMessageFor(model => model.LeaveSubCategoryId, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-md-3 col-form-label required" for="file-input">
+                                            Leave
+                                            Reason
+                                        </label>
+                                        <div class="col-md-9">
+                                            @Html.EditorFor(model => model.LeaveNature, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.LeaveNature, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-md-3 col-form-label required"
+                                               for="from-leave-date">From</label>
+                                        <div class="col-md-9">
+                                            <input asp-for="StartDate" class="form-control" type="date" onchange="leaveDetail(); GetLeaveNumberOfDays();check_team_leaves();"/>
+                                            @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+                                        </div>
+                                        <label class="col-md-3 col-form-label" for="from-leave-date">
+                                            Half
+                                            Day
+                                        </label>
+                                        <div class="col-md-9 col-form-label">
+                                            @Html.EditorFor(model => model.HalfDayStart, new { htmlAttributes = new { @onchange = "switchhalfday('start');GetLeaveNumberOfDays();" } })
+                                            @Html.ValidationMessageFor(model => model.HalfDayStart, "", new { @class = "text-danger" })
+                                             &nbsp;<label class="form-check-label"
+                                                   for="inline-checkboxfrom2">Afternoon</label>
+                                                   &nbsp;
+                                                    <div class="form-check form-check-inline mr-1">
+                                            @Html.EditorFor(model => model.HalfDayEnd, new { htmlAttributes = new { @onchange = "switchhalfday('end'); GetLeaveNumberOfDays();" } })
+                                            @Html.ValidationMessageFor(model => model.HalfDayEnd, "", new { @class = "text-danger" })
+                                             &nbsp;<label class="form-check-label" for="inline-checkboxfrom2">
+                                                Morning
+                                            </label>
+                                                </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row" id="compoff">
+                                        <label class="col-md-3 col-form-label">
+                                            Comp off against date
+                                        </label>
+                                        <div class="col-md-9">
+                                            @Html.DropDownListFor(m => m.CompOffAgainstDateId, Enumerable.Empty<SelectListItem>(), "select Comp Off against date", htmlAttributes: new { @class = "form-control " })
+                                            @Html.ValidationMessageFor(model => model.CompOffAgainstDateId, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-md-3 col-form-label" for="file-input">
+                                            Total No.
+                                            Days
+                                        </label>
+                                        <div class="col-md-9">
+                                            <input class="form-control" id="TotalNumberOfDays" name="TotalNumberOfDays" type="text" onchange="CheckMedical()" disabled>
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group row" id="medical-doc">
+                                        <label class="col-md-3 col-form-label required" for="file-input">
+                                            Upload Medical
+                                            Documents
+                                        </label>
+                                        <div class="col-md-9">
+                                            <input id="supportings-reuim" type="file" name="documents"
+                                                   multiple>
+                                            <!--<input name="file-input" id="file-input01" type="file">-->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        @Html.LabelFor(model => model.Type, "Applicant", htmlAttributes: new { @class = "col-md-3 col-form-label" })
+                                        <div class="col-md-9">
+                                            @Html.DropDownList("Type", new List<SelectListItem>()
+                                            {
+                                                         new SelectListItem{Text="Myself", Value="1"},
+                                                         new SelectListItem{Text="On Behalf", Value="2"}
+                                            }, "   Applicant Type", new { @class = "form-control", @onchange = "MyselfOnbehalf()" })
+                                            @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-md-3 col-form-label" for="emp-name">Employee</label>
+                                        <div class="col-md-9">
+                                            @Html.DropDownListFor(m => m.EmployeeId, (IEnumerable<SelectListItem>)ViewData["EmployeeId"], "select employee", htmlAttributes: new { @class = "form-control employee", @onchange = "LoadEmployeedetails();LoadLeaveTypes();LoadCompOffs();" })
+                                            @Html.ValidationMessageFor(model => model.EmployeeId, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div id="behalf-details">
+
+
+
+                                        <div class="form-group row">
+                                            <label class="col-md-3  col-form-label">Designation</label>
+                                            <div class="col-md-9">
+                                                <span id="Behalf_Emp_Designation"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-3  col-form-label">Location</label>
+                                            <div class="col-md-9">
+                                                <span id="Behalf_Emp_Location"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-md-3 col-form-label required" for="to-leave-date">To</label>
+                                            <div class="col-md-9">
+                                                <input asp-for="EndDate" class="form-control" type="date" onchange="GetLeaveNumberOfDays();check_team_leaves();" />
+                                                @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
+                                            </div>
+                                       
+                                            <br />
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Submit" id="submit" class="btn btn-md btn-primary" onsubmit="CheckLeaveDays(); return false;" />
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+<!-- /.col-->
+<style>
+    .required:after {
+        content: "*";
+        font-weight: bold;
+        color: red;
+    }
+
+    span.error1 {
+        display: none;
+        color: red;
+        font-size: 90%;
+    }
+
+    tr.error1 {
+        background-color: rgba(255,0,0,0.35);
+    }
+</style>
+
+@section Scripts {
+    <script src="~/js/RequestLeaveForm.js?version='03/12/2022'"></script>
+}

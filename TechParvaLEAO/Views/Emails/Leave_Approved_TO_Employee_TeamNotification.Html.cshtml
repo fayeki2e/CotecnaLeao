@@ -1,0 +1,21 @@
+﻿Content-Type: text/html; charset=utf-8
+@{
+    Layout = null;
+}
+@model TechParvaLEAO.Models.NotificationEmailViewModel
+@using System.Globalization
+
+
+Dear @Model.EmployeeDataList[0].Name   ,<br />
+<br />
+
+Kindly be informed leave request for @Model.obj_leaverequest[0].EmployeeName member of Team - @Model.DetailButtonUrl  for period of @Convert.ToDateTime(@Model.obj_leaverequest[0].StartDate).ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)
+to @Convert.ToDateTime(@Model.obj_leaverequest[0].EndDate).ToString("dd/MM/yyyy", CultureInfo.InvariantCulture) has been approved.
+
+
+<br />
+<br />
+
+ 
+<br />
+    Best Regards

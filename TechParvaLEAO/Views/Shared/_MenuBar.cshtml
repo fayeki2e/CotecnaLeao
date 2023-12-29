@@ -1,0 +1,491 @@
+﻿@using TechParvaLEAO.Authorization
+<div class="sidebar">
+    <nav class="sidebar-nav">
+        <ul class="nav">
+            @if (SignInManager.IsSignedIn(User))
+            {
+                if (User.IsInRole(AuthorizationRoles.EMPLOYEE))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Home/EmployeeDashboard">
+                            <i class="nav-icon icon-speedometer"></i> Dashboard
+                        </a>
+                    </li>
+                }
+                if (User.IsInRole(AuthorizationRoles.MANAGER))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Home/ManagerDashboard">
+                            <i class="nav-icon icon-speedometer"></i> Manager Dashboard
+                        </a>
+                    </li>
+                }
+                if (User.IsInRole(AuthorizationRoles.HR))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Home/HRDashboard">
+                            <i class="nav-icon icon-speedometer"></i> HR Dashboard
+                        </a>
+                    </li>
+                }
+                if (User.IsInRole(AuthorizationRoles.LOCATION_COORDINATOR))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Home/LocationCoordinatorDashboard">
+                            <i class="nav-icon icon-speedometer"></i> Coordinator Dashboard
+                        </a>
+                    </li>
+                }
+
+                if (User.IsInRole(AuthorizationRoles.FINANCE))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Home/FinanceDashboard">
+                            <i class="nav-icon icon-speedometer"></i>Finance Dashboard
+                        </a>
+                    </li>
+
+                    <!-- *****************Finance Block******************* -->
+                    <li class="nav-title">Finance Components</li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Expense/PaymentRequests/FinancePendingAdvanceList">
+                            <i class="nav-icon fa fa-cart-arrow-down"></i> Advance Payment
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Expense/PaymentRequests/FinancePendingExpenseList">
+                            <i class="nav-icon fa fa-cart-arrow-down"></i> Expense Payment
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Expense/PaymentRequests/PendingDocumentSearchModelList">
+                            <i class="nav-icon icon-puzzle"></i> Pending Document
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Expense/PaymentRequests/FinanceSettlementList">
+                            <i class="nav-icon icon-puzzle"></i> Settlement
+                        </a>
+                    </li>
+                }
+                if (User.IsInRole(AuthorizationRoles.EMPLOYEE))
+                {
+                    <!-- *****************Employee Block******************* -->
+                    <li class="nav-title">My Components</li>
+                    <li class="nav-item nav-dropdown">
+                        <a class="nav-link nav-dropdown-toggle" href="#">
+                            <i class="nav-icon fa fa-calendar"></i> Timesheet
+                        </a>
+                        <ul class="nav-dropdown-items">
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Attendance/TimeSheets/">
+                                    <i class="nav-icon icon-puzzle"></i> View
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item nav-dropdown">
+                        <a class="nav-link nav-dropdown-toggle" href="#">
+                            <i class="nav-icon fa fa-money" aria-hidden="true"></i>
+                            Expense
+                        </a>
+                        <ul class="nav-dropdown-items">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Expense/PaymentRequests/Advance">
+                                    <i class="nav-icon icon-wallet"></i> Advance
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Expense/PaymentRequests/Expense">
+                                    <i class="nav-icon icon-paper-clip"></i> Reimbursement
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Expense/PaymentRequests/AdvanceListDraft">
+                                    <i style="color:red" class="nav-icon icon-pencil"></i> Advance Drafts
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Expense/PaymentRequests/ExpenseListDraft">
+                                    <i style="color:red" class="nav-icon icon-pencil"></i> Reimbursement Drafts
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Expense/PaymentRequests/AdvanceList">
+                                    <i class="nav-icon icon-wallet"></i> Advance Status
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Expense/PaymentRequests/ExpenseList">
+                                    <i class="nav-icon icon-paper-clip"></i> Expense Status
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item nav-dropdown">
+                        <a class="nav-link nav-dropdown-toggle" href="#">
+                            <i class="nav-icon fa fa-tasks" aria-hidden="true"></i> Leave
+                        </a>
+                        <ul class="nav-dropdown-items">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Leave/LeaveRequests/NewRequestLeave">
+                                    <i class="nav-icon icon-puzzle"></i> New Request
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Leave/LeaveRequests/LeaveListDraft">
+                                    <i style="color:red" class="nav-icon icon-pencil"></i> Leave Drafts
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Leave/LeaveRequests/LeaveListOwn">
+                                    <i class="nav-icon icon-puzzle"></i> Status
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Leave/LeaveCreditAndUtilizations/CompOffsListOwn">
+                                    <i class="nav-icon icon-puzzle"></i> Comp-Off List
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                }
+                <li class="divider"></li>
+                if (User.IsInRole(AuthorizationRoles.MANAGER) ||
+                    User.IsInRole(AuthorizationRoles.TIMESHEET) ||
+                    User.IsInRole(AuthorizationRoles.LOCATION_COORDINATOR))
+                {
+                    <li class="nav-title">Team Components</li>
+                    <li class="nav-item nav-dropdown">
+                        <a class="nav-link nav-dropdown-toggle" href="#">
+                            <i class="nav-icon fa fa-calendar"></i> Timesheet
+                        </a>
+                        <ul class="nav-dropdown-items">
+                            @if (User.IsInRole(AuthorizationRoles.MANAGER))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Attendance/Timesheets/TimesheetForApproval">
+                                        <i class="nav-icon icon-calculator"></i> View
+                                    </a>
+                                </li>
+                            }
+                            @if (User.IsInRole(AuthorizationRoles.TIMESHEET))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Attendance/TimeSheets/OnBehalfTimesheets">
+                                        <i class="nav-icon icon-puzzle"></i> View
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </li>
+
+                    <li class="nav-item nav-dropdown">
+                        <a class="nav-link nav-dropdown-toggle" href="#">
+                            <i class="nav-icon fa fa-money" aria-hidden="true"></i> Expense
+                        </a>
+                        <ul class="nav-dropdown-items">
+                            @if (User.IsInRole(AuthorizationRoles.MANAGER))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Expense/PaymentRequests/AdvancePendingApprovalList">
+                                        <i class="nav-icon icon-puzzle"></i> Approve Advance Requests
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Expense/PaymentRequests/ExpensePendingApprovalList">
+                                        <i class="nav-icon icon-puzzle"></i> Approve Expense Claims
+                                    </a>
+                                </li>
+
+                            }
+                            @if (User.IsInRole(AuthorizationRoles.LOCATION_COORDINATOR))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Expense/PaymentRequests/AdvanceOnBehalf">
+                                        <i class="nav-icon icon-wallet"></i> Advance
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Expense/PaymentRequests/ExpenseOnBehalf">
+                                        <i class="nav-icon icon-paper-clip"></i> Reimbursement
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Expense/PaymentRequests/AdvanceListDraft">
+                                        <i style="color:red" class="nav-icon icon-pencil"></i> Advance Drafts
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Expense/PaymentRequests/ExpenseListDraft">
+                                        <i style="color:red" class="nav-icon icon-pencil"></i> Reimbursement Drafts
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Expense/PaymentRequests/AdvanceOnBehalfList">
+                                        <i class="nav-icon icon-puzzle"></i> View Advance
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Expense/PaymentRequests/ExpenseOnBehalfList">
+                                        <i class="nav-icon icon-puzzle"></i> View Expense
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </li>
+
+                    <li class="nav-item nav-dropdown">
+                        <a class="nav-link nav-dropdown-toggle" href="#">
+                            <i class="nav-icon fa fa-tasks" aria-hidden="true"></i> Leave
+                        </a>
+                        <ul class="nav-dropdown-items">
+                            @if (User.IsInRole(AuthorizationRoles.MANAGER))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Leave/LeaveRequests/LeavesPendingApprovalList">
+                                        <i class="nav-icon icon-puzzle"></i> Approve
+                                    </a>
+                                </li>
+                            }
+                            @if (User.IsInRole(AuthorizationRoles.LOCATION_COORDINATOR))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Leave/LeaveRequests/RequestLeaveFormOnBehalf">
+                                        <i class="nav-icon icon-puzzle"></i> New Request
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Leave/LeaveRequests/OnBehalfLeaves">
+                                        <i class="nav-icon icon-puzzle"></i> View
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Leave/LeaveCreditAndUtilizations">
+                                        <i class="nav-icon icon-puzzle"></i> Comp-Off List
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </li>
+                }
+                @if (User.IsInRole(AuthorizationRoles.MASTER) ||
+            User.IsInRole(AuthorizationRoles.FINANCE_MASTER) ||
+            User.IsInRole(AuthorizationRoles.HR_MASTER))
+                {
+                    <li class="divider"></li>
+                    <li class="nav-title">Masters</li>
+                    @if (User.IsInRole(AuthorizationRoles.HR_MASTER))
+                    {
+                        <!--
+                            <li class="nav-item nav-dropdown">
+                                <a class="nav-link nav-dropdown-toggle" href="#">
+                                    <i class="nav-icon fa fa-calendar"></i> Timesheet
+                                </a>
+                                <ul class="nav-dropdown-items">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/Attendance/LocationOvertimeRules">
+                                            <i class="nav-icon icon-puzzle"></i> Location Overtime Rules
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/Attendance/Clients">
+                                            <i class="nav-icon icon-puzzle"></i> Client
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/Attendance/Jobs">
+                                            <i class="nav-icon icon-puzzle"></i> Job
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        -->
+                        <li class="nav-item nav-dropdown">
+                            <a class="nav-link nav-dropdown-toggle" href="#">
+                                <i class="nav-icon fa fa-tasks" aria-hidden="true"></i> Leave
+                            </a>
+                            <ul class="nav-dropdown-items">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Leave/Holidays">
+                                        <i class="nav-icon icon-puzzle"></i> Holiday
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Leave/LeaveAccountingPeriods">
+                                        <i class="nav-icon icon-puzzle"></i> Leave Accounting Period
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Leave/LeaveCategories">
+                                        <i class="nav-icon icon-puzzle"></i> Leave Category
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Leave/LeaveSubCategories">
+                                        <i class="nav-icon icon-puzzle"></i> Leave Sub Category
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Leave/LeaveRejectionReasons">
+                                        <i class="nav-icon icon-puzzle"></i> Leave Rejection Reason
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Leave/LeaveTypes">
+                                        <i class="nav-icon icon-puzzle"></i> Leave Type
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    if (User.IsInRole(AuthorizationRoles.FINANCE_MASTER))
+                    {
+                        <li class="nav-item nav-dropdown">
+                            <a class="nav-link nav-dropdown-toggle" href="#">
+                                <i class="nav-icon fa fa-money" aria-hidden="true"></i> Finance
+                            </a>
+                            <ul class="nav-dropdown-items">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Expense/BusinessActivities">
+                                        <i class="nav-icon icon-puzzle"></i> Business Activity
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Expense/CustomerMarkets">
+                                        <i class="nav-icon icon-puzzle"></i> Customer Market
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Expense/BusinessActivityCustomerMarketMappings">
+                                        <i class="nav-icon icon-puzzle"></i> Business Activity Customer Market Mapping
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Expense/Currencies">
+                                        <i class="nav-icon icon-puzzle"></i> Currency
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Expense/ExpenseHeads">
+                                        <i class="nav-icon icon-puzzle"></i> Expense Head
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Expense/ExpenseHeadExpenseProfileMappings">
+                                        <i class="nav-icon icon-puzzle"></i> Expense Head Expense Profile Mappings
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Expense/PaymentRequestRejectionReasons">
+                                        <i class="nav-icon icon-puzzle"></i> Advance/ Expense Rejection Reasons
+                                    </a>
+                                </li>
+                                <!--
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/Organization/EmployeeClaimSeries">
+                                            <i class="nav-icon icon-puzzle"></i> Expense Claim Series
+                                        </a>
+                                    </li>
+                                -->
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Organization/ApprovalLimitProfiles">
+                                        <i class="nav-icon icon-puzzle"></i> Approval Limit Profiles
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Organization/FinancialYears">
+                                        <i class="nav-icon icon-puzzle"></i> Financial Year
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Organization/ExpenseProfiles">
+                                        <i class="nav-icon icon-puzzle"></i> Expense Mapping Profiles
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    @if (User.IsInRole(AuthorizationRoles.HR_MASTER))
+                    {
+                        <li class="nav-item nav-dropdown">
+                            <a class="nav-link nav-dropdown-toggle" href="#">
+                                <i class="nav-icon fa fa-users" aria-hidden="true"></i> Organization
+                            </a>
+                            <ul class="nav-dropdown-items">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Organization/Employees">
+                                        <i class="nav-icon icon-puzzle"></i> Employee
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Organization/Team">
+                                        <i class="nav-icon icon-puzzle"></i> Team
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Organization/EmployeeBasicSalaries">
+                                        <i class="nav-icon icon-puzzle"></i> Employee Basic Salary
+                                    </a>
+                                </li>
+                                <!--
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/ApplicationUsers">
+                                            <i class="nav-icon icon-puzzle"></i> Login Accounts
+                                        </a>
+                                    </li>
+                                -->
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Organization/Designations">
+                                        <i class="nav-icon icon-puzzle"></i> Designation
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Organization/Locations">
+                                        <i class="nav-icon icon-puzzle"></i> Location
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Organization/OvertimeRules">
+                                        <i class="nav-icon icon-puzzle"></i> Overtime Rules
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                }
+            }
+
+            @if (User.IsInRole(AuthorizationRoles.FINANCE) ||
+         User.IsInRole(AuthorizationRoles.HR) || User.IsInRole(AuthorizationRoles.MANAGER))
+            {
+                <li class="divider"></li>
+                <li class="nav-title">Reports</li>
+            }
+
+            @if (User.IsInRole(AuthorizationRoles.FINANCE)  || User.IsInRole(AuthorizationRoles.MANAGER))
+            {
+                <li class="nav-item nav-dropdown">
+                    <a class="nav-link " href="/Reports/FinanceReports">
+                        <i class="nav-icon fa fa-money" aria-hidden="true"></i> Finance Reports
+                    </a>
+                </li>
+            }
+            @if (User.IsInRole(AuthorizationRoles.HR) || User.IsInRole(AuthorizationRoles.MANAGER))
+            {
+                <li class="nav-item nav-dropdown">
+                    <a class="nav-link " href="/Reports/TimesheetReports">
+                        <i class="nav-icon fa fa-calendar" aria-hidden="true"></i> Timesheet Reports
+                    </a>
+                    <a class="nav-link " href="/Reports/LeaveReports">
+                        <i class="nav-icon fa fa-briefcase" aria-hidden="true"></i> Leave Reports
+                    </a>
+                </li>
+            }
+        </ul>
+    </nav>
+    <button class="sidebar-minimizer brand-minimizer" type="button"></button>
+</div>

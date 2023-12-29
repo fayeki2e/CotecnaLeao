@@ -1,0 +1,126 @@
+﻿@model IEnumerable<TechParvaLEAO.Areas.Reports.Models.RejectedExpensesReportVm>
+
+@{
+    ViewData["Title"] = "Rejected Expenses Report";
+    var search = (TechParvaLEAO.Areas.Reports.Models.FinanceReportSearchVm)ViewData["Search"];
+}
+
+<h1>Rejected Expenses Report</h1>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <strong>Report Filter</strong>
+                <span data-toggle="tooltip" data-placement="top" data-original-title="click for Filter">
+                    &nbsp;
+                    <a class="btn btn-info btn-sm" data-toggle="collapse"
+                       data-target="#filter-for-search"><i class="fa fa-angle-double-down"></i></a>
+                </span>
+            </div>
+            <div class="card-body collapse" id="filter-for-search">
+                <form class="form-horizontal" action="" method="get">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="expenseClaim-from-date">Approve/ Reject From</label>
+                                <div class="col-md-9">
+                                    @Html.EditorFor(model => search.ApproveRejectFromDate, new { htmlAttributes = new { @class = "form-control", type = "date" } })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="expenseClaim-to-date">Approve/ Reject To</label>
+                                <div class="col-md-9">
+                                    @Html.EditorFor(model => search.ApproveRejectToDate, new { htmlAttributes = new { @class = "form-control", type = "date" } })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-responsive">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Month)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.SerialNumber)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PaymentRequestNumber)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Branch)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EmployeeCode)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EmployeeName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Amount)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Currency)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.RejectionReason)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.RejectedBy)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @{if (Model.Count() == 0)
+                    {
+                        <tr><td>No Data Found</td></tr>
+                    }
+                }
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Month)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SerialNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PaymentRequestNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Branch)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EmployeeCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EmployeeName)
+                        </td>
+                        <td align="right">
+                            @Html.DisplayFor(modelItem => item.Amount)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Currency)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RejectionReason)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RejectedBy)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

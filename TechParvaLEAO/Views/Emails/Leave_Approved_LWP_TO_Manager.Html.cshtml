@@ -1,0 +1,34 @@
+﻿Content-Type: text/html; charset=utf-8
+@{
+    Layout = null;
+}
+@model TechParvaLEAO.Models.NotificationEmailViewModel
+@using System.Globalization
+
+
+Dear @Model.LeaveRequestData.ReportingManager,
+<br />
+<br />
+@Model.LeaveRequestData.Employee @Model.LeaveRequestData.EmployeeCode, has been marked as Leave Without Pay (LWP) <br />
+<br />
+<table border="1">
+    <tr>
+        <td>Leave Eligibility</td>
+        <td>Carried Forward</td>
+        <td>Total Opening Balance</td>
+        <td>Leave Utilized</td>
+        <td>Leave Balance</td>
+        <td>LWP days</td>
+    </tr>
+    <tr>
+        <td>@Model.LeaveRequestData.LeaveEligibility</td>
+        <td>@Model.LeaveRequestData.LeaveCarriedForward</td>
+        <td>@Model.LeaveRequestData.LeavesOpeningBalance</td>
+        <td>@Model.LeaveRequestData.LeavesUtilized</td>
+        <td>@Model.LeaveRequestData.LeavesBalance</td>
+        <td>@Model.LeaveRequestData.LWPDays</td>
+    </tr>
+</table>
+<br />
+<br />
+    Best Regards

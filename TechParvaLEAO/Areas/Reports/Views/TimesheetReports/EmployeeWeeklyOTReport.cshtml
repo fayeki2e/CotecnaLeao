@@ -1,0 +1,180 @@
+﻿@model IEnumerable<TechParvaLEAO.Areas.Reports.Models.EmployeeWeeklyOTReportVm>
+
+@{
+    ViewData["Title"] = "Employee Weekly OT Report";
+}
+
+<h1>Employee Weekly OT Report</h1>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <strong>Report Filter</strong>
+                <span data-toggle="tooltip" data-placement="top" data-original-title="click for Filter">
+                    &nbsp;
+                    <a class="btn btn-info btn-sm" data-toggle="collapse"
+                       data-target="#filter-for-search"><i class="fa fa-angle-double-down"></i></a>
+                </span>
+            </div>
+            <div class="card-body collapse" id="filter-for-search">
+                <form class="form-horizontal" action="" method="get">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="expenseClaim-from-date">From Date</label>
+                                <div class="col-md-9">
+                                    @Html.Editor("FromDate", new { htmlAttributes = new { @class = "form-control", type = "date" } })
+                                    @Html.ValidationMessage("FromDate", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="expenseClaim-to-date">To Date</label>
+                                <div class="col-md-9">
+                                    @Html.Editor("ToDate", new { htmlAttributes = new { @class = "form-control", type = "date" } })
+                                    @Html.ValidationMessage("ToDate", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="expenseClaim-to-date">Location</label>
+                                <div class="col-md-9">
+                                    @Html.DropDownList("Location", (SelectList)ViewData["Branch"], "Select", new { @class = "form-control" })
+                                    @Html.ValidationMessage("Location", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="expenseClaim-to-date">Employee</label>
+                                <div class="col-md-9">
+                                    @Html.DropDownList("Employee", (SelectList)ViewData["Branch"], "Select", new { @class = "selectpicker", data_live_search = "true" })
+                                    @Html.ValidationMessage("Employee", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-9">
+                                    <button class="btn btn-md btn-primary" type="submit">
+                                        <i class="fa fa-dot-circle-o"></i> Search
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-responsive">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EmployeeCode)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EmployeeName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Branch)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FromDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ToDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TotalNumberOfHours)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TotalNumberOfOTHours)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.OvertimeAmount)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EmployeeCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EmployeeName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Branch)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FromDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ToDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TotalNumberOfHours)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TotalNumberOfOTHours)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OvertimeAmount)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <p>
+            @Html.ActionLink("Download Excel", "EmployeeWeeklyOTReport",
+                "TimesheetReports",
+                new
+                {
+                    Area = "Reports",
+                    FromDate = Context.Request.Query["FromDate"],
+                    ToDate = Context.Request.Query["ToDate"],
+                    JobNumber = Context.Request.Query["JobNumber"],
+                    Client = Context.Request.Query["Client"],
+                    Employee = Context.Request.Query["Employee"],
+                    Location = Context.Request.Query["Location"],
+                    Download = "xlsx"
+                }, new { @class = "btn btn-sm btn-info" })
+
+            @Html.ActionLink("Download PDF", "EmployeeWeeklyOTReport",
+                "TimesheetReports",
+                new
+                {
+                    area = "Reports",
+                    FromDate = Context.Request.Query["FromDate"],
+                    ToDate = Context.Request.Query["ToDate"],
+                    JobNumber = Context.Request.Query["JobNumber"],
+                    Client = Context.Request.Query["Client"],
+                    Employee = Context.Request.Query["Employee"],
+                    Location = Context.Request.Query["Location"],
+                    Download = "pdf"
+                }, new { @class = "btn btn-sm btn-info" })
+        </p>
+    </div>
+</div>
+@Html.PagedListPager((IPagedList)Model, page => Url.Action(
+    "EmployeeWeeklyOTReport",
+    "TimesheetReports",
+    new
+    {
+        area = "Reports",
+        id = page,
+        FromDate = Context.Request.Query["FromDate"],
+        ToDate = Context.Request.Query["ToDate"],
+        JobNumber = Context.Request.Query["JobNumber"],
+        Client = Context.Request.Query["Client"],
+        Employee = Context.Request.Query["Employee"],
+        Location = Context.Request.Query["Location"],
+    }), new PagedListRenderOptionsBase
+    {
+        PageClasses = new string[] { "page-link" },
+        UlElementClasses = new string[] { "pagination" },
+        LiElementClasses = new string[] { "page-item" },
+        DisplayItemSliceAndTotal = false,
+    })

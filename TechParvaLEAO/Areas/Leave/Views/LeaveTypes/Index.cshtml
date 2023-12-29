@@ -1,0 +1,84 @@
+﻿@model IEnumerable<TechParvaLEAO.Areas.Leave.Models.LeaveType>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Leave Types</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+
+            <button onclick="exportData('leave_types_data' ,'LeaveTypes')" class="btn btn-sm btn-info">
+    <span class="fa fa-download"></span>
+    Download Excel
+</button>
+
+
+</p>
+<table class="table" id="leave_types_data">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Paid)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Limit)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Order)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsMaternity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsMission)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsCommon)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Deactivated)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Paid)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Limit)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Order)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsMaternity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsMission)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsCommon)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Deactivated)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Deactive" asp-route-id="@item.Id">Deactive</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

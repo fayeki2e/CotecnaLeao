@@ -1,0 +1,180 @@
+﻿@model TechParvaLEAO.Areas.Expense.Models.ViewModels.EditExpenseViewModel
+@{
+    ViewBag.Title = "EditExpense";
+}
+
+<form asp-action="EditExpensessss" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="container-fluid">
+        <div class="animated fadeIn">
+            <div class="row">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <strong>Expense Claim Application</strong>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+
+                                        @Html.LabelFor(model => model.FromDate, htmlAttributes: new { @class = "col-md-3 col-form-label" })
+                                        <div class="col-md-9">
+                                            @Html.DisplayFor(model => model.FromDate, new { htmlAttributes = new { @class = "form-control", type = "date" } })                                      
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        @Html.LabelFor(model => model.ToDate, htmlAttributes: new { @class = "col-md-3 col-form-label" })
+                                        <div class="col-md-9">
+                                            @Html.DisplayFor(model => model.ToDate, new { htmlAttributes = new { @class = "form-control", type = "date", @onfocusout = "FromAndToDate()" } })                                          
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        @Html.LabelFor(model => model.AdvancePaymentRequest, htmlAttributes: new { @class = "col-md-3 col-form-label" })
+                                        <div class="col-md-9">
+                                            @Html.DisplayFor(model => model.AdvancePaymentRequest, new { htmlAttributes = new { @class = "form-control" } })                                           
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        @Html.LabelFor(model => model.CurrencyId, "Currency", htmlAttributes: new { @class = "control-label col-md-3" })
+                                        <div class="col-md-9">
+                                            @Html.DisplayFor(model => model.CurrencyName, new { htmlAttributes = new { @class = "form-control"} })                                            
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <div class="col-md-6">
+
+                                    <div class="form-group row">
+                                        <label class="col-md-3 col-form-label" for="emp-name">Employee</label>
+                                        <div class="col-md-9">
+                                            @Html.DisplayFor(model => model.EmployeeName, new { htmlAttributes = new { @class = "form-control employee" } })
+                                            @Html.ValidationMessageFor(model => model.EmployeeName, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        @Html.LabelFor(model => model.Comment, htmlAttributes: new { @class = "col-md-3 col-form-label" })
+                                        <div class="col-md-9">
+                                            @Html.DisplayFor(model => model.Comment, new { htmlAttributes = new { @class = "form-control" } })
+                                        </div>
+                                    </div>
+                                    <div class="form-group row" id="CreditCardDiv">
+                                        @Html.LabelFor(model => model.CreditCard, htmlAttributes: new { @class = "col-md-3 col-form-label" })
+                                        <div class="col-md-9">
+                                            @Html.DisplayFor(model => model.CreditCard, new { htmlAttributes = new { @class = "control-label col-md-3" } } )
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!--expense head table-->
+                                <div class="col-md-12">
+                                    <table class="table table-responsive-sm table-bordered table-striped table-sm"
+                                           id="myTable">
+                                        <thead>
+                                            <tr>
+                                                <th rowspan="2">Sr No.</th>
+                                                <th rowspan="2">Expense Head</th>
+                                                <th rowspan="2">Business Activity</th>
+                                                <th rowspan="2">Customer Market</th>
+                                                <th rowspan="2">Expense Voucher<br> Reference No.</th>
+                                                <th rowspan="2">Description</th>
+                                                <th rowspan="2">Date</th>
+                                                <th rowspan="2">Amount</th>
+                                                
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (Model.ExpenseLineItems != null)
+                                            {
+                                                for (var i = 0; i < Model.ExpenseLineItems.Count(); i++)
+                                                {
+                                            <tr class="mycontainer">
+                                                <td>@(i + 1)</td>
+                                                <td>
+                                                    @Html.DropDownListFor(m => Model.ExpenseLineItems[i].ExpenseHead, (IEnumerable<SelectListItem>)ViewData["ExpenseHead"], "select expense head", htmlAttributes: new { @class = "pc form-control expensehead", @onchange = "LoadBusinessActivity(this)" })
+                                                    @Html.ValidationMessageFor(model => Model.ExpenseLineItems[i].ExpenseHead, "", new { @class = "text-danger" })
+                                                </td>
+                                                <td>
+                                                    @Html.DropDownListFor(m => Model.ExpenseLineItems[i].BusinessActivity, (IEnumerable<SelectListItem>)ViewData["BusinessActivity"], "select business activity", htmlAttributes: new { @class = "pc form-control businessactivity", @onchange = "LoadCustomerMarket(this)" })
+                                                    @Html.ValidationMessageFor(model => Model.ExpenseLineItems[i].BusinessActivity, "", new { @class = "text-danger" })
+                                                </td>
+                                                <td>
+                                                    @Html.DropDownListFor(m => Model.ExpenseLineItems[i].CustomerMarket, (IEnumerable<SelectListItem>)ViewData["CustomerMarket"], "select customer market", htmlAttributes: new { @class = "pc form-control customermarket" })
+                                                    @Html.ValidationMessageFor(model => Model.ExpenseLineItems[i].CustomerMarket, "", new { @class = "text-danger" })
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(x => Model.ExpenseLineItems[i].ExpenseVoucherReferenceNo, new { @class = "form-control" })
+                                                    @Html.HiddenFor(x => Model.ExpenseLineItems[i].ExpenseVoucherReferenceNo)
+                                                    @Html.ValidationMessageFor(model => model.ExpenseLineItems[i].ExpenseVoucherReferenceNo, "", new { @class = "text-danger" })
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(x => Model.ExpenseLineItems[i].Description, new { @class = "form-control" })
+                                                    @Html.HiddenFor(x => Model.ExpenseLineItems[i].Description)
+                                                    @Html.ValidationMessageFor(model => model.ExpenseLineItems[i].Description, "", new { @class = "text-danger" })
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(model => model.ExpenseLineItems[i].Date, new { htmlAttributes = new { @class = "form-control expenseDate", type = "date", @onfocusout = "ExpenseCreateDate()" } })
+                                                    @Html.HiddenFor(model => model.ExpenseLineItems[i].Date)
+                                                    <span class="error1">Date should be in between From and To date</span>
+                                                    @Html.ValidationMessageFor(model => model.ExpenseLineItems[i].Date, "", new { @class = "text-danger" })
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(x => Model.ExpenseLineItems[i].Amount, new { @class = "form-control" })
+                                                    @Html.HiddenFor(x => Model.ExpenseLineItems[i].Amount)
+                                                    @Html.ValidationMessageFor(model => model.ExpenseLineItems[i].Amount, "", new { @class = "text-danger" })
+                                                </td>
+                                                @Html.HiddenFor(x => Model.ExpenseLineItems[i].Id)
+
+                                            </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                    
+                                    <div style="padding:10px 0; text-align:left">
+                                        <input id="submit" type="submit" value="Submit" class="btn btn-success" style="padding:10px 20px" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.col-->
+                </div>
+                <!-- /.row-->
+            </div>
+            <!--table for claim details input-->
+
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+
+    <script src="~/js/AdvanceAndExpense.js"></script>
+    <script src="~/js/common.js"></script>
+}
+
+
+<style>
+    span.error {
+        display: block;
+        visibility: hidden;
+        color: red;
+        font-size: 90%;
+    }
+
+    tr.error {
+        background-color: rgba(255,0,0,0.35);
+    }
+
+    span.error1 {
+        display: none;
+        color: red;
+        font-size: 90%;
+    }
+
+    tr.error1 {
+        background-color: rgba(255,0,0,0.35);
+    }
+</style>

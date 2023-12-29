@@ -1,0 +1,66 @@
+﻿@model IEnumerable<TechParvaLEAO.Areas.Expense.Models.ViewModels.AdvanceDraftListRow>
+@using TechParvaLEAO.Authorization
+@using TechParvaLEAO.Areas.Leave.Models
+@{
+    ViewBag.Title = "Index";
+}   
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fa fa-align-justify"></i>Advance Drafts
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-responsive-sm table-bordered table-striped table-sm">
+                                <thead>
+                                    <tr>
+                                        <th rowspan="2">Employee Name</th>
+                                        <th rowspan="2">Employee Code</th>
+                                        <th rowspan="2">Saved At</th>
+                                        <th rowspan="2">Amount</th>
+                                        <th colspan="2"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Draft.Employee.Name)<br>
+                                            @Html.DisplayFor(modelItem => item.Draft.Employee.Location.Name)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Draft.Employee.EmployeeCode)<br>
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Draft.LastUpdatedOn)<br>
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ViewModel.Amount)<br>
+                                        </td>
+                                        <td>
+                                            <a asp-action="AdvanceDraft" asp-route-id="@item.Draft.Id">Proceed</a>
+                                        </td>
+                                        <td>
+                                            <a asp-action="DeleteAdvanceDraft" asp-route-id="@item.Draft.Id">Delete</a>
+                                        </td>
+                                    </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+@section scripts{
+    <script src="~/js/RequestLeaveForm.js?version='03/12/2022'"></script>
+    <script src="~/js/common.js"></script>
+}

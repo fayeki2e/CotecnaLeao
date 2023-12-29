@@ -1,0 +1,43 @@
+﻿@model TechParvaLEAO.Areas.Expense.Models.ExpenseHeadExpenseProfileMapping
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Expense Head Expense Profile Mapping</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" id="masters_form">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ExpenseHeadId" class="control-label"></label>
+                <select asp-for="ExpenseHeadId" class="form-control" asp-items="ViewBag.ExpenseHeadId"></select>
+                <span asp-validation-for="ExpenseHeadId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ExpenseProfileId" class="control-label"></label>
+                <select asp-for="ExpenseProfileId" class="form-control" asp-items="ViewBag.ExpenseProfileId"></select>
+                <span asp-validation-for="ExpenseProfileId" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Deactivated" /> @Html.DisplayNameFor(model => model.Deactivated)
+                </label>
+            </div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+@section scripts {
+    <script src="~/js/confirm_submit.js"></script>
+}

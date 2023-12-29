@@ -1,0 +1,258 @@
+﻿@using TechParvaLEAO.Models
+@model TechParvaLEAO.Areas.Organization.Models.Employee
+@{
+    ViewData["Title"] = "Details";
+}
+
+    <div class="col-lg-12">
+        <div class="table">
+            <h4>@Model.Name</h4> (created By : @Model.Created_by , Created Date : @Model.Created_Date, Modified By : @Model.Modified_by , Modified Date : @Model.Modified_Date)
+            <hr />
+            <div class="row">
+                <div class="col-md-3">
+                    <table>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.Name)</th>
+                            <td>@Html.DisplayFor(model => model.Name)</td>
+                        </tr>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.Designation)</th>
+                            <td>@Html.DisplayFor(model => model.Designation.Name)</td>
+                        </tr>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.EmployeeCode)</th>
+                            <td>@Html.DisplayFor(model => model.EmployeeCode)</td>
+                        </tr>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.Location)</th>
+                            <td>@Html.DisplayFor(model => model.Location.Name)</td>
+                        </tr>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.ReportingTo)</th>
+                            <td>@Html.DisplayFor(model => model.ReportingTo.Name)</td>
+                        </tr>
+                         <tr>
+                            <th>@Html.DisplayNameFor(model => model.TeamId)</th>
+                            <td>
+                            
+                            @if (@ViewBag.teams != null)
+                            {
+                                @foreach (var item in @ViewBag.teams)
+                                {
+                                    @item.TeamName <span>,</span>
+                                }
+                            }
+
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.Gender)</th>
+                            <td>@Html.DisplayFor(model => model.Gender)</td>
+                        </tr>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.Email)</th>
+                            <td>@Html.DisplayFor(model => model.Email)</td>
+                        </tr>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.OvertimeMultiplier)</th>
+                            <td>@Html.DisplayFor(model => model.OvertimeMultiplier.Name)</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-md-3">
+                    <table>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.AuthorizationProfile)</th>
+                            <td>@Html.DisplayFor(model => model.AuthorizationProfile.Name)</td>
+                        </tr>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.ExpenseProfile)</th>
+                            <td>@Html.DisplayFor(model => model.ExpenseProfile.Name)</td>
+                        </tr>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.AccountNumber)</th>
+                            <td>@Html.DisplayFor(model => model.AccountNumber)</td>
+                        </tr>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.CanCreateForexRequests)</th>
+                            <td>@Html.DisplayFor(model => model.CanCreateForexRequests)</td>
+                        </tr>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.CanHoldCreditCard)</th>
+                            <td>@Html.DisplayFor(model => model.CanHoldCreditCard)</td>
+                        </tr>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.OnFieldEmployee)</th>
+                            <td>@Html.DisplayFor(model => model.OnFieldEmployee)</td>
+                        </tr>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.SpecificWeeklyOff)</th>
+                            <td>@Html.DisplayFor(model => model.SpecificWeeklyOff)</td>
+                        </tr>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.CanApplyMissionLeaves)</th>
+                            <td>@Html.DisplayFor(model => model.CanApplyMissionLeaves)</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-md-3">
+                    <table>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.DateOfBirth)</th>
+                            <td>@Html.DisplayFor(model => model.DateOfBirth)</td>
+                        </tr>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.DateOfJoining)</th>
+                            <td>@Html.DisplayFor(model => model.DateOfJoining)</td>
+                        </tr>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.LastWorkingDate)</th>
+                            <td>@Html.DisplayFor(model => model.LastWorkingDate)</td>
+                        </tr>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.ResignationDate)</th>
+                            <td>@Html.DisplayFor(model => model.ResignationDate)</td>
+                        </tr>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.IsHr)</th>
+                            <td>@Html.DisplayFor(model => model.IsHr)</td>
+                        </tr>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.Status)</th>
+                            <td>@Html.DisplayFor(model => model.Status)</td>
+                        </tr>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.Deactivated)</th>
+                            <td>@Html.DisplayFor(model => model.Deactivated)</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-md-3">
+                    <table>
+                        @{
+                            var user = (ApplicationUser)ViewData["ApplicationUser"];
+                            var roles = (IList<string>)ViewData["UserRoles"];
+                        }
+                        @if (user != null)
+                        {
+                            <tr>
+                                <th>Login Id</th>
+                                <td>@Html.DisplayFor(model => user.NormalizedUserName)</td>
+                            </tr>
+                            <tr>
+                                <th>Password</th>
+                                <td><a asp-action="ChangePassword" asp-route-userId=@user.Id class="btn btn-sm btn-info">Update Password</a></td>
+                            </tr>
+                            <tr>
+                                <th>Roles Assigned</th>
+                                <td>
+                                    <ul>
+                                        @foreach (var role in roles)
+                                        {
+                                            <li>@Html.DisplayFor(model => role)</li>
+                                        }
+                                    </ul>
+                                    <a asp-action="AssignRoles" asp-route-userId=@user.Id class="btn btn-sm btn-info">Change Roles</a>
+                                </td>
+                            </tr>
+                        }
+                        else if (Model.Email != null)
+                        {
+                            <tr>
+                                <th>Create Login</th>
+                                <td><a asp-action="CreateUser" asp-route-employeeId=@Model.Id class="btn btn-sm btn-info">Create Login</a></td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+            <div>
+                <a class="btn btn-sm btn-success" asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+                <a class="btn btn-sm btn-info" asp-action="Index">Back to List</a>
+            </div>
+        </div>
+        <div>
+            <h4>Basic Salary</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>From Date</th>
+                        <th>To Date</th>
+                        <th>Salary</th>
+                        <th>
+                            <a class="btn btn-sm btn-info" asp-action="Create" asp-controller="EmployeeBasicSalaries" asp-route-EmployeeId="@Model.Id">New</a>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var basic in Model.BasicSalaryHistory)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(model => basic.FromDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => basic.ToDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => basic.BaseSalary)
+                            </td>
+                            <td>
+                                <a class="btn btn-sm btn-success" asp-action="Edit" asp-controller="EmployeeBasicSalaries" asp-route-id="@basic.Id">Edit</a>
+                            </td>
+                        </tr>
+
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <h4>Weekly Offs</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>From Date</th>
+                        <th>To Date</th>
+                        <th>Weekly Off</th>
+                        <th>Other Weekly Off</th>
+                        <th>Other Weekly Off Type</th>
+                        <th>
+                            <a class="btn btn-sm btn-primary" href="/Organization/EmployeeWeeklyOffs/Create/@Model.Id">New</a>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var weeklyOff in Model.EmployeeWeeklyOffs)
+                    {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(model => weeklyOff.FormDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => weeklyOff.ToDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => weeklyOff.WeeklyOffDay)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => weeklyOff.OtherWeeklyOffDay)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => weeklyOff.OtherWeeklyOffRule)
+                        </td>
+                        <td>
+                            <!--<a class="btn btn-sm btn-success" href="/Organization/EmployeeWeeklyOffs/Edit/@Model.Id">Edit</a>-->
+                        </td>
+                    </tr>
+                    }
+                    @if (Model.EmployeeWeeklyOffs.Count() < 1)
+                    {
+                        <tr>
+                            <td colspan="3">No Data Present. Location weekly offs applicable.</td>
+                        </tr>
+                    }
+                    </tbody>
+            </table>
+        </div>
+    </div>

@@ -1,0 +1,14 @@
+﻿
+@{
+    ViewData["Title"] = "DataImport";
+}
+
+<h1>Upload Payment File</h1>
+<hr />
+<form asp-controller="PaymentRequests" asp-action="UploadPaymentFileAsync" method="post"
+      enctype="multipart/form-data">
+
+    <input type="file" name="file" />
+    <button type="submit">Upload File</button>
+</form>
+

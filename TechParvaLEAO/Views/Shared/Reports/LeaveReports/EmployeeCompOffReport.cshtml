@@ -1,0 +1,151 @@
+﻿@model IEnumerable<TechParvaLEAO.Areas.Reports.Models.EmployeeCompOffReportVm>
+
+@{
+    ViewData["Title"] = "Employee Comp Off Report";
+    var search = (TechParvaLEAO.Areas.Reports.Models.LeaveReportSearchVm)ViewData["Search"];
+}
+
+<h1>Employee Comp Off Report</h1>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <strong>Report Filter</strong>
+                <span data-toggle="tooltip" data-placement="top" data-original-title="click for Filter">
+                    &nbsp;
+                    <a class="btn btn-info btn-sm" data-toggle="collapse"
+                       data-target="#filter-for-search"><i class="fa fa-angle-double-down"></i></a>
+                </span>
+            </div>
+            <div class="card-body collapse" id="filter-for-search">
+                <form class="form-horizontal" action="" method="get">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="expenseClaim-to-date">From Date</label>
+                                <div class="col-md-9">
+                                    @Html.EditorFor(model => search.FromDate, new { htmlAttributes = new { @class = "form-control", type = "date" } })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="expenseClaim-to-date">To Date</label>
+                                <div class="col-md-9">
+                                    @Html.EditorFor(model => search.ToDate, new { htmlAttributes = new { @class = "form-control", type = "date" } })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="expenseClaim-to-date">Leave Year</label>
+                                <div class="col-md-9">
+                                    @Html.DropDownList("LeaveYear", (SelectList)ViewData["LeaveYear"], "Select", new { @class = "form-control" })
+                                    @Html.ValidationMessage("LeaveYear", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="expenseClaim-to-date">Location</label>
+                                <div class="col-md-9">
+                                    @Html.DropDownList("Branch", (SelectList)ViewData["Branch"], "Select", new { @class = "form-control" })
+                                    @Html.ValidationMessage("Branch", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="expenseClaim-to-date">Employee</label>
+                                <div class="col-md-9">
+                                    @Html.DropDownList("Employee", (SelectList)ViewData["Employee"], "Select", new { @class = "selectpicker", data_live_search = "true"  })
+                                    @Html.ValidationMessage("Employee", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="expenseClaim-to-date">Reporting Manager</label>
+                                <div class="col-md-9">
+                                    @Html.DropDownList("ReportingManager", (SelectList)ViewData["ReportingManager"], "Select", new { @class = "form-control" })
+                                    @Html.ValidationMessage("ReportingManager", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-responsive">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LeaveYear)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EmployeeCode)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ReportingManager)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Designation)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Location)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CompOffForDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ApprovalDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ExpiryDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Utilized)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LeaveYear)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EmployeeCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ReportingManager)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Designation)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Location)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CompOffForDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ApprovalDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ExpiryDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Utilized)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

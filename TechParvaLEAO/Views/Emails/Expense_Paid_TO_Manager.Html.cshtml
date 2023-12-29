@@ -1,0 +1,34 @@
+﻿Content-Type: text/html; charset=utf-8
+@{
+    Layout = null;
+}
+@model TechParvaLEAO.Models.NotificationEmailViewModel
+@using System.Globalization
+
+
+Dear @Model.PaymentRequestData.ReportingManager,<br />
+<br />
+Expense Claim has been processed as follows.<br />
+<br />
+<table border="1">
+    <tr>
+        <td>Sr No</td>
+        <td>Employee code and Employee Name</td>
+        <td>Expense Claim No</td>
+        <td>Date of Claim Request</td>
+        <td>Date of Payment</td>
+        <td>Amount</td>
+        <td>Payment mode</td>
+    </tr>
+    <tr>
+        <td>@Model.PaymentRequestData.Id</td>
+        <td>@Model.PaymentRequestData.EmployeeCode - @Model.PaymentRequestData.Employee</td>
+        <td>@Model.PaymentRequestData.RequestNumber</td>
+        <td>@Model.PaymentRequestData.CreatedDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</td>
+        <td>@Model.PaymentRequestData.PostedOn.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</td>
+        <td>@Model.PaymentRequestData.Currency  @Model.PaymentRequestData.Amount</td>
+        <td>@Model.PaymentRequestData.PaymentMode</td>
+    </tr>
+</table><br />
+<br />
+Best Regards

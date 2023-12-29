@@ -1,0 +1,45 @@
+﻿@model TechParvaLEAO.Areas.Expense.Models.BusinessActivityCustomerMarketMapping
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Business Activity Customer Market Mapping</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" id="masters_form">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="BusinessActivityId" class="control-label"></label>
+                <select asp-for="BusinessActivityId" class="form-control" asp-items="ViewBag.BusinessActivityId"></select>
+                <span asp-validation-for="BusinessActivityId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CustomerMarketId" class="control-label"></label>
+                <select asp-for="CustomerMarketId" class="form-control" asp-items="ViewBag.CustomerMarketId"></select>
+                <span asp-validation-for="CustomerMarketId" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Deactivated" /> @Html.DisplayNameFor(model => model.Deactivated)
+                </label>
+            </div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section scripts {
+    <script src="~/js/confirm_submit.js"></script>
+}
+

@@ -1,0 +1,325 @@
+﻿@model TechParvaLEAO.Areas.Organization.Models.ViewModels.AddEditEmployeeVM
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Employee</h4>
+<hr />
+
+<div class="container  float-md-left" >
+           <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row">
+        <div class="col-md-4">
+             <div class="form-group">
+                <label asp-for="Name" class="control-label required"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+                <div class="form-group">
+                <label asp-for="DesignationId" class="control-label required"></label>
+                <select asp-for="DesignationId" class="form-control" asp-items="ViewBag.DesignationId">
+                    <option disabled selected>select</option>
+                </select>
+                <span asp-validation-for="DesignationId" class="text-danger"></span>
+
+            </div>
+        </div>
+         <div class="col-md-4">
+                 <div class="form-group">
+                <label asp-for="LocationId" class="control-label required"></label>
+                <select asp-for="LocationId" class="form-control" asp-items="ViewBag.LocationId">
+                    <option disabled selected>select</option>                    
+                </select>
+                <span asp-validation-for="LocationId" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+      <div class="row">
+        <div class="col-md-4">
+               <div class="form-group">
+                <label asp-for="AuthorizationProfileId" class="control-label required"></label>
+                <select asp-for="AuthorizationProfileId" class="form-control" asp-items="ViewBag.AuthorizationProfileId">
+                    <option disabled selected>select</option>
+                </select>
+                <span asp-validation-for="AuthorizationProfileId" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+                   <div class="form-group">
+                <label asp-for="ExpenseProfileId" class="control-label required"></label>
+                <select asp-for="ExpenseProfileId" class="form-control" asp-items="ViewBag.ExpenseProfileId">
+                    <option disabled selected>select</option>
+                </select>
+                <span asp-validation-for="ExpenseProfileId" class="text-danger"></span>
+            </div>
+        </div>
+         <div class="col-md-4">
+                      <div class="form-group">
+      
+
+                  <label asp-for="TeamId" class="control-label required"></label>
+
+  
+          <select class="form-control"  asp-for="teamlist"  id="TeamList" name="TeamList" multiple onchange="selectteamvalue(Array.from(this.selectedOptions).map(x=>x.value??x.text))" multiselect-hide-x="true">
+                 @foreach (var item in @ViewBag.ListofTeam)
+                    {
+                        <option value=@item.Id>@item.TeamName</option> 
+                    }
+        </select>
+
+
+       
+        <span  asp-validation-for="teamlist"  id="msgError" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+      <div class="row">
+        <div class="col-md-4">
+              <div class="form-group">
+                <label asp-for="EmployeeCode" class="control-label required"></label>
+                <input asp-for="EmployeeCode" class="form-control" />
+                <span asp-validation-for="EmployeeCode" class="text-danger"></span>
+            
+            </div>
+        </div>
+        <div class="col-md-4">
+             <div class="form-group">
+                <label asp-for="AccountNumber" class="control-label"></label>
+                <input asp-for="AccountNumber" class="form-control" />
+                <span asp-validation-for="AccountNumber" class="text-danger"></span>
+            </div>
+        </div>
+         <div class="col-md-4">
+               <div class="form-group">
+                <label asp-for="ReportingToId" class="control-label required"></label>
+                <select asp-for="ReportingToId" class="form-control" asp-items="ViewBag.ReportingToId">
+                    <option disabled selected>select</option>
+                </select>
+                <span asp-validation-for="ReportingToId" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+      <div class="row">
+        <div class="col-md-4">
+                 <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+               <div class="form-group">
+                <label asp-for="Gender" class="control-label"></label>
+                <select asp-for="Gender" class="form-control">
+                    <option value="M">Male</option>
+                    <option value="F">Female</option>
+                </select>
+                <span asp-validation-for="Gender" class="text-danger"></span>
+            </div>
+        </div>
+         <div class="col-md-4">
+                 <div class="form-group">
+                <label asp-for="DateOfJoining" class="control-label required"></label>
+                <input asp-for="DateOfJoining" class="form-control" type="date"/>
+                <span asp-validation-for="DateOfJoining" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+      <div class="row">
+        <div class="col-md-4">
+            
+            <div class="form-group">
+                <label asp-for="DateOfBirth" class="control-label required"></label>
+                <input asp-for="DateOfBirth" class="form-control" type="date"/>
+                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+             <div class="form-group">
+                <label asp-for="OvertimeMultiplierId" class="control-label"></label>
+                <select asp-for="OvertimeMultiplierId" class="form-control" asp-items="ViewBag.OvertimeMultiplierId">
+                    <option disabled selected>select</option>
+                </select>
+                <span asp-validation-for="OvertimeMultiplierId" class="text-danger"></span>
+            </div>
+
+            
+        </div>
+         <div class="col-md-4">
+            
+           
+        </div>
+    </div>
+
+       <div class="row">
+        <div class="col-md-4">
+              <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="CanApplyMissionLeaves" /> @Html.DisplayNameFor(model => model.CanApplyMissionLeaves)
+                </label>
+            </div>
+             <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="CanCreateForexRequests" /> @Html.DisplayNameFor(model => model.CanCreateForexRequests)
+                </label>
+            </div>
+
+        </div>
+        <div class="col-md-4">
+             <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="CanHoldCreditCard" /> @Html.DisplayNameFor(model => model.CanHoldCreditCard)
+                </label>
+            </div>
+              <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsHr" /> @Html.DisplayNameFor(model => model.IsHr)
+                </label>
+            </div>
+        </div>
+         <div class="col-md-4">
+              <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="OnFieldEmployee" /> @Html.DisplayNameFor(model => model.OnFieldEmployee)
+                </label>
+            </div>
+        </div>
+    </div>
+
+       <div class="row">
+        <div class="col-md-4">
+             <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="SpecificWeeklyOff" /> @Html.DisplayNameFor(model => model.SpecificWeeklyOff)
+                </label>
+            </div>
+        </div>
+        <div class="col-md-4">
+            
+        </div>
+         <div class="col-md-4">
+             
+        </div>
+    </div>
+      <div class="row">
+        <div class="col-md-4">
+            
+            <div class="form-group">
+                <input type="submit" value="Create" onclick="valid()" class="btn btn-primary" />
+            </div>
+        </div>
+        <div class="col-md-4">
+             
+        </div>
+         <div class="col-md-4">
+             
+        </div>
+    </div>
+
+     <div class="row">
+        <div class="col-md-4">
+            
+            
+    <div>
+    <a asp-action="Index">Back to List</a>
+</div>
+        </div>
+        <div class="col-md-4">
+             
+        </div>
+         <div class="col-md-4">
+             
+        </div>
+    </div>
+
+     </form>
+</div>
+
+
+
+<input type="hidden" value="" id="selectedTeams" name="selectedTeams" />
+
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+           
+
+          
+        </form>
+    </div>
+</div>
+
+ 
+@section scripts {
+    <script src="~/js/multiselect-dropdown.js"></script>
+}
+
+
+<script>
+    window.onload = function () {
+        $("#ReportingToId").select2();
+    };
+    function valid()
+    {
+        //var team=$('#TeamList option:selected').val();
+        //if(team =="Select" || team =="")
+        //{
+        //    $("#msgError").html("Please select Team");
+        //    return false;
+        //}
+        //else
+        //{
+        //     $("#msgError").html("");
+        //}
+
+        var team = $('#selectedTeams').val();
+
+        if(team =="")
+        {
+            $("#msgError").html("Please select Team");
+           
+
+            return false;
+        }
+        else
+        {
+             $("#msgError").html("");
+        }
+
+    }
+ 
+    function selectteamvalue(name)
+    {
+        
+        $("#selectedTeams").val(name);
+        valid();
+    }
+
+       //$("form").submit(function(e){
+
+       //     if($('#selectedTeams').val() ="")
+       //     {
+       //         alert('submit intercepted');
+       //         e.preventDefault(e);
+       //     }
+       // });
+
+   
+
+
+</script>
+
+
+
+

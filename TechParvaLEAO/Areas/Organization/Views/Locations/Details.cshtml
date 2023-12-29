@@ -1,0 +1,78 @@
+﻿@model TechParvaLEAO.Areas.Organization.Models.Location
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Location</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Code)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Code)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Deactivated)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Deactivated)
+        </dd>
+        <dt class="col-sm-2">
+            Monday
+        </dt>
+        <dd class="col-sm-10">
+            @Model.GetWorkday(DayOfWeek.Monday).WorkDayType
+        </dd>
+        <dt class="col-sm-2">
+            Tuesday
+        </dt>
+        <dd class="col-sm-10">
+            @Model.GetWorkday(DayOfWeek.Tuesday).WorkDayType
+        </dd>
+        <dt class="col-sm-2">
+            Wednesday
+        </dt>
+        <dd class="col-sm-10">
+            @Model.GetWorkday(DayOfWeek.Wednesday).WorkDayType
+        </dd>
+        <dt class="col-sm-2">
+            Thursday
+        </dt>
+        <dd class="col-sm-10">
+            @Model.GetWorkday(DayOfWeek.Thursday).WorkDayType
+        </dd>
+        <dt class="col-sm-2">
+            Friday
+        </dt>
+        <dd class="col-sm-10">
+            @Model.GetWorkday(DayOfWeek.Friday).WorkDayType
+        </dd>
+        <dt class="col-sm-2">
+            Saturday
+        </dt>
+        <dd class="col-sm-10">
+            @Model.GetWorkday(DayOfWeek.Saturday).WorkDayType
+        </dd>
+        <dt class="col-sm-2">
+            Sunday
+        </dt>
+        <dd class="col-sm-10">
+            @Model.GetWorkday(DayOfWeek.Sunday).WorkDayType
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

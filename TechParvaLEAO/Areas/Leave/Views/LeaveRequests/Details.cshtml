@@ -1,0 +1,111 @@
+﻿@model TechParvaLEAO.Areas.Leave.Models.LeaveRequest
+
+@{
+    ViewData["Title"] = "Leave Details";
+}
+
+<div>
+    <div class="float-left">
+        <a class="navbar-brand" href="#">
+            <img class="navbar-brand-full" src="~/img/cotecna.png" width="276" height="80"
+                 alt="CotecnaUI Logo">
+        </a>
+    </div>
+    <div class="float-right">
+        <table class="table table-responsive-sm table-bordered table-striped table-sm">
+            <tbody>
+                <tr>
+                    <td>Id:</td>
+                    <td>@Html.DisplayFor(model => model.Id)</td>
+                </tr>
+                <tr>
+                    <td>Created date:</td>
+                    <td>@Html.DisplayFor(model => model.LeaveRequestCreatedDate)</td>
+                </tr>
+                <tr>
+                    <td>Created By:</td>
+                    <td>@Html.DisplayFor(model => model.CreatedByEmployee.Name)</td>
+                </tr>
+                <tr>
+                    <td>Approved By:</td>
+                    <td>@Html.DisplayFor(model => model.LeaveRequestApprovedBy.Name)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="table-responsive">
+    <h4 class="text-center">
+        Leave Details
+    </h4>
+    <dl>
+        <table class="table table-responsive-sm table-bordered table-striped table-sm">
+            <tbody>
+                <tr>
+                    <td colspan="3">Location</td>
+                    <td>@Html.DisplayFor(model => model.Employee.Location.Name)</td>
+                </tr>
+                <tr>
+                    <td colspan="3">NAME</td>
+                    <td>@Html.DisplayFor(model => model.Employee.Name)</td>
+                </tr>
+                <tr>
+                    <td>DESIGNATION</td>
+                    <td>@Html.DisplayFor(model => model.Employee.Designation.Name)</td>
+                    <td>Emp Code</td>
+                    <td>@Html.DisplayFor(model => model.Employee.EmployeeCode)</td>
+                </tr>
+                <tr>
+                    <td>PERIOD</td>
+                    <td>@Html.DisplayFor(model => model.StartDate) - @Html.DisplayFor(model => model.EndDate)</td>
+                    <td>Leave Nature</td>
+                    <td>@Html.DisplayFor(model => model.LeaveNature)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="table table-responsive-sm table-bordered table-striped table-sm">
+            <tbody>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Action By</th>
+                    <th>Action By Designation</th>
+                    <th>Action</th>
+                </tr>
+                @foreach (var data in Model.LeaveRequestActions)
+                {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => data.Timestamp)</td>
+                    <td>@Html.DisplayFor(modelItem => data.ActionBy.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => data.ActionBy.Designation.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => data.Action)</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+
+        <table class="table table-responsive-sm table-bordered table-striped table-sm">
+            <tbody>
+                <tr>
+                    <td colspan="2">SUBMITTED BY : </td>
+                    <td colspan="2">APPROVED  BY :</td>
+                </tr>
+                <tr>
+                    <td>NAME /SIGNATURE :</td>
+                    <td>@Html.DisplayFor(model => model.CreatedByEmployee.Name)</td>
+                    <td>NAME /SIGNATURE :</td>
+                    <td>@Html.DisplayFor(model => model.LeaveRequestApprovedBy.Name)</td>
+                </tr>
+                <tr>
+                    <td>DATE :</td>
+                    <td>@Html.DisplayFor(model => model.LeaveRequestCreatedDate)</td>
+                    <td>DATE :</td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </dl>
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

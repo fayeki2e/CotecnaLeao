@@ -1,0 +1,208 @@
+﻿@model TechParvaLEAO.Areas.Expense.Models.PaymentRequest
+@using TechParvaLEAO.Authorization
+@using TechParvaLEAO.Areas.Expense.Models
+
+@{
+    ViewData["Title"] = "Expense Claim in Detail";
+}
+
+<div>
+    <div class="float-left">
+        <a class="navbar-brand" href="#">
+            <img class="navbar-brand-full" src="~/img/cotecna.png" width="276" height="80"
+                 alt="CotecnaUI Logo">
+        </a>
+    </div>
+    <div class="float-right">
+        <table class="table table-responsive-sm table-bordered table-striped table-sm">
+            <tbody>
+                <tr>
+                    <td>Reference No.:</td>
+                    <td>QMS-FR-FIN-COM-GEN-009-1.0</td>
+                </tr>
+                <tr>
+                    <td>Effective date:</td>
+                    <td>1st September 2020</td>
+                </tr>
+                <tr>
+                    <td>Author & Administrator:</td>
+                    <td>Lavita DSILVA</td>
+                </tr>
+                <tr>
+                    <td>Approved By:</td>
+                    <td>Anuja NESARIKAR</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="table-responsive">
+    <h4 class="text-center">
+        Expense Claim Form
+    </h4>
+    <table class="table table-responsive-sm table-bordered table-striped table-sm">
+        <tbody>
+            <tr>
+                <td>Branch</td>
+                <td>@Html.DisplayFor(model => model.Location.Name)</td>
+                <td>Comment</td>
+                <td>@Html.DisplayFor(model => model.Comment)</td>
+            </tr>
+            <tr>
+                <td>NAME</td>
+                <td colspan="3">@Html.DisplayFor(model => model.Employee.Name)</td>
+            </tr>
+            <tr>
+                <td>DESIGNATION</td>
+                <td>@Html.DisplayFor(model => model.Employee.Designation.Name)</td>
+                <td>Emp Code</td>
+                <td>@Html.DisplayFor(model => model.Employee.EmployeeCode)</td>
+            </tr>
+            <tr>
+                <td>PERIOD</td>
+                <td>@Html.DisplayFor(model => model.FromDate) To @Html.DisplayFor(model => model.ToDate)</td>
+                <td>Expense Claim Reference No</td>
+                <td>@Html.DisplayFor(model => model.RequestNumber)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="table table-responsive-sm table-bordered table-striped table-sm">
+        <tbody>
+            <tr>
+                <th>DATE</th>
+                <th>VOUCHER NO./ BILL NO.</th>
+                <th>Descriptions</th>
+                <th>Currency</th>
+                <th>FX</th>
+                <th>INR</th>
+                <th>BUSINESS ACTIVITY</th>
+                <th>Customer Market</th>
+            </tr>
+
+            @foreach (var data in Model.LineItems)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(model => data.ExpenseDate)</td>
+                    <td>@Html.DisplayFor(modelItem => data.ExpenseVoucherReferenceNumber)</td>
+                    <td>@Html.DisplayFor(modelItem => data.VoucherDescription)</td>
+                    <td>@Html.DisplayFor(modelItem => data.Currency.Name)</td>
+                    @if (data.Currency.Id != 1)
+                    {
+                        <td>@Html.DisplayFor(modelItem => data.Amount)</td>
+                    }
+                    else
+                    {
+                        <td>0</td>
+                    }
+
+                    @if (data.Currency.Id != 1)
+                    {
+                        var amt = data.Amount * Model.ExchangeRate;
+                        <td>@Html.DisplayFor(modelItem => amt)</td>
+                    }
+                    else
+                    {
+                        <td>@Html.DisplayFor(modelItem => data.Amount)</td>
+
+                    }
+                    <td>@Html.DisplayFor(modelItem => data.BusinessActivity.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => data.CustomerMarket.Name)</td>
+                </tr>
+            }
+            <tr>
+                <td colspan="3">Total Amount</td>
+                <td>@Html.DisplayFor(modelItem => Model.Currency.Name)</td>
+                @if (Model.Currency.Id != 1)
+                {
+                    <td>@Html.DisplayFor(modelItem => Model.Amount)</td>
+                }
+                else
+                {
+                    <td>0</td>
+                }
+                @if (Model.Currency.Id != 1)
+                {
+                    var amt = Model.Amount * Model.ExchangeRate;
+                    <td>@Html.DisplayFor(modelItem => amt)</td>
+
+                }
+                else
+                {
+                    <td>@Html.DisplayFor(modelItem => Model.Amount)</td>
+                }
+
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="table table-responsive-sm table-bordered table-striped table-sm">
+        <tbody>
+            <tr>
+                <td colspan="2">SUBMITTED BY : </td>
+                <td colspan="2">APPROVED  BY :</td>
+            </tr>
+            <tr>
+                <td>NAME /SIGNATURE :</td>
+                <td>@Html.DisplayFor(model => model.PaymentRequestCreatedBy.Name)</td>
+                <td>NAME /SIGNATURE :</td>
+                <td>
+                    @if (
+                    string.Equals(Model.Status, PaymentRequestStatus.APPROVED.ToString()) ||
+                    string.Equals(Model.Status, PaymentRequestStatus.POSTED.ToString()) ||
+                    string.Equals(Model.Status, PaymentRequestStatus.PAID.ToString())
+                    )
+                    {
+                        @Html.DisplayFor(model => model.PaymentRequestActionedBy.Name)
+                    }
+                    else
+                    {
+                        <b>Not Yet Approved</b>
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td>DATE :</td>
+                <td>@Html.DisplayFor(model => model.PaymentRequestCreatedDate)</td>
+                <td>DATE :</td>
+                <td>@Html.DisplayFor(model => model.ActionDate)</td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-responsive-sm table-bordered table-striped table-sm">
+        <tbody>
+            <tr>
+                <td colspan="6">Supporting</td>
+            </tr>
+            @if (Model.GetSupportingDocuments().Count == 0)
+            {
+                <tr>
+                    <td>No Supportings Uploaded</td>
+                </tr>
+            }
+            @foreach (var data in Model.GetSupportingDocuments())
+            {
+                <tr>
+                    <td><a href="/@Html.DisplayFor(modelItem => data)" target="_blank">@Html.DisplayFor(modelItem => data)</a></td>
+
+                   @*   <td><a href="/Expense/PaymentRequests/DownloadSupporting/@(Model.Id)" target="_blank">@Html.DisplayFor(modelItem => data)</a></td>*@
+
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+<div class="btn btn-primary btn-sm d-print-none" onclick="window.print()">
+    Print
+</div>
+<!--
+<div class="btn btn-primary btn-sm" onclick="goBack()">
+        Back
+</div>
+-->
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>

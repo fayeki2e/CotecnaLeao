@@ -1,0 +1,34 @@
+﻿@model TechParvaLEAO.Areas.Expense.Models.ViewModels.EmployeeSettlementViewModel
+@{
+    ViewBag.Title = "Settlement Confirmation";
+}
+<div>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+    <div class="form-horizontal col-6">
+        <h4>Settlement Date</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.EmployeeId)
+        <div class="form-group">
+            @Html.LabelFor(model => model.SettlementAmount, "Settlement Amount", htmlAttributes: new { @class = "control-label col-md-12" })
+            <div class="col-md-9">
+                @Html.TextBoxFor(model => model.SettlementAmount, new { @class = "form-control"})
+                @Html.ValidationMessageFor(model => model.SettlementAmount, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.SettlementDate, "Settlement Date", htmlAttributes: new { @class = "control-label col-md-12" })
+            <div class="col-md-9">
+                @Html.TextBoxFor(model => model.SettlementDate, new { @class = "form-control", Type="date" })
+                @Html.ValidationMessageFor(model => model.SettlementDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+        <div class="form-actions no-color">
+            <input type="submit" value="Submit" class="btn btn-default" /> |
+        </div>
+    }
+</div>

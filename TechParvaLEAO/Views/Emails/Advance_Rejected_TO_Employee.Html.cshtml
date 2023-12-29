@@ -1,0 +1,30 @@
+﻿Content-Type: text/html; charset=utf-8
+@{
+    Layout = null;
+}
+@model TechParvaLEAO.Models.NotificationEmailViewModel
+@using System.Globalization
+
+
+Dear @Model.PaymentRequestData.Employee,<br />
+<br />
+Your advance request has been Rejected by @Model.PaymentRequestData.ActionByEmployee.<br />
+<br />
+<table border="1">
+    <tr>
+        <td>Advance Request No:</td>
+        <td>Amount:</td>
+        <td>Comment:</td>
+    </tr>
+    <tr>
+        <td> @Model.PaymentRequestData.RequestNumber</td>
+        <td> @Model.PaymentRequestData.Currency  @Model.PaymentRequestData.Amount</td>
+        <td>@Model.PaymentRequestData.Comment</td>
+    </tr>
+</table>
+<br />
+Reason for rejection: @Model.PaymentRequestData.RejectionReason
+<br />
+<br />
+
+        Best Regards

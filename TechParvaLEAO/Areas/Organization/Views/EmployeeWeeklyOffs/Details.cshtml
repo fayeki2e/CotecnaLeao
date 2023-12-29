@@ -1,0 +1,58 @@
+﻿@model TechParvaLEAO.Areas.Organization.Models.EmployeeWeeklyOff
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Employee Weekly Off</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.FormDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.FormDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ToDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ToDate)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.WeeklyOffDay)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.WeeklyOffDay)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.OtherWeeklyOffDay)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.OtherWeeklyOffDay)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.OtherWeeklyOffRule)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.OtherWeeklyOffRule)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Employee)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Employee.Id)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

@@ -1,0 +1,58 @@
+﻿@using TechParvaLEAO.Authorization
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <strong>Search</strong>
+                <span data-toggle="tooltip" data-placement="top" data-original-title="click for Filter">
+                    &nbsp;
+                    <a class="btn btn-info btn-sm" data-toggle="collapse"
+                       data-target="#filter-for-search"><i class="fa fa-angle-double-down"></i></a>
+                </span>
+            </div>
+            <div class="card-body collapse" id="filter-for-search">
+                <form class="form-horizontal" action="" method="post">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="name">Employee Name</label>
+                                <div class="col-md-9">
+                                    @Html.TextBox("EmployeeName", "", htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessage("EmployeeName", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="name">Employee Code</label>
+                                <div class="col-md-9">
+                                    @Html.TextBox("EmployeeCode", "", htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessage("EmployeeCode", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="name">Designation</label>
+                                <div class="col-md-9">
+                                    @Html.TextBox("Designation", "", htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessage("Designation", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="name">Location</label>
+                                <div class="col-md-9">
+                                    @Html.TextBox("Location", "", htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessage("Location", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-9">
+                                <button class="btn btn-md btn-primary" type="submit">
+                                    <i class="fa fa-dot-circle-o"></i> Search
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

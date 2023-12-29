@@ -1,0 +1,158 @@
+﻿@model TechParvaLEAO.Areas.Expense.Models.ViewModels.AdvanceViewModel
+@using TechParvaLEAO.Authorization
+@{
+    ViewBag.Title = "Advance Request";
+}
+
+<form asp-action="Advance" id="advanceform">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="container-fluid">
+        <div class="animated fadeIn">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <strong>Advance Request Application</strong>
+                        </div>
+                        <div class="card-body">
+
+                            <div class="row mycontainer">
+                                <div class="col-md-6">
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    <div class="form-group row">
+                                        @Html.LabelFor(model => model.RequestNumber, htmlAttributes: new { @class = "col-md-3 col-form-label" })
+                                        <div class="col-md-9">
+                                            New
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        @Html.LabelFor(model => model.Type, "Applicant", htmlAttributes: new { @class = "col-md-3 col-form-label" })
+                                        <div class="col-md-9">
+                                            @Html.DropDownList("Type", new List<SelectListItem>(){
+                                                new SelectListItem{Text="Myself", Value="1"},
+                                                new SelectListItem{Text="On Behalf", Value="2"}
+                                                }, "Applicant Type", new { @class = "form-control", @onchange = "MyselfOnbehalf()" })
+                                            @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-md-3 col-form-label" for="emp-name">Employee</label>
+                                        <div class="col-md-9">
+                                            @Html.DropDownListFor(m=> m.EmployeeId, null, "select employee", htmlAttributes: new { @class = "form-control employee", @onchange = "LoadEmployeedetails();LoadCurrency();" })
+                                            @Html.ValidationMessageFor(m => m.EmployeeId, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        @Html.LabelFor(model => model.BusinessActivityId, htmlAttributes: new { @class = "col-md-3 col-form-label" })
+                                        <div class="col-md-9">
+                                            @Html.DropDownListFor(m=>m.BusinessActivityId, (IEnumerable<SelectListItem>)ViewData["BusinessActivityId"], "Please Select", htmlAttributes: new { @class = "pc form-control businessactivity", @onchange = "LoadCustomerMarket(this)" })
+                                            @Html.ValidationMessageFor(model => model.BusinessActivityId, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        @Html.LabelFor(model => model.CustomerMarketId, htmlAttributes: new { @class = "col-md-3 col-form-label" })
+                                        <div class="col-md-9">
+                                            @Html.DropDownListFor(m=>m.CustomerMarketId, (IEnumerable<SelectListItem>)ViewData["CustomerMarketId"], "Please Select", htmlAttributes: new { @class = "pc form-control customermarket" })
+                                            @Html.ValidationMessageFor(model => model.CustomerMarketId, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        @Html.LabelFor(model => model.Comment, htmlAttributes: new { @class = "col-md-3 col-form-label" })
+                                        <div class="col-md-9">
+                                            @Html.TextAreaFor(model => model.Comment, 5, 40, htmlAttributes: new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.Comment, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        @Html.LabelFor(model => model.CurrencyId, htmlAttributes: new { @class = "col-md-3 col-form-label"})
+                                        <div class="col-md-9">
+                                            @Html.DropDownListFor(m => m.CurrencyId, (IEnumerable<SelectListItem>)ViewData["CurrencyId"], "Please Select", htmlAttributes: new { @class = "form-control", @onchange = "LoadEmployeedetails();"})
+                                            @Html.ValidationMessageFor(model => model.CurrencyId, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        @Html.LabelFor(model => model.Amount, htmlAttributes: new { @class = "col-md-3 col-form-label" })
+                                        <div class="col-md-9">
+                                            @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @class = "form-control", @value = "0" } })
+                                            @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div id="behalf-details">
+                                        <div class="form-group row">
+                                            <label class="col-md-3">Designation</label>
+                                            <div class="col-md-9">
+                                                <span id="Behalf_Emp_Designation"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-3">Location</label>
+                                            <div class="col-md-9">
+                                                <span id="Behalf_Emp_Location"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-3">Advance Paid (<span class="currencycode"></span>)</label>
+                                            <div class="col-md-9">
+                                                <span id="Behalf_Emp_Advance"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-3">Approved Reimbursements (<span class="currencycode"></span>)</label>
+                                            <div class="col-md-9">
+                                                <span id="Behalf_Emp_Reimbursement"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-3">Balance Payable/ Receivable (<span class="currencycode"></span>)</label>
+                                            <div class="col-md-9">
+                                                <span id="Behalf_Emp_Balance"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-md-3"></label>
+                                            <div class="col-md-9">
+                                                @Html.Hidden("LoggedInEmployeeId", ViewData["Employee_Loggedin"])
+                                                @Html.Hidden("Employee_CanApplyOnBehalf", (object)ViewData["Employee_CanApplyOnBehalf"])
+                                                @Html.Hidden("BasicSalary", 0)
+                                                @Html.Hidden("PaymentRequestType", "A")
+                                                @Html.Hidden("DraftId", @Model.DraftId)
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <!--expense head table-->
+                                <div class="col-md-12">
+                                    <nav>
+                                        <div class="col-md-offset-2 col-md-10">
+                                            <input type="submit" value="Submit" class="btn btn-success btn-sm" onsubmit="warnIfRequired(); return false;" />
+                                        </div>
+                                    </nav>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <!-- /.col-->
+                </div>
+                <!-- /.row-->
+
+            </div>
+            <!--table for claim details input-->
+
+        </div>
+    </div>
+
+</form>
+
+@section Scripts {
+    <script src="~/js/AdvanceAndExpense.js"></script>
+    <script src="~/js/common.js"></script>
+}

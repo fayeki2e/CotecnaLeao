@@ -1,0 +1,76 @@
+﻿@model IEnumerable<TechParvaLEAO.Areas.Leave.Models.LeaveAccountingPeriod>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Leave Accounting Periods</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+           <button onclick="exportData('leave_accounting_data' ,'LeaveAccounting')" class="btn btn-sm btn-info">
+    <span class="fa fa-download"></span>
+    Download Excel
+</button>
+
+</p>
+<table class="table" id="leave_accounting_data">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EndDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Active)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumberOfDaysOfLeave)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MaxCarryForwardFromLastYear)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Deactivated)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Active)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumberOfDaysOfLeave)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaxCarryForwardFromLastYear)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Deactivated)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Deactive" asp-route-id="@item.Id">Deactive</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,49 @@
+﻿@model TechParvaLEAO.Areas.Leave.Models.ViewModels.LeaveAccountingPeriodDeactivateVm
+
+@{
+    ViewData["Title"] = "Deactive";
+}
+
+<h1>Deactive</h1>
+
+<h3>Are you sure you want to Deactivate this?</h3>
+<div>
+    <p>
+        Please ensure that there are no pending leaves before deactivating leave year.
+    </p>
+    <table class="table table-responsive-sm table-bordered table-striped table-sm">
+        <thead>
+            <tr>
+                <th rowspan="2">Employee</th>
+                <th rowspan="2">From Date</th>
+                <th rowspan="2">To Date</th>
+                <th rowspan="2">Approver</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.PendingLeaves.Count() == 0)
+            {
+                <tr>
+                    <td colspan="5">No data found</td>
+                </tr>
+            }
+            @foreach (var item in Model.PendingLeaves)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Employee.EmployeeCode)</td>
+                    <td>@Html.DisplayFor(modelItem => item.StartDate)</td>
+                    <td>@Html.DisplayFor(modelItem => item.EndDate)</td>
+                    <td>@Html.DisplayFor(modelItem => item.LeaveRequestApprovedBy.Name)</td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+
+
+                <form asp-action="Deactive">
+                    <input type="hidden" asp-for="LeaveAccountingPeriod.Id" />
+                    <input type="submit" value="Deactive" class="btn btn-danger" /> |
+                    <a asp-action="Index">Back to List</a>
+                </form>
+</div>

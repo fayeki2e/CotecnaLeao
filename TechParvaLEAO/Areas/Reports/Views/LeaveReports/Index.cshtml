@@ -1,0 +1,138 @@
+﻿@using TechParvaLEAO.Authorization
+@{
+    ViewData["Title"] = "Leave Reports";
+}
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Leave Reports</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-responsive-sm table-bordered table-striped table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Sr No.</th>
+                                        <th rowspan="2">Reports</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                 @{
+                        int srno = 1;
+                    }
+                                <tbody>
+                                     @if (User.IsInRole(AuthorizationRoles.HR) || User.IsInRole(AuthorizationRoles.MANAGER))
+                                    {
+                                    <tr>
+                                        <td>@srno.ToString()</td>
+                                        <td>Paid Leave Balance Report</td>
+                                        
+                                   
+                                        <td><a href="/Reports/LeaveReports/PaidLeaveBalanceReport">View</a></td>
+                                    
+                                    </tr>
+                                    }
+                                     @if ( User.IsInRole(AuthorizationRoles.HR) || User.IsInRole(AuthorizationRoles.MANAGER))
+                                    {
+                                    <tr>
+                                          @{srno = srno + 1;}
+                                        <td>@srno.ToString()</td>
+                                        <td>Datewise Leaves Report</td>
+                                    
+                                        <td><a href="/Reports/LeaveReports/DateWiseLeaveReport">View</a></td>
+                                    
+                                    </tr>
+                                    }
+                                           @if (User.IsInRole(AuthorizationRoles.HR)  )
+                                    {
+                                    <tr>
+                                        @{srno = srno + 1;}
+                                        <td>@srno.ToString()</td>
+                                        <td>Carry Forward Leaves Report</td>
+                                    
+                                        <td><a href="/Reports/LeaveReports/CarryForwardLeavesReport">View</a></td>
+                                    
+                                    </tr>
+                                    }
+                                           @if (User.IsInRole(AuthorizationRoles.HR)  )
+                                    {
+                                    <tr>
+                                        @{srno = srno + 1;}
+                                        <td>@srno.ToString()</td>
+                                        <td>Seperated Employees Leave Balance Report</td>
+                                   
+                                        <td><a href="/Reports/LeaveReports/SeperatedEmployeeLeaveReport">View</a></td>
+                                    
+                                    </tr>
+                                    }
+                                          @if (User.IsInRole(AuthorizationRoles.HR) )
+                                    {
+                                    <tr>
+                                        @{srno = srno + 1;}
+                                        <td>@srno.ToString()</td>
+                                        <td>Newly joined Employees Leave Credit Report</td>
+                                   
+                                        <td><a href="/Reports/LeaveReports/JoinedEmployeeLeaveReport">View</a></td>
+                                    
+                                    </tr>
+                                    }
+                                      @if (User.IsInRole(AuthorizationRoles.HR)  )
+                                    {
+                                    <tr>
+                                        @{srno = srno + 1;}
+                                        <td>@srno.ToString()</td>
+                                        <td>Comp Off Report</td>
+                                   
+                                        <td><a href="/Reports/LeaveReports/EmployeeCompOffReport">View</a></td>
+                                   
+                                    </tr>
+                                     }
+                                     @if (User.IsInRole(AuthorizationRoles.HR) || User.IsInRole(AuthorizationRoles.MANAGER) )
+                                    {
+                                     <tr>
+                                         @{srno = srno + 1;}
+                                        <td>@srno.ToString()</td>
+                                        <td>Trend Report1 (Day Wise)</td>
+                                  
+                                        <td><a href="/Reports/LeaveReports/TrendReport1">View</a></td>
+                                    
+                                    </tr>
+                                    }
+                                     @if (User.IsInRole(AuthorizationRoles.HR) || User.IsInRole(AuthorizationRoles.MANAGER) )
+                                    {
+                                     <tr>
+                                         @{srno = srno + 1;}
+                                        <td>@srno.ToString()</td>
+                                        <td>Trend Report 2 (Type of Leave, Paid Leave/Sick Leave/Comp Off/ Maternity)</td>
+                                  
+                                        <td><a href="/Reports/LeaveReports/TrendReport2">View</a></td>
+                                    </tr>
+                                    }
+                                     @if (User.IsInRole(AuthorizationRoles.HR) || User.IsInRole(AuthorizationRoles.MANAGER) )
+                                    {
+                                     <tr>
+                                         @{srno = srno + 1;}
+                                        <td>@srno.ToString()</td>
+                                        <td>Trend Report 3 (Category of leave, Planned/Unplanned)</td>
+                                  
+                                        <td><a href="/Reports/LeaveReports/TrendReport3">View</a></td>
+                                    
+                                    </tr>
+                                    }
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

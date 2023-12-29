@@ -1,0 +1,14 @@
+﻿@model TechParvaLEAO.Areas.Leave.Models.ViewModels.LeaveRequestCancelViewModel
+
+@{
+    ViewBag.Title = "Cancel";
+}
+<h3>Error</h3>
+<div>
+    <div class="form-actions no-color">
+        This Leave cannot be cancelled as Timesheet is already submitted for this period.
+    </div>
+        <div class="form-actions no-color">
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    </div>

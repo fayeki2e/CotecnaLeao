@@ -1,0 +1,30 @@
+﻿Content-Type: text/html; charset=utf-8
+@{
+    Layout = null;
+}
+@model TechParvaLEAO.Models.NotificationEmailViewModel
+@using System.Globalization
+
+
+Dear @Model.PaymentRequestData.Employee,<br />
+<br />
+Your Expenses Claim has been approved and is forwarded to Finance for further process<br />
+<br />
+<table border="1">
+    <tr>
+        <td>Date of Claim Request:</td>
+        <td>Expense Claim No:</td>
+        <td>Amount</td>
+        <td>Comment</td>
+    </tr>
+    <tr>
+        <td>@Model.PaymentRequestData.CreatedDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</td>
+        <td>@Model.PaymentRequestData.RequestNumber</td>
+        <td>@Model.PaymentRequestData.Currency  @Model.PaymentRequestData.Amount</td>
+        <td>@Model.PaymentRequestData.Comment</td>
+    </tr>
+</table>
+<br />
+<br />
+
+        Best Regards

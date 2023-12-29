@@ -1,0 +1,224 @@
+﻿@model IEnumerable<TechParvaLEAO.Areas.Reports.Models.EmployeeExpenseTrackerReportVm>
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@using X.PagedList.Mvc.Common;
+
+@{
+    ViewData["Title"] = "Employee Expense Tracker";
+}
+<h1>Employee Expenses Tracker Report</h1>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <strong>Report Filter</strong>
+                <span data-toggle="tooltip" data-placement="top" data-original-title="click for Filter">
+                    &nbsp;
+                    <a class="btn btn-info btn-sm" data-toggle="collapse"
+                       data-target="#filter-for-search"><i class="fa fa-angle-double-down"></i></a>
+                </span>
+            </div>
+            <div class="card-body collapse" id="filter-for-search">
+                <form class="form-horizontal" action="" method="get">
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="expenseClaim-from-date">Approval From</label>
+                            <div class="col-md-9">
+                                @Html.Editor("ApproveRejectFromDate", new { htmlAttributes = new { @class = "form-control", type = "date" } })
+                                @Html.ValidationMessage("ApproveRejectToDate", "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="expenseClaim-to-date">Approval To</label>
+                            <div class="col-md-9">
+                                @Html.Editor("ApproveRejectToDate", new { htmlAttributes = new { @class = "form-control", type = "date" } })
+                                @Html.ValidationMessage("ApproveRejectToDate", "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-9">
+                                <button class="btn btn-md btn-primary" type="submit">
+                                    <i class="fa fa-dot-circle-o"></i> Search
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-responsive">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Month)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.SerialNumber)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Branch)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EmployeeCode)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EmployeeName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PaymentRequestNumber)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Amount)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.SubmissionDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ApprovalDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PaidDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Description)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PaidInDays)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @{if (Model.Count() == 0)
+                    {
+                        <tr><td>No Data Found</td></tr>
+                    }
+                }
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(model => item.Month)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.SerialNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.Branch)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.EmployeeCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.EmployeeName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.PaymentRequestNumber)
+                        </td>
+                        <td align="right">
+                            @Html.DisplayFor(model => item.Currency) @Html.DisplayFor(model => item.Amount)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.SubmissionDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.ApprovalDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.PaidDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.PaidInDays)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <p>
+            @Html.ActionLink("Download Excel", "EmployeeExpenseTracker",
+                "FinanceReports",
+                new
+                {
+                    Area = "Reports",
+                    ExpenseFromDate = Context.Request.Query["ExpenseFromDate"],
+                    ExpenseToDate = Context.Request.Query["ExpenseToDate"],
+                    AdvanceFromDate = Context.Request.Query["AdvanceFromDate"],
+                    AdvanceToDate = Context.Request.Query["AdvanceToDate"],
+                    ApproveRejectFromDate = Context.Request.Query["ApproveRejectFromDate"],
+                    ApproveRejectToDate = Context.Request.Query["ApproveRejectToDate"],
+                    AmountGt = Context.Request.Query["AmountGt"],
+                    AmountLt = Context.Request.Query["AmountLt"],
+                    BusinessActivity = Context.Request.Query["BusinessActivity"],
+                    Employee = Context.Request.Query["Employee"],
+                    CustomerMarket = Context.Request.Query["CustomerMarket"],
+                    Branch = Context.Request.Query["Branch"],
+                    SubmittedBy = Context.Request.Query["SubmittedBy"],
+                    ApproveRejectedBy = Context.Request.Query["ApproveRejectedBy"],
+                    Status = Context.Request.Query["Status"],
+                    Type = Context.Request.Query["Type"],
+                    Download = "xlsx"
+                }, new { @class = "btn btn-sm btn-info" })
+
+            @Html.ActionLink("Download PDF", "EmployeeExpenseTracker",
+                "FinanceReports",
+                new
+                {
+                    area = "Reports",
+                    ExpenseFromDate = Context.Request.Query["ExpenseFromDate"],
+                    ExpenseToDate = Context.Request.Query["ExpenseToDate"],
+                    AdvanceFromDate = Context.Request.Query["AdvanceFromDate"],
+                    AdvanceToDate = Context.Request.Query["AdvanceToDate"],
+                    ApproveRejectFromDate = Context.Request.Query["ApproveRejectFromDate"],
+                    ApproveRejectToDate = Context.Request.Query["ApproveRejectToDate"],
+                    AmountGt = Context.Request.Query["AmountGt"],
+                    AmountLt = Context.Request.Query["AmountLt"],
+                    BusinessActivity = Context.Request.Query["BusinessActivity"],
+                    Employee = Context.Request.Query["Employee"],
+                    CustomerMarket = Context.Request.Query["CustomerMarket"],
+                    Branch = Context.Request.Query["Branch"],
+                    SubmittedBy = Context.Request.Query["SubmittedBy"],
+                    ApproveRejectedBy = Context.Request.Query["ApproveRejectedBy"],
+                    Status = Context.Request.Query["Status"],
+                    Type = Context.Request.Query["Type"],
+                    Download = "pdf"
+                }, new { @class = "btn btn-sm btn-info" })
+        </p>
+    </div>
+</div>
+@Html.PagedListPager((IPagedList)Model, page => Url.Action(
+    "EmployeeExpenseTracker",
+    "FinanceReports",
+    new
+    {
+        area = "Reports",
+        id = page,
+        ExpenseFromDate = Context.Request.Query["ExpenseFromDate"],
+        ExpenseToDate = Context.Request.Query["ExpenseToDate"],
+        AdvanceFromDate = Context.Request.Query["AdvanceFromDate"],
+        AdvanceToDate = Context.Request.Query["AdvanceToDate"],
+        ApproveRejectFromDate = Context.Request.Query["ApproveRejectFromDate"],
+        ApproveRejectToDate = Context.Request.Query["ApproveRejectToDate"],
+        AmountGt = Context.Request.Query["AmountGt"],
+        AmountLt = Context.Request.Query["AmountLt"],
+        BusinessActivity = Context.Request.Query["BusinessActivity"],
+        Employee = Context.Request.Query["Employee"],
+        CustomerMarket = Context.Request.Query["CustomerMarket"],
+        Branch = Context.Request.Query["Branch"],
+        SubmittedBy = Context.Request.Query["SubmittedBy"],
+        ApproveRejectedBy = Context.Request.Query["ApproveRejectedBy"],
+        Status = Context.Request.Query["Status"],
+        Type = Context.Request.Query["Type"],
+    }), new PagedListRenderOptionsBase
+    {
+        PageClasses = new string[] { "page-link" },
+        UlElementClasses = new string[] { "pagination" },
+        LiElementClasses = new string[] { "page-item" },
+        DisplayItemSliceAndTotal = false,
+    })

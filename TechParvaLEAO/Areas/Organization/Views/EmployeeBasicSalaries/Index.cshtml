@@ -1,0 +1,137 @@
+﻿@model IEnumerable<TechParvaLEAO.Areas.Organization.Models.EmployeeBasicSalary>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Employee Basic Salaries</h1>
+
+<p>
+    <a class="btn btn-sm btn-info" asp-action="Create">Create New</a>
+    <a class="btn btn-sm btn-success" asp-action="UploadBasicSalariesFile">Bullk Upload File</a>
+          <button onclick="exportData('emp_basic_salary_data' ,'EmployeeBasicSalary')" class="btn btn-sm btn-info">
+    <span class="fa fa-download"></span>
+    Download Excel
+</button>
+
+</p>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <strong>Search</strong>
+                <span data-toggle="tooltip" data-placement="top" data-original-title="click for Filter">
+                    &nbsp;
+                    <a class="btn btn-info btn-sm" data-toggle="collapse"
+                       data-target="#filter-for-search"><i class="fa fa-angle-double-down"></i></a>
+                </span>
+            </div>
+            <div class="card-body collapse" id="filter-for-search">
+                <form class="form-horizontal" action="" method="post">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="name">Base Salary</label>
+                                <div class="col-md-9">
+                                    @Html.TextBox("BaseSalary", "", htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessage("BaseSalary", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="name">From Date</label>
+                                <div class="col-md-9">
+                                    @Html.Editor("FromDate", new { htmlAttributes = new { @class = "form-control", type = "date" } })
+                                    @Html.ValidationMessage("FromDate", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="name">Employee Code</label>
+                                <div class="col-md-9">
+                                    @Html.Editor("EmployeeCode", new { htmlAttributes = new { @class = "form-control"} })
+                                    @Html.ValidationMessage("EmployeeCode", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="name">Employee</label>
+                                <div class="col-md-9">
+                                    @Html.DropDownList("EmployeeId", null, "Select", htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessage("EmployeeId", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="name">To Date</label>
+                                <div class="col-md-9">
+                                    @Html.Editor("ToDate", new { htmlAttributes = new { @class = "form-control", type = "date" } })
+                                    @Html.ValidationMessage("ToDate", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-9">
+                                <button class="btn btn-md btn-primary" type="submit">
+                                    <i class="fa fa-dot-circle-o"></i> Search
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<table class="table" id="emp_basic_salary_data">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Employee.EmployeeCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Employee)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FromDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ToDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BaseSalary)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Deactivated)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Employee.EmployeeCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Employee.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FromDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ToDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BaseSalary)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Deactivated)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Deactive" asp-route-id="@item.Id">Deactive</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

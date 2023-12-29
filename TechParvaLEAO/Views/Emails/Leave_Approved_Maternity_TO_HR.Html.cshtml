@@ -1,0 +1,16 @@
+﻿Content-Type: text/html; charset=utf-8
+@{
+    Layout = null;
+}
+@model TechParvaLEAO.Models.NotificationEmailViewModel
+@using System.Globalization
+
+
+Dear  @Model.LeaveRequestData.HR,<br />
+<br />
+Maternity leave application of @Model.LeaveRequestData.Employee - @Model.LeaveRequestData.EmployeeCode for 180 days for period
+@Model.LeaveRequestData.FromDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture) to
+@Model.LeaveRequestData.ToDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture) has been approved by @Model.LeaveRequestData.ReportingManager.
+<br />
+<br />
+Best Regards

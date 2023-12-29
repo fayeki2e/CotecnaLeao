@@ -1,0 +1,46 @@
+﻿@model IEnumerable<TechParvaLEAO.Areas.Leave.Models.LeaveCategory>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Leave Categories</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+             <button onclick="exportData('leave_category_data' ,'LeaveCategory')" class="btn btn-sm btn-info">
+    <span class="fa fa-download"></span>
+    Download Excel
+</button>
+
+</p>
+<table class="table" id="leave_category_data">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Text)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Deactivated)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Text)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Deactivated)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Deactive" asp-route-id="@item.Id">Deactive</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,111 @@
+﻿@model IEnumerable<TechParvaLEAO.Areas.Expense.Models.BusinessActivity>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Business Activities</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <strong>Search</strong>
+                <span data-toggle="tooltip" data-placement="top" data-original-title="click for Filter">
+                    &nbsp;
+                    <a class="btn btn-info btn-sm" data-toggle="collapse"
+                       data-target="#filter-for-search"><i class="fa fa-angle-double-down"></i></a>
+                </span>
+            </div>
+            <div class="card-body collapse" id="filter-for-search">
+                <form class="form-horizontal" action="" method="post">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="name">Business Activity</label>
+                                <div class="col-md-9">
+                                    @Html.TextBox("Name", "", htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessage("Name", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="name">Code</label>
+                                <div class="col-md-9">
+                                    @Html.TextBox("Code", "", htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessage("Code", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="name">Business Unit</label>
+                                <div class="col-md-9">
+                                    @Html.DropDownList("BusinessUnitid", null, "Select", htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessage("BusinessUnitid", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-9">
+                                <button class="btn btn-md btn-primary" type="submit">
+                                    <i class="fa fa-dot-circle-o"></i> Search
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Code)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsVOC)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BusinessUnit)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Deactivated)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Code)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsVOC)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BusinessUnit.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Deactivated)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Deactive" asp-route-id="@item.Id">Deactive</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

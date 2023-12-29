@@ -1,0 +1,65 @@
+﻿@model IEnumerable<TechParvaLEAO.Areas.Organization.Models.EmployeeWeeklyOff>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Employee Weekly Off List</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FormDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ToDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WeeklyOffDay)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OtherWeeklyOffDay)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OtherWeeklyOffRule)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Employee)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FormDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ToDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WeeklyOffDay)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OtherWeeklyOffDay)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OtherWeeklyOffRule)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Employee.Id)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Deactive" asp-route-id="@item.Id">Deactive</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

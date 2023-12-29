@@ -1,0 +1,76 @@
+﻿@model TechParvaLEAO.Areas.Leave.Models.LeaveAccountingPeriod
+@{
+    ViewData["Title"] = "Confirm Activation";
+    var CarryForwardData = (IEnumerable<TechParvaLEAO.Areas.Leave.Controllers.MasterData.CarryForwardLeavesVm>)ViewData["CarryForwardData"];
+}
+
+<h1>Confirm Activation of New Leave Year</h1>
+
+<h3>Are you sure you want to Activate this?</h3>
+<div>
+    <p>
+        Confirm carry forward leaves from last year. Carry forward leaves once processed cannot be changed.
+    </p>
+    <table class="table table-responsive-sm table-bordered table-striped table-sm">
+        <thead>
+            <tr>
+                <th rowspan="2">Employee Code</th>
+                <th rowspan="2">Employee Name</th>
+                <th rowspan="2">Total Leaves</th>
+                <th rowspan="2">Leaves Utilized</th>
+                <th rowspan="2">Leaves To Be Carried Forward</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (CarryForwardData.Count() == 0)
+            {
+                <tr>
+                    <td colspan="5">No data found</td>
+                </tr>
+            }
+            @foreach (var item in CarryForwardData)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.EmployeeCode)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.TotalLeaves)</td>
+                    <td>@Html.DisplayFor(modelItem => item.LeavesUtilized)</td>
+                    <td>@Html.DisplayFor(modelItem => item.CarryForward)</td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+    <div class="col-md-4">
+        <form asp-action="ConfirmActivation">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StartDate" class="control-label"></label>
+                <input asp-for="StartDate" class="form-control" type="date" />
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EndDate" class="control-label"></label>
+                <input asp-for="EndDate" class="form-control" type="date" />
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NumberOfDaysOfLeave" class="control-label"></label>
+                <input asp-for="NumberOfDaysOfLeave" class="form-control" />
+                <span asp-validation-for="NumberOfDaysOfLeave" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MaxCarryForwardFromLastYear" class="control-label"></label>
+                <input asp-for="MaxCarryForwardFromLastYear" class="form-control" />
+                <span asp-validation-for="MaxCarryForwardFromLastYear" class="text-danger"></span>
+            </div>
+            <input type="submit" value="ConfirmActivation" class="btn btn-success" /> |
+            <a asp-action="Index">Cancel & back to Masters</a>
+        </form>
+    </div>
+</div>

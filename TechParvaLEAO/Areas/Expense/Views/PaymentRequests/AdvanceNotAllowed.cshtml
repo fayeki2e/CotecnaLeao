@@ -1,0 +1,23 @@
+﻿@using TechParvaLEAO.Areas.Expense.Services;
+@model IEnumerable<PendingDocumentPaymentRequests>
+
+@{
+    ViewData["Title"] = "AdvanceNotAllowed";
+}
+
+<h3>Can not create Advance Request for employee as documents for following Expense claims are not received</h3>
+
+<table class="table">
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.PaymentRequestNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SubmittedDate)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,20 @@
+﻿@{
+    ViewBag.Title = "Editor";
+}
+
+<h2>Editor</h2>
+
+@using(Html.BeginForm("Editor", "Index"))
+{ 
+<div>
+    @Html.TextArea("query")
+    <button type="submit">Go</button>
+</div>
+}
+
+@if(ViewBag.Result != null)
+{
+    <div>
+        @Html.Raw(ViewBag.Result)
+    </div>
+}

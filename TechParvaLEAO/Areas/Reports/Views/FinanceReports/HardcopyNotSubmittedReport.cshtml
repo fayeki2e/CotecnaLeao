@@ -1,0 +1,171 @@
+﻿@model IEnumerable<TechParvaLEAO.Areas.Reports.Models.HardcopyPendingReportVm>
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@using X.PagedList.Mvc.Common;
+
+@{
+    ViewData["Title"] = "Hardcopy Not Submitted Report";
+}
+
+<h1>Hardcopy Not Submitted Report</h1>
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-responsive">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Month)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.SerialNumber)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Branch)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EmployeeCode)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EmployeeName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Amount)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ClaimSubmissionDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ApprovalDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DaysSincePaid)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PaymentRequestNumber)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @{if (Model.Count() == 0)
+                    {
+                        <tr><td>No Data Found</td></tr>
+                    }
+                }
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Month)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SerialNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Branch)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EmployeeCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EmployeeName)
+                        </td>
+                        <td align="right">
+                            @Html.DisplayFor(model => item.Currency) @Html.DisplayFor(model => item.Amount)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ClaimSubmissionDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ApprovalDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DaysSincePaid)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PaymentRequestNumber)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <p>
+            @Html.ActionLink("Download Excel", "HardcopyNotSubmittedReport",
+                "FinanceReports",
+                new
+                {
+                    Area = "Reports",
+                    ExpenseFromDate = Context.Request.Query["ExpenseFromDate"],
+                    ExpenseToDate = Context.Request.Query["ExpenseToDate"],
+                    AdvanceFromDate = Context.Request.Query["AdvanceFromDate"],
+                    AdvanceToDate = Context.Request.Query["AdvanceToDate"],
+                    ApproveRejectFromDate = Context.Request.Query["ApproveRejectFromDate"],
+                    ApproveRejectToDate = Context.Request.Query["ApproveRejectToDate"],
+                    AmountGt = Context.Request.Query["AmountGt"],
+                    AmountLt = Context.Request.Query["AmountLt"],
+                    BusinessActivity = Context.Request.Query["BusinessActivity"],
+                    Employee = Context.Request.Query["Employee"],
+                    CustomerMarket = Context.Request.Query["CustomerMarket"],
+                    Branch = Context.Request.Query["Branch"],
+                    SubmittedBy = Context.Request.Query["SubmittedBy"],
+                    ApproveRejectedBy = Context.Request.Query["ApproveRejectedBy"],
+                    Status = Context.Request.Query["Status"],
+                    Type = Context.Request.Query["Type"],
+                    Download = "xlsx"
+                }, new { @class = "btn btn-sm btn-info" })
+
+            @Html.ActionLink("Download PDF", "HardcopyNotSubmittedReport",
+                "FinanceReports",
+                new
+                {
+                    area = "Reports",
+                    ExpenseFromDate = Context.Request.Query["ExpenseFromDate"],
+                    ExpenseToDate = Context.Request.Query["ExpenseToDate"],
+                    AdvanceFromDate = Context.Request.Query["AdvanceFromDate"],
+                    AdvanceToDate = Context.Request.Query["AdvanceToDate"],
+                    ApproveRejectFromDate = Context.Request.Query["ApproveRejectFromDate"],
+                    ApproveRejectToDate = Context.Request.Query["ApproveRejectToDate"],
+                    AmountGt = Context.Request.Query["AmountGt"],
+                    AmountLt = Context.Request.Query["AmountLt"],
+                    BusinessActivity = Context.Request.Query["BusinessActivity"],
+                    Employee = Context.Request.Query["Employee"],
+                    CustomerMarket = Context.Request.Query["CustomerMarket"],
+                    Branch = Context.Request.Query["Branch"],
+                    SubmittedBy = Context.Request.Query["SubmittedBy"],
+                    ApproveRejectedBy = Context.Request.Query["ApproveRejectedBy"],
+                    Status = Context.Request.Query["Status"],
+                    Type = Context.Request.Query["Type"],
+                    Download = "pdf"
+                }, new { @class = "btn btn-sm btn-info" })
+        </p>
+    </div>
+</div>
+@Html.PagedListPager((IPagedList)Model, page => Url.Action(
+    "HardcopyNotSubmittedReport",
+    "FinanceReports",
+    new
+    {
+        area = "Reports",
+        id = page,
+        ExpenseFromDate = Context.Request.Query["ExpenseFromDate"],
+        ExpenseToDate = Context.Request.Query["ExpenseToDate"],
+        AdvanceFromDate = Context.Request.Query["AdvanceFromDate"],
+        AdvanceToDate = Context.Request.Query["AdvanceToDate"],
+        ApproveRejectFromDate = Context.Request.Query["ApproveRejectFromDate"],
+        ApproveRejectToDate = Context.Request.Query["ApproveRejectToDate"],
+        AmountGt = Context.Request.Query["AmountGt"],
+        AmountLt = Context.Request.Query["AmountLt"],
+        BusinessActivity = Context.Request.Query["BusinessActivity"],
+        Employee = Context.Request.Query["Employee"],
+        CustomerMarket = Context.Request.Query["CustomerMarket"],
+        Branch = Context.Request.Query["Branch"],
+        SubmittedBy = Context.Request.Query["SubmittedBy"],
+        ApproveRejectedBy = Context.Request.Query["ApproveRejectedBy"],
+        Status = Context.Request.Query["Status"],
+        Type = Context.Request.Query["Type"],
+    }), new PagedListRenderOptionsBase
+    {
+        PageClasses = new string[] { "page-link" },
+        UlElementClasses = new string[] { "pagination" },
+        LiElementClasses = new string[] { "page-item" },
+        DisplayItemSliceAndTotal = false,
+    })

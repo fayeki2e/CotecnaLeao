@@ -1,0 +1,40 @@
+﻿Content-Type: text/html; charset=utf-8
+@{
+    Layout = null;
+}
+@model TechParvaLEAO.Models.NotificationEmailViewModel
+@using System.Globalization
+
+
+Dear @Model.PaymentRequestData.Employee,<br />
+<br />
+Your advance request is forwarded to your reporting manager for validation.<br />
+<br />
+<table border="1">
+    <tr>
+        <td>Advance Request No:</td>
+        <td>Amount:</td>
+        <td>Comment:</td>
+    </tr>
+    <tr>
+        <td> @Model.PaymentRequestData.RequestNumber</td>
+        <td> @Model.PaymentRequestData.Currency  @Model.PaymentRequestData.Amount</td>
+        <td>@Model.PaymentRequestData.Comment</td>
+    </tr>
+</table>
+<br />
+Pending unsettle advance for which claims are not submitted.
+<br />
+<table border="1">
+    <tr>
+        <td>Total of Amount of Advance Unsettled:</td>
+    </tr>
+    <tr>
+        <td>@Model.PaymentRequestData.UnsettledCurrency  @Model.PaymentRequestData.UnsettledAmount</td>
+    </tr>
+</table>
+    </br>
+
+
+
+        Best Regards

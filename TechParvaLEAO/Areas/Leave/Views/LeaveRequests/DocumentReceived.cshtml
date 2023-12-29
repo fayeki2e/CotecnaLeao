@@ -1,0 +1,22 @@
+﻿@model TechParvaLEAO.Areas.Leave.Models.ViewModels.DocumentReceivedViewModel
+@{
+    ViewBag.Title = "DocumentReceived";
+}
+<div>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <h4>Document Received date will be today's date.</h4>
+            <br />
+            <h5>Are you sure you want to confirm?</h5>
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.LeaveRequestId)
+
+        </div>
+        <div class="form-actions no-color">
+            <input type="submit" value="Confirm" class="btn btn-default" />
+        </div>
+    }
+</div>

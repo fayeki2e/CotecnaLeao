@@ -1,0 +1,42 @@
+﻿
+Content-Type: text/html; charset=utf-8
+@{
+    Layout = null;
+}
+@model TechParvaLEAO.Models.NotificationEmailViewModel
+@using System.Globalization
+
+
+Dear All,<br />
+<br />
+An advance request submitted by
+@Model.PaymentRequestData.Employee - @Model.PaymentRequestData.EmployeeCode is still pending for your validation.<br />
+<br />
+<table border="1">
+    <tr>
+        <td>Date of Request:</td>
+        <td>Advance Request No:</td>
+        <td>Amount:</td>
+        <td>Comment:</td>
+    </tr>
+    <tr>
+        <td>@Model.PaymentRequestData.CreatedDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</td>
+        <td>@Model.PaymentRequestData.RequestNumber</td>
+        <td>@Model.PaymentRequestData.Currency  @Model.PaymentRequestData.Amount</td>
+        <td>@Model.PaymentRequestData.Comment</td>
+    </tr>
+</table>
+<br />
+Pending unsettled advance by
+@Model.PaymentRequestData.EmployeeCode - @Model.PaymentRequestData.Employee<br />
+<br />
+<table border="1">
+    <tr>
+        <td>Amount of Advance Unsettled :</td>
+    </tr>
+    <tr>
+        <td>@Model.PaymentRequestData.UnsettledCurrency  @Model.PaymentRequestData.UnsettledAmount</td>
+    </tr>
+</table>
+<br />
+Best Regards

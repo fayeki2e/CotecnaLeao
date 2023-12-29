@@ -1,0 +1,547 @@
+﻿@model TechParvaLEAO.Areas.Expense.Models.ViewModels.ExpenseViewModel
+
+@{
+    ViewBag.Title = "Expense";
+}
+
+<form asp-action="Expense" id="ExpenseForm" enctype="multipart/form-data">
+    <div class="container-fluid">
+        <div class="animated fadeIn">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <strong>Expense Claim Application</strong>
+                        </div>
+                        <div class="card-body" id="div_c_body">
+                            <div class="row">
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        @Html.HiddenFor(model => model.Amount)
+                                        @Html.LabelFor(model => model.FromDate, htmlAttributes: new { @class = "col-md-4 col-form-label" })
+                                        <div class="col-md-8">
+                                            @Html.EditorFor(model => model.FromDate, new { htmlAttributes = new { @class = "form-control", @type = "date" } })
+                                            @Html.ValidationMessageFor(model => model.FromDate, "", new { @class = "text-danger" })
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group row">
+                                        @Html.LabelFor(model => model.ToDate, htmlAttributes: new { @class = "col-md-4 col-form-label" })
+                                        <div class="col-md-8">
+                                            @Html.EditorFor(model => model.ToDate, new { htmlAttributes = new { @class = "form-control", type = "date", @onfocusout = "FromAndToDate()" } })
+                                            <span class="error1">To Date should be greater than or equal to From Date</span>
+                                            @Html.ValidationMessageFor(model => model.ToDate, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        @Html.LabelFor(model => model.CurrencyId, "Currency", htmlAttributes: new { @class = "control-label col-md-4" })
+                                        <div class="col-md-8">
+                                            @Html.DropDownListFor(model => model.CurrencyId, null, "select", htmlAttributes: new { @class = "form-control", @onchange = "CheckSettleAdvance(); LoadEmployeedetails(); LoadPendingAdvances();" })
+                                            @Html.ValidationMessageFor(model => model.CurrencyId, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        @Html.LabelFor(model => model.AdvancePaymentRequestId, htmlAttributes: new { @class = "col-md-4 col-form-label" })
+                                        <div class="col-md-8">
+                                            @Html.DropDownListFor(model => model.AdvancePaymentRequestId, null, htmlAttributes: new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.AdvancePaymentRequestId, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                               @*      <div class="form-group row">
+                                          @Html.LabelFor(model => model.operationtype,"Operation Type",  htmlAttributes: new { @class = "col-md-3 col-form-label" })
+                                        <div class="col-md-9">
+                                            @Html.DropDownList("OperationType", new List<SelectListItem>()
+                                            {
+                                                new SelectListItem{Text="Misc", Value="1"},
+                                                new SelectListItem{Text="Job No", Value="2"}
+                                            },   new { @class = "form-control", @onchange = "OperationNumber()" })
+                                            @Html.ValidationMessageFor(model => model.operationtype, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>*@
+                                    @*  <div class="form-group row" id="dv_operation" style="visibility:hidden">
+                                        @Html.LabelFor(model => model.operationno, htmlAttributes: new { @class = "col-md-3 col-form-label" })
+                                        <div class="col-md-9">
+                                            @Html.TextBoxFor(model => model.operationno,   htmlAttributes: new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.operationno, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>*@
+                                    <div class="form-group row">
+                                        @Html.LabelFor(model => model.Comment, htmlAttributes: new { @class = "col-md-4 col-form-label" })
+                                        <div class="col-md-8">
+                                            @Html.TextAreaFor(model => model.Comment, 2, 40, htmlAttributes: new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.Comment, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group row" id="CreditCardDiv">
+                                        @Html.LabelFor(model => model.CreditCard, htmlAttributes: new { @class = "col-md-4 col-form-label" })
+                                        <div class="col-md-8">
+                                            @Html.CheckBoxFor(model => model.CreditCard, htmlAttributes: new { @class = "control-label col-md-3", @onclick = "CheckCreditCard()" })
+                                            @Html.ValidationMessageFor(model => model.CreditCard, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        @Html.LabelFor(model => model.Type, "Applicant", htmlAttributes: new { @class = "col-md-4 col-form-label" })
+                                        <div class="col-md-8">
+                                            @Html.DropDownList("Type", new List<SelectListItem>()
+                                            {
+                                                new SelectListItem{Text="Myself", Value="1"},
+                                                new SelectListItem{Text="On Behalf", Value="2"}
+                                            }, "   Applicant Type", new { @class = "form-control", @onchange = "MyselfOnbehalf()" })
+                                            @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-md-4 col-form-label" for="emp-name">Employee</label>
+                                        <div class="col-md-8">
+                                            @Html.DropDownListFor(m => m.EmployeeId, null, "select employee", htmlAttributes: new { @class = "form-control employee selectpicker", data_live_search = "true", @onchange = "LoadEmployeedetails();LoadCurrency();LoadExpenseHead();LoadPendingAdvances()" })
+                                            @Html.ValidationMessageFor(model => model.EmployeeId, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div id="behalf-details">
+                                        <div class="form-group row">
+                                            <label class="col-md-4">Designation</label>
+                                            <div class="col-md-8">
+                                                <span id="Behalf_Emp_Designation"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-4">Location</label>
+                                            <div class="col-md-8">
+                                                <span id="Behalf_Emp_Location"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-4">Advance Paid (<span class="currencycode"></span>)</label>
+                                            <div class="col-md-8">
+                                                <span id="Behalf_Emp_Advance"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-4">Approved Reimbursements(<span class="currencycode"></span>)</label>
+                                            <div class="col-md-8">
+                                                <span id="Behalf_Emp_Reimbursement"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-4">Balance Payable/ Receivable (<span class="currencycode"></span>)</label>
+                                            <div class="col-md-8">
+                                                <span id="Behalf_Emp_Balance"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-4"></label>
+                                            <div class="col-md-8">
+                                                @Html.Hidden("LoggedInEmployeeId", (object)ViewData["Employee_Loggedin"])
+                                                @Html.Hidden("Employee_CanApplyOnBehalf", (object)ViewData["Employee_CanApplyOnBehalf"])
+                                                @Html.Hidden("BasicSalary", 0)
+                                                @Html.Hidden("PaymentRequestType", "E")
+                                                @Html.Hidden("DraftId", @Model.DraftId)
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--expense head table-->
+                                <div class="col-md-12"  >
+                                     <div   id="dv_print" class="dv_print_close">
+                                         <span id="ui-id-1" class="ui-dialog-title" style="display:none">Basic dialog</span>
+
+ 
+                                    <table class="table table-responsive-sm table-bordered table-striped table-sm"
+                                           id="myTable">
+                                        <thead>
+                                            
+
+                                            <tr>
+                                                <th rowspan="2">Sr No.</th>
+                                                <th rowspan="2">Operation Type</th>
+                                                   <th rowspan="2">Operation Number</th>
+                                                <th rowspan="2">Expense Head</th>
+                                                <th rowspan="2">Business Activity</th>
+                                                <th rowspan="2">Customer Market</th>
+                                                <th rowspan="2">Expense Voucher<br> Reference No.</th>
+                                                <th rowspan="2">Description (Max 50 chars.)</th>
+                                                <th rowspan="2">Date</th>
+                                                <th rowspan="2">Amount</th>
+                                                <th colspan="2">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (Model.ExpenseLineItems != null)
+                                            {
+                                                for (var i = 0; i < Model.ExpenseLineItems.Count(); i++)
+                                                {
+                                                    <tr class="mycontainer">
+                                                        <td>@(i + 1)</td>
+                                                         <td>
+                                                          
+                                         @Html.DropDownListFor(m => Model.ExpenseLineItems[i].operationtype, new List<SelectListItem>()
+                                            {
+                                                new SelectListItem{Text="Miscellaneous", Value="1"},
+                                                new SelectListItem{Text="Job No", Value="2"}
+                                            },   new { @class = "pc form-control ", @onchange = "OperationNumber(this)" })
+                                                            @Html.ValidationMessageFor(model => Model.ExpenseLineItems[i].operationtype, "", new { @class = "text-danger" })
+                                                       
+                                             
+                                                                @if( Model.ExpenseLineItems[i].operationtype == "2")
+                                                                {
+                                                                    ViewBag.operationno_setvisibility = "visible";
+                                                                }
+                                                                else
+                                                                {
+                                                                    ViewBag.operationno_setvisibility = "hidden";
+                                                                }
+                                                        
+                                                        </td>
+                                                           <td>
+                                                            @Html.TextBoxFor(x => Model.ExpenseLineItems[i].operationno, new { @class = "form-control" , @style="visibility:"+@ViewBag.operationno_setvisibility,@onchange = "check_operationnumber(this)"})
+                                                            @Html.ValidationMessageFor(model => model.ExpenseLineItems[i].operationno, "", new { @class = "text-danger" })
+                                                           <div id="validation_@(i)__operationnumber" class="text-danger field-validation-error" style="visibility:hidden">Please Enter Operation Number </div>   
+ 
+
+                                                        </td>
+                                                        <td>
+                                                            @Html.DropDownListFor(m => Model.ExpenseLineItems[i].ExpenseHead, (IEnumerable<SelectListItem>)ViewData["ExpenseHead"], "select expense head", htmlAttributes: new { @class = "pc form-control expensehead", @onchange = "LoadBusinessActivity(this)" })
+                                                            @Html.ValidationMessageFor(model => Model.ExpenseLineItems[i].ExpenseHead, "", new { @class = "text-danger" })
+                                                        </td>
+                                                        <td>
+                                                            @Html.DropDownListFor(m => Model.ExpenseLineItems[i].BusinessActivity, (IEnumerable<SelectListItem>)ViewData["BusinessActivity"], "select business activity", htmlAttributes: new { @class = "pc form-control businessactivity", @onchange = "LoadCustomerMarket(this)" })
+                                                            @Html.ValidationMessageFor(model => Model.ExpenseLineItems[i].BusinessActivity, "", new { @class = "text-danger" })
+                                                        </td>
+                                                        <td>
+                                                            @Html.DropDownListFor(m => Model.ExpenseLineItems[i].CustomerMarket, (IEnumerable<SelectListItem>)ViewData["CustomerMarket"], "select customer market", htmlAttributes: new { @class = "pc form-control customermarket" })
+                                                            @Html.ValidationMessageFor(model => Model.ExpenseLineItems[i].CustomerMarket, "", new { @class = "text-danger" })
+                                                        </td>
+                                                        <td>
+                                                            @Html.TextBoxFor(x => Model.ExpenseLineItems[i].ExpenseVoucherReferenceNo, new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(model => model.ExpenseLineItems[i].ExpenseVoucherReferenceNo, "", new { @class = "text-danger" })
+                                                        </td>
+                                                        <td>
+                                                            @Html.TextBoxFor(x => Model.ExpenseLineItems[i].Description, new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(model => model.ExpenseLineItems[i].Description, "", new { @class = "text-danger" })
+                                                        </td>
+                                                        <td>
+                                                            @Html.EditorFor(model => model.ExpenseLineItems[i].Date, new { htmlAttributes = new { @class = "form-control expenseDate", type = "date", @onfocusout = "ExpenseCreateDate()" } })
+                                                            <span class="error1">Date should be in between From and To date</span>
+                                                            @Html.ValidationMessageFor(model => model.ExpenseLineItems[i].Date, "", new { @class = "text-danger" })
+                                                        </td>
+                                                        <td>
+                                                            @Html.TextBoxFor(x => Model.ExpenseLineItems[i].Amount, new { @class = "form-control" , onchange = "get_balance()"}) 
+                                                            @Html.ValidationMessageFor(model => model.ExpenseLineItems[i].Amount, "", new { @class = "text-danger" })
+                                                        </td>
+                                                        @*<td><input class="btn btn-success" type="submit" value="Add" name="add_row" onclick="get_balance();add_line_item();" formaction="/Expense/PaymentRequests/AddLineItem" formnovalidate></td>
+*@
+                                                        <td><input class="btn btn-success" type="button" value="Add" name="add_row" onclick="get_balance();add_line_item();" ></td>
+                                                      @*     <td><input class="btn btn-success" type="button" value="Add" name="add_row" onclick="get_balance();remove_line_item(@(i));" ></td>*@
+
+                                                        <td><input class="btn btn-success" type="submit" value="Delete" name="remove_row"  onclick="get_balance()" formaction="/Expense/PaymentRequests/RemoveLineItem/@(i+0)" formnovalidate></td>
+                                                    </tr>
+                                                }
+                                            }
+                                            <tr>
+                                                <th rowspan="2"></th>
+                                                <th rowspan="2"> </th>
+                                                <th rowspan="2"> </th>
+                                                <th rowspan="2"> </th>
+                                                <th rowspan="2"> </th>
+                                                <th rowspan="2"> </th>
+                                                <th rowspan="2">Total Amount</th>
+                                                <th rowspan="2"><label id="lbl_total"></label></th>
+                                                <th colspan="2"> </th>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                    </div>
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <div class="form-group row">
+                                                    <label class="col-md-6 col-form-label" for="supportings">Supportings</label>
+                                                    <div class="col-md-6">
+                                                        <input id="supportings-reuim" type="file" name="supportings"
+                                                               multiple  >
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                    </table>
+                                    
+                                    <div style="padding:10px 0; text-align:left">
+                                        <input id="submit" type="submit" value="Submit" class="btn btn-success" style="padding:10px 20px" onclick="validate_expense(event);"/>
+                                         <input id="btn_preview" type="submit" value="Preview" class="btn btn-warning" style="padding:10px 20px" onclick="show_preview(event)" /> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.col-->
+                </div>
+                <!-- /.row-->
+            </div>
+            <!--table for claim details input-->
+
+        </div>
+    </div>
+
+ 
+
+
+
+<div class="bs-example" >
+      
+    <!-- Modal HTML -->
+    <div id="previewModal" class="modal fade">
+        <div class="modal-dialog" style="margin:10px">
+            <div class="modal-content"  style="width:1200px;padding:30px">
+
+               
+                <!-- Content will be loaded here from "remote.php" file -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</form>
+ 
+ 
+ 
+ 
+
+<script>
+
+
+
+         //function uploadFiles(inputId) {
+         //   var input = document.getElementById(inputId);
+         //   var files = input.files;
+         //   alert('aa');
+
+         //   console.log(files);
+
+         //}
+
+
+    function check_operationnumber(txt)
+    {
+          
+
+        var index=txt.id.split("_")[1];
+        if(txt.value =="")
+        {
+    
+         $("#validation_"+index+"__operationnumber").css("visibility", "visible");
+        }else
+        {
+             $("#validation_"+index+"__operationnumber").css("visibility", "hidden");
+        }
+    }
+
+
+    function validate_expense(e)
+    {
+          
+
+         var form_validate =false;
+
+         for(i=1;i<$('#myTable tr').length;i++)
+         {
+             var index = i-1;
+
+             if($("#ExpenseLineItems_"+index+"__operationtype option:selected").val() =="2" )
+             {
+
+                 if($("#ExpenseLineItems_"+index+"__operationno").val() =="" || $("#ExpenseLineItems_"+index+"__operationno").val() == undefined )          
+                 {
+               //  alert("aaa");
+               $("#validation_"+index+"__operationnumber").css("visibility", "visible");
+        
+               
+               form_validate =false;
+                break;
+                 
+                 }else
+                 {
+ $("#validation_"+index+"__operationnumber").css("visibility", "hidden");
+                 }
+
+             }
+             else
+             {
+                 form_validate =true;
+             }
+         }
+
+         if(form_validate == false)
+         {
+               e.preventDefault() ;
+                   return false;
+         }
+
+       
+    }
+
+    function remove_line_item(id)
+    {
+
+        alert(id);
+
+    }
+
+    function add_line_item()
+    {
+       
+var tlen=$('#myTable tr').length;
+
+var html ="";
+html  = '<tr>';
+html  = html + '<td>'+ parseInt(parseInt(tlen) -1)  +'</td>'
+html=html +'<td>'+ document.getElementById('myTable').tBodies[0].rows[0].cells[1].innerHTML.replaceAll('_0_', '_'+ parseInt(parseInt(tlen) -2)  +'_').replaceAll('[0]','['+ parseInt(parseInt(tlen) -2)+']') +'</td>';
+html=html +'<td>'+ document.getElementById('myTable').tBodies[0].rows[0].cells[2].innerHTML.replaceAll('_0_', '_'+ parseInt(parseInt(tlen) -2)  +'_').replaceAll('[0]','['+ parseInt(parseInt(tlen) -2)+']').replaceAll('visible','hidden') +'</td>';
+html=html +'<td>'+ document.getElementById('myTable').tBodies[0].rows[0].cells[3].innerHTML.replaceAll('_0_', '_'+ parseInt(parseInt(tlen) -2)  +'_').replaceAll('[0]','['+ parseInt(parseInt(tlen) -2)+']') +'</td>';
+
+html=html +'<td>'+ document.getElementById('myTable').tBodies[0].rows[0].cells[4].innerHTML.replaceAll('_0_', '_'+ parseInt(parseInt(tlen) -2)  +'_').replaceAll('[0]','['+ parseInt(parseInt(tlen) -2)+']') +'</td>';
+html=html +'<td>'+ document.getElementById('myTable').tBodies[0].rows[0].cells[5].innerHTML.replaceAll('_0_', '_'+ parseInt(parseInt(tlen) -2)  +'_').replaceAll('[0]','['+ parseInt(parseInt(tlen) -2)+']') +'</td>';
+html=html +'<td>'+ document.getElementById('myTable').tBodies[0].rows[0].cells[6].innerHTML.replaceAll('_0_', '_'+ parseInt(parseInt(tlen) -2)  +'_').replaceAll('[0]','['+ parseInt(parseInt(tlen) -2)+']') +'</td>';
+html=html +'<td>'+ document.getElementById('myTable').tBodies[0].rows[0].cells[7].innerHTML.replaceAll('_0_', '_'+ parseInt(parseInt(tlen) -2)  +'_').replaceAll('[0]','['+ parseInt(parseInt(tlen) -2)+']') +'</td>';
+html=html +'<td>'+ document.getElementById('myTable').tBodies[0].rows[0].cells[8].innerHTML.replaceAll('_0_', '_'+ parseInt(parseInt(tlen) -2)  +'_').replaceAll('[0]','['+ parseInt(parseInt(tlen) -2)+']') +'</td>';
+html=html +'<td>'+ document.getElementById('myTable').tBodies[0].rows[0].cells[9].innerHTML.replaceAll('_0_', '_'+ parseInt(parseInt(tlen) -2)  +'_').replaceAll('[0]','['+ parseInt(parseInt(tlen) -2)+']') +'</td>';
+html=html +'<td>'+ document.getElementById('myTable').tBodies[0].rows[0].cells[10].innerHTML +'</td>';
+html=html +'<td>'+ document.getElementById('myTable').tBodies[0].rows[0].cells[11].innerHTML.replace('0', parseInt(parseInt(tlen) -2)); +'</td>';
+html  = html + '</tr>'
+
+document.getElementById("myTable").insertRow(tlen-1).innerHTML = html;
+  
+ 
+        //var model = { EmployeeId :"1" };
+
+        //    var viewModel = { EmployeeId : 1};
+
+        //     var person = {};
+        //        person.EmployeeId = "1";
+
+        //        var EmployeeId ="1";
+               
+        //   $.ajax({
+        //    url: '/Expense/PaymentRequests/ApproveConfirmedAll',
+        //    type: "GET",
+        //  //  data:  '{paymentRequest: ' + JSON.stringify(person) + '}',
+        // //   data: $("form").serialize(),
+        //  data: {
+                 
+        //        EmployeeId: JSON.stringify(employeeId) , 
+        //        EmployeeName: JSON.stringify('fayek'),
+        //        ExpenseHead:JSON.stringify('abc')
+        //    },
+        //   //data: {
+                 
+        //   //     paymentRequest: JSON.stringify(person)  
+        //   // },
+        //    cache: false,
+        //    contentType: "application/json; charset=utf-8",
+        //    dataType: "json",
+        //    success: function (data) {
+        //        alert("Successfully Leave Approved");
+        //        //location.reload();
+
+        //    }
+        //});
+
+    }
+
+    function show_preview(e)
+    {
+ 
+
+    var url = window.location.href;
+var preview_url = "";
+preview_url = url + "DetailsPreview/1";
+
+preview_url = location.protocol + '//' + location.host +'/Expense/PaymentRequests/ExpenseDetailsPreview/1';
+
+
+  $('#previewModal').modal('show').find('.modal-content').load(preview_url);
+
+  e.preventDefault() ;
+ 
+
+        
+    }
+      function close_preview()
+    {
+        // $( "#dv_print" ).dialog();
+        $("#dv_print").toggle();
+       
+          $("#dv_print").removeClass("dv_print_show");
+           $("#dv_print").addClass("dv_print_close");
+            $("#btn_close").css("display", "none");
+    }
+
+    function tbl_preview()
+    {
+          var divElements = document.getElementById('dv_print').innerHTML;
+        //Get the HTML of whole page
+        var oldPage = document.body.innerHTML;
+        //Reset the page's HTML with div's HTML only
+        var print_body="";
+
+        print_body = "<html><head>   "
+print_body = print_body + " <title></title></head><body>" + divElements + "</body>";
+
+          document.body.innerHTML = print_body;
+        //Print Page
+        window.print();
+        //Restore orignal HTML
+        document.body.innerHTML = oldPage;
+         
+
+    }
+
+</script>
+
+@section Scripts {
+
+    <script src="~/js/AdvanceAndExpense.js"></script>
+    <script src="~/js/common.js"></script>
+   
+@*     <script src=
+        "https://code.jquery.com/jquery-3.5.1.min.js">
+    </script>
+*@
+ 
+    
+<script src=~/lib/bootstrap/dist/js/bootstrap.js></script>
+ 
+
+     
+
+}
+
+
+<style>
+    span.error {
+        display: block;
+        visibility: hidden;
+        color: red;
+        font-size: 90%;
+    }
+
+    tr.error {
+        background-color: rgba(255,0,0,0.35);
+    }
+    span.error1 {
+        display: none;
+        color: red;
+        font-size: 90%;
+    }
+
+    tr.error1 {
+        background-color: rgba(255,0,0,0.35);
+    }
+</style>

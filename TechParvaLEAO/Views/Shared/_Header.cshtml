@@ -1,0 +1,45 @@
+﻿@using Microsoft.AspNetCore.Identity
+    <header class="app-header navbar">
+        <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="/">
+            <img class="navbar-brand-full" src="~/img/cotecna.png" width="176" height="40"
+                 alt="CotecnaUI Logo">
+
+        </a>
+        <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button" data-toggle="sidebar-lg-show">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        @if (SignInManager.IsSignedIn(User))
+        {
+            if (await UserManager.GetUserAsync(User) != null)
+            {
+                <ul class="nav navbar-nav d-md-down-none">
+                    <li class="nav-item px-3">
+                        <a class="nav-link" href="/">Dashboard</a>
+                    </li>
+                </ul>
+            }
+            <ul class="nav navbar-nav ml-auto">
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                        <!--<img class="img-avatar" src="Content/img/avatars/6.jpg" alt="admin@bootstrapmaster.com">-->
+                        @await Component.InvokeAsync("EmployeeHeader", new { User })
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <div class="dropdown-header text-center">
+                            <strong>Account</strong>
+                        </div>
+                        @if (await UserManager.GetUserAsync(User) != null)
+                        {
+                            <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><i class="fa fa-lock"></i> View Profile</a>
+                            <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/ChangePassword" title="Change password"><i class="fa fa-lock"></i> Change Password</a>
+                        }
+                        <partial name="_LoginPartial" />
+                    </div>
+                </li>
+            </ul>
+        }
+    </header>

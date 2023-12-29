@@ -1,0 +1,22 @@
+﻿Content-Type: text/html; charset=utf-8
+@{
+    Layout = null;
+}
+@model TechParvaLEAO.Models.NotificationEmailViewModel
+@using System.Globalization
+
+Dear @Model.LeaveRequestData.EmployeeCode - @Model.LeaveRequestData.Employee,
+<br />
+<br />
+Your mission application of @Model.LeaveRequestData.NumberOfDays day/s for the period
+@Model.LeaveRequestData.FromDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)
+@if (@Model.LeaveRequestData.HalfDayStart)
+{<span> (Half day Afternoon)</span>}
+ to
+@Model.LeaveRequestData.ToDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)
+@if (Model.LeaveRequestData.HalfDayEnd)
+{<span> (Half Day Morning)</span>} has been submitted successfully
+and sent to your Reporting Manager for approval.
+<br />
+<br />
+Best Regards

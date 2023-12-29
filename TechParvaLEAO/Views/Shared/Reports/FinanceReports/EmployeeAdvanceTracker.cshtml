@@ -1,0 +1,135 @@
+﻿@model IEnumerable<TechParvaLEAO.Areas.Reports.Models.EmployeeAdvanceTrackerReportVm>
+
+@{
+    ViewData["Title"] = "Employee Advance Tracker";
+    var search = (TechParvaLEAO.Areas.Reports.Models.FinanceReportSearchVm)ViewData["Search"];
+}
+
+<h1>Employee Advance Tracker Report</h1>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <strong>Report Filter</strong>
+                <span data-toggle="tooltip" data-placement="top" data-original-title="click for Filter">
+                    &nbsp;
+                    <a class="btn btn-info btn-sm" data-toggle="collapse"
+                       data-target="#filter-for-search"><i class="fa fa-angle-double-down"></i></a>
+                </span>
+            </div>
+            <div class="card-body collapse" id="filter-for-search">
+                <form class="form-horizontal" action="" method="get">
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="expenseClaim-from-date">Approve From</label>
+                            <div class="col-md-9">
+                                @Html.EditorFor(model => search.ApproveRejectFromDate, new { htmlAttributes = new { @class = "form-control", type = "date" } })
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="expenseClaim-to-date">Approve To</label>
+                            <div class="col-md-9">
+                                @Html.EditorFor(model => search.ApproveRejectToDate, new { htmlAttributes = new { @class = "form-control", type = "date" } })
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-responsive">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Month)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.SerialNumber)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Branch)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EmployeeCode)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EmployeeName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PaymentRequestNumber)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Amount)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.SubmissionDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ApprovalDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PaidDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Description)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PaidInDays)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @{if (Model.Count() == 0)
+                    {
+                        <tr><td>No Data Found</td></tr>
+                    }
+                }
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(model => item.Month)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.SerialNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.Branch)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.EmployeeCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.EmployeeName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.PaymentRequestNumber)
+                        </td>
+                        <td align="right">
+                            @Html.DisplayFor(model => item.Currency) @Html.DisplayFor(model => item.Amount)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.SubmissionDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.ApprovalDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.PaidDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.PaidInDays)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

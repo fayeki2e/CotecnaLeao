@@ -1,0 +1,140 @@
+﻿@model TechParvaLEAO.Areas.Expense.Models.PaymentRequest
+@using TechParvaLEAO.Authorization
+@using TechParvaLEAO.Areas.Expense.Models
+
+@{
+    ViewData["Title"] = "Expense Claim in Detail";
+    Layout = null;
+}
+
+<div>
+    <div class="float-left">
+        <a class="navbar-brand" href="#">
+            <img class="navbar-brand-full" src="~/img/cotecna.png" width="276" height="80"
+                 alt="CotecnaUI Logo">
+        </a>
+    </div>
+    <div class="float-right">
+        <table class="table table-responsive-sm table-bordered table-striped table-sm">
+            <tbody>
+                <tr>
+                    <td>Reference No.:</td>
+                    <td>QMS-FR-FIN-COM-GEN-009-1.0</td>
+                </tr>
+                <tr>
+                    <td>Effective date:</td>
+                    <td>1st September 2020</td>
+                </tr>
+                <tr>
+                    <td>Author & Administrator:</td>
+                    <td>Lavita DSILVA</td>
+                </tr>
+                <tr>
+                    <td>Approved By:</td>
+                    <td>Anuja NESARIKAR</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="table-responsive">
+    <h4 class="text-center">
+        Expense Draft
+    </h4>
+    <table class="table table-responsive-sm table-bordered table-striped table-sm">
+        <tbody>
+            <tr>
+                <td>Branch</td>
+                <td id="div_branch"></td>
+                <td>Comment</td>
+                <td id="div_comment"></td>
+            </tr>
+            <tr>
+                <td>NAME</td>
+                <td colspan="3" id="emp_name"> </td>
+            </tr>
+            <tr>
+                <td>DESIGNATION</td>
+                <td id="div_designation"> </td>
+            </tr>
+           
+        </tbody>
+    </table>
+
+    <table id="tbl_expense_preview" style="overflow:scroll;" class="table table-responsive-sm table-bordered table-striped table-sm">
+        <tbody>
+            <tr>
+                <th>DATE</th>
+                <th>VOUCHER NO./ BILL NO.</th>
+                 <th>Operation Type</th>
+                <th>Operation Number</th>
+                <th>Expense Head</th>
+                 <th>Business Activity</th>
+                <th>Customer Market</th>
+                <th>Descriptions</th>
+                <th>Currency</th>
+                <th>FX</th>
+                <th>INR</th>
+               
+            </tr>
+            
+        </tbody>
+    </table>
+     
+
+</div>
+  
+<script>
+    function goBack() {
+        window.history.back();
+    }
+
+
+    $(document).ready(function(){
+  var location = $('#Behalf_Emp_Location').text();
+  $('#div_branch').html(location);
+
+  var emp =document.querySelector('[data-id="EmployeeId"]');
+  
+    $('#emp_name').html(emp.title);
+
+      var designation = $('#Behalf_Emp_Designation').text();
+  $('#div_designation').html(designation);
+
+        var comment = $('#Comment').val();
+  $('#div_comment').html(comment);
+  
+     for(i=1;i<$('#myTable tr').length-1;i++)
+    {
+        var index=0;
+
+        index = i-1;
+
+        var operationtype=$("#ExpenseLineItems_"+index+"__operationtype option:selected").text(); 
+        var operationnumber =$("#ExpenseLineItems_"+index+"__operationno").val();
+         
+
+
+        var expensehead =$("#ExpenseLineItems_"+index+"__ExpenseHead option:selected").text(); 
+        var businessactivity =$("#ExpenseLineItems_"+index+"__BusinessActivity option:selected").text(); 
+        var customermarket =$("#ExpenseLineItems_"+index+"__CustomerMarket option:selected").text(); 
+        var expensevoucherreferenceno =$("#ExpenseLineItems_"+index+"__ExpenseVoucherReferenceNo").val();  
+        var date =$("#ExpenseLineItems_"+index+"__Date").val();  
+        var amount =$("#ExpenseLineItems_"+index+"__Amount").val();  
+        var description =$("#ExpenseLineItems_"+index+"__Description").val(); 
+        
+ 
+
+   $('#tbl_expense_preview').append("<tr><td>"+date+"</td><td>"+expensevoucherreferenceno+"</td> <td>" +operationtype+" </td><td>" +operationnumber+" </td><td>" +expensehead+" </td><td>"+businessactivity+"</td><td>"+customermarket+"</td><td>" +description+" </td><td>INR</td><td>0</td><td>"+amount+"</td></tr>");
+
+    }
+    var total =$("#lbl_total").text();   
+
+    $('#tbl_expense_preview').append("<tr><td colspan='7'></td><td>Total Amount</td><td>INR</td><td>0</td><td>"+total+"</td></tr>");
+    
+
+
+});
+
+
+</script>

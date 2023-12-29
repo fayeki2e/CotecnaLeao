@@ -1,0 +1,41 @@
+﻿@model TechParvaLEAO.Areas.Expense.Models.ViewModels.PaymentRequestApproveRejectViewModel
+
+@{
+    ViewBag.Title = "Reject";
+}
+<h3>Are you sure you want to Reject this?</h3>
+<div>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <h4>Rejection Reason</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.PaymentRequestId)
+            <div class="form-group row">
+                @Html.LabelFor(model => model.RejectionReasonId, "Leave Rejection Reason", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-9">
+                    @Html.DropDownListFor(m => m.RejectionReasonId, null, "select reason", htmlAttributes: new { @class = "form-control", @onchange = "CheckRejectionReason()" })
+                    @Html.ValidationMessageFor(model => model.RejectionReasonId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group row">
+                @Html.LabelFor(model => model.RejectionReasonOther, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-9">
+                    @Html.EditorFor(model => model.RejectionReasonOther, new { htmlAttributes = new { @class = "form-control", @value = "0" } })
+                    @Html.ValidationMessageFor(model => model.RejectionReasonOther, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="form-actions no-color">
+            <input type="submit" value="Reject" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="~/js/common.js"></script>
+}

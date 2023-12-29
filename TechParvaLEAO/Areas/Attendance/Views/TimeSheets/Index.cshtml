@@ -1,0 +1,167 @@
+﻿@model TimeSheetOverviewViewModel
+@using TechParvaLEAO.Authorization
+@using TechParvaLEAO.Areas.Attendance.Models
+
+@{
+    ViewBag.Title = "Index";
+}
+@{
+    var CanApproveReject = (bool)ViewData["CanApproveReject"];
+}
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <form method="get">
+                            <input type="month" name="timesheetMonth" value="@ViewData["MonthYear"]" />
+                            <input type="submit" name="go" value="Go" />
+                        </form>
+                        <span>
+                            <strong>
+                                <i id="date"></i>
+                            </strong>
+                        </span>
+                    </div>
+                    <div class="card-body">
+                        <form class="form-horizontal" action="/Attendance/Timesheets/Approve" method="post">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="tab-content" id="nav-tabContent">
+                                        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                                            <nav>
+                                                <ul class="pagination">
+                                                    <div class="ml-auto p-2">
+                                                        <ul class="pagination">
+                                                            @if (User.IsInRole(AuthorizationRoles.MANAGER))
+                                                            {
+                                                                <span data-toggle="tooltip" data-placement="top" data-original-title="Select All">
+                                                                    <li class="btn btn-ghost btn-md">
+
+                                                                        <input type="checkbox" value="" onclick="checkbox_test();" id="select-all">
+                                                                    </li>
+                                                                </span>
+                                                                <li>&nbsp;</li>
+                                                                <li>&nbsp;</li>
+                                                                <li>&nbsp;</li>
+                                                                <li>&nbsp;</li>
+                                                                <li>&nbsp;</li>
+                                                                <li>&nbsp;</li>
+
+                                                                <input type="submit" value="Approve" class="btn btn-primary btn-md" id="approve_btn" />
+                                                            }
+                                                        </ul>
+                                                    </div>
+
+                                                </ul>
+
+                                            </nav>
+
+                                            <div class="table-responsive">
+                                                <table class="table table-responsive-sm table-bordered table-striped table-sm">
+
+                                                    <thead>
+                                                        <tr>
+                                                            <th rowspan="2">Employee Name</th>
+                                                            <th rowspan="2">Employee Code</th>
+                                                            @foreach (var week in Model.Weeks)
+                                                            {
+                                                                <th rowspan="2">@Html.DisplayFor(modelItem => week.StartDate) -<br /> @Html.DisplayFor(modelItem => week.EndDate)</th>
+                                                            }
+                                                        </tr>
+
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var item in Model.EmployeeTimeSheetMonth)
+                                                        {
+                                                            <tr>
+                                                                <td>
+                                                                    <a href="/Attendance/TimeSheets/EmployeeDetails/@item.EmployeeId">
+                                                                        @Html.DisplayFor(modelItem => item.Employee)- @Html.DisplayFor(modelItem => item.Designation)
+                                                                    </a>
+                                                                </td>
+                                                                <td>
+                                                                    @Html.DisplayFor(modelItem => item.EmployeeCode)
+                                                                </td>
+                                                                @foreach (var week in item.TimeSheetWeeks)
+                                                                {
+                                                                    @if (week.TimeSheetId == 0)
+                                                                    {
+                                                                        @if (User.IsInRole(AuthorizationRoles.TIMESHEET))
+                                                                        {
+                                                                            <td style="background-color:lightgoldenrodyellow">
+                                                                                @Html.ActionLink("Create", "Create", "TimeSheets", new { StartDate = week.StartDate.ToString("dd/MM/yyyy"), EndDate = week.EndDate.ToString("dd/MM/yyyy"), WeekInMonth = week.WeekInMonth, EmployeeId = item.EmployeeId })
+                                                                            </td>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <td></td>
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+                                                            <td style="background-color:lightgreen">
+                                                                @if (string.Equals(week.Status, "DRAFT"))
+                                                                {
+                                                                    <span>Draft</span>
+                                                                }
+                                                                @if (string.Equals(week.Status, "PENDING"))
+                                                                {
+                                                                    <input type="checkbox" class="checkBoxClass" name="id" value="@week.TimeSheetId">
+                                                                }
+                                                                @if (string.Equals(week.Status, "APPROVED"))
+                                                                {
+                                                                    <i class="fa fa-check"></i>
+                                                                }
+                                                                else if (string.Equals(week.Status, "REJECTED"))
+                                                                {
+                                                                    <i class="fa fa-times"></i>
+                                                                }
+                                                                <i class="fa fa-clock-o"> @week.OvertimeHours h</i> <i class="fa fa-calendar"> @week.CompOffs</i>
+
+                                                                @if (string.Equals(week.Status, "DRAFT"))
+                                                                {
+                                                                    <a href="/Attendance/TimeSheets/TimesheetEdit/@week.TimeSheetId">View</a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <a href="/Attendance/TimeSheets/TimesheetDetail/@week.TimeSheetId">View</a>
+                                                                }
+
+
+                                                            </td>
+                                                                    }
+
+                                                                }
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+                <!-- /.col-->
+            </div>
+            <!-- /.row-->
+
+        </div>
+        <!-- /.row-->
+
+    </div>
+</div>
+
+@section scripts {
+    <script src="~/js/common.js"></script>
+}

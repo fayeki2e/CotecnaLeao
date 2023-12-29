@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        thead {
+            display: table-header-group;
+        }
+
+        tfoot {
+            display: table-row-group;
+        }
+
+        tr {
+            page-break-inside: avoid;
+        }
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+    </style>
+</head>
+<body>
+    @{
+        var hst = Context.Request.Scheme + "://" + Context.Request.Host;
+    }
+    <img class="navbar-brand-full" src="@hst/img/cotecna.png" width="176" height="40"
+         alt="CotecnaUI Logo">
+    <p>Report Generated on @DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss")</p>
+    @RenderBody()
+</body>
+</html>

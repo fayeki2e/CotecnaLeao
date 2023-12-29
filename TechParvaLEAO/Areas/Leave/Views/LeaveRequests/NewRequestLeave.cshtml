@@ -1,0 +1,304 @@
+﻿@model TechParvaLEAO.Areas.Leave.Models.ViewModels.NewLeaveViewModel
+@{
+    ViewBag.Title = "Index";
+}
+@section Styles  {
+@*    <script src="https://unpkg.com/js-year-calendar@latest/dist/js-year-calendar.min.js"></script>*@
+
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/js-year-calendar@latest/dist/js-year-calendar.min.css" />
+
+
+    <link href="~/css/js-year-calendar.css" rel="stylesheet">
+}
+
+
+
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <strong>Leave</strong> Managment
+                    </div>
+                    <div class="card-body">
+                        <div>
+                            <span>
+                                <a href="/Leave/LeaveRequests/RequestLeaveForm" class="btn btn-primary">Request Leave</a>
+                            </span>
+                            <span>
+                                <a href="~/policy/Leave & Overtime policy.pdf" class="btn btn-outline-primary" target="_blank">Leave Policy</a>
+                            </span>
+                            <span>
+                                <a href="~/policy/Leave & Overtime policy.pdf" class="btn btn-outline-primary" target="_blank">Overtime Policy</a>
+                            </span>
+                            <span>
+                                <a href="~/policy/Maternity Act.pdf" class="btn btn-outline-primary" target="_blank">Maternity Act</a>
+                            </span>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <strong>Search</strong>
+                                    </div>
+                                    <div class="card-body">
+                                        <form class="form-horizontal" action="" method="post">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-md-4 col-form-label"
+                                                               for="employee-name">Employee Name</label>
+                                                        <div class="col-md-8">
+                                                            <span class="form-control">@Model.EmployeeName</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-md-4 col-form-label"
+                                                               for="employee-designation">Employee Code</label>
+                                                        <div class="col-md-8">
+                                                            <span class="form-control">@Model.EmployeeCode</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-md-4 col-form-label"
+                                                               for="leave-approver">Leave Approver</label>
+                                                        <div class="col-md-8">
+                                                            <span class="form-control">@Model.LeaveApprover</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered">
+                                                            <tr>
+                                                                <th>Annual Leaves Added</th>
+                                                                <td>@Model.AnnualLeaveEligibility</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Carry Forward</th>
+                                                                <td>@Model.LeavesCarryForward</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Total Leaves</th>
+                                                                <td>@Model.AnnualLeaves</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Leave Utilized</th>
+                                                                <td>@Model.LeavesUtilized</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Leave Balance</th>
+                                                                <td>@Model.LeaveBalance</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Leaves Pending Approval</th>
+                                                                <td>@Model.LeavesPendingApproval</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Leaves without Pay(LWP)</th>
+                                                                <td>@Model.LeavesWithoutPay</td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <!-- /.col-->
+                            </div>
+                            <!-- /.row-->
+                        </div>
+                    </div>
+                </div>
+                <!-- /.col-->
+            </div>
+            <!-- /.row-->
+        </div>
+        <!-- /.row-->
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div id="calendar" data-provide="calendar"></div>
+
+                             
+                                <!--<div id="calendar"></div> -->
+                            </div>
+                            <div class="col">
+                                <div class="card">
+                                    <div class="sat-holidays-list">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Holidays</h5>
+                                            <table>
+                                                <tbody>
+                                                    @foreach (var holiday in Model.Holidays)
+                                                    {
+                                                        <tr class=@Html.DisplayFor(item=>holiday.Type)>
+                                                            <td>
+                                                                <i>@Html.DisplayFor(item => holiday.Date)</i>
+                                                            </td>
+                                                            <td>&nbsp;</td>
+                                                            <td>&nbsp;</td>
+                                                            <td>@Html.DisplayFor(item => @holiday.Description)</td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                            
+                                        </div>
+                                        
+                                    </div>
+                                     
+                                </div>
+                                <div id="dv_leave_teammember" style="display:none">
+                                 <h5 class="card-title">Team Member On Leaves</h5>
+                                      <table id="tbl_leaves">
+                                                <tbody>
+                                                      <tr>
+                                                            
+                                                          
+                                                        </tr>
+
+                                                </tbody>
+                                            </table>
+</div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+ 
+@section Scripts {
+    <script src="~/js/moment.min.js"></script>
+    <script src="~/lib/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+    <!--fullcalendar extension-->
+    <script src="~/js/js-year-calendar.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            $('#todays_date')
+                .datepicker({
+                    autoclose: true,
+                    todayHighlight: true
+                })
+                .datepicker('update', new Date())
+        })
+        setcalandarevent();
+     
+ document.querySelector('#calendar').addEventListener('clickDay', function(e) {
+  
+  var s_date=new Date(e.date);
+  var selected_date =s_date.getFullYear() +"-"+ ("0"+(s_date.getMonth()+1)).slice(-2) +"-" + ("0" + s_date.getDate()).slice(-2);
+  getleaves_employee(selected_date)
+
+})
+
+ 
+
+function setcalandarevent()
+{
+
+      dataSource = [];
+
+      var test= "test";
+            $.ajax(
+            {
+                method: "POST",
+                url: '@Url.Action("GetLeavesData", "LeaveRequests")',
+                data: {
+                     
+                },
+                success: function (data) {
+           for(i=0;i<data.length;i++)
+               {
+                    console.log(data[i].startDate);
+
+                        var leave_data = {
+                             startDate: new Date(data[i].startDate),
+                            endDate: new Date(data[i].endDate),
+                            color: "yellow"
+                            }
+                            dataSource.push(leave_data);
+
+
+               }
+
+                        let calendar = new Calendar('#calendar', {
+                        style: 'background',
+                        dataSource: dataSource,
+                        enableRangeSelection: true
+                        });
+                },
+                error: function (msg) {
+                    alert("Error in getting details: " + msg);
+                    console.log(msg);
+                }
+            });
+  
+}
+ 
+
+    </script>
+  
+    <script>
+
+        function getleaves_employee(sdate)
+        {
+            $.ajax(
+            {
+                method: "POST",
+                url: '@Url.Action("GetLeaves_employees", "LeaveRequests")',
+                data: {
+                     sdate :sdate
+                },
+                success: function (data) {
+         
+                    
+
+         var table = document.getElementById("tbl_leaves");
+         table.innerHTML = "";
+
+         if(data.length > 0)
+         {
+             $("#dv_leave_teammember").css("display", "block");
+                for(i=0;i<data.length;i++)
+               {
+                    console.log(data[i].displayName);
+                    var row = table.insertRow(0);
+                    var cell1 = row.insertCell(0);
+                    cell1.innerHTML = data[i].displayName;
+
+               }
+         }
+         else
+         {
+                 $("#dv_leave_teammember").css("display", "none");
+         }
+                   
+                },
+                error: function (msg) {
+                  //  alert("Error in getting details: " + msg);
+                  
+                }
+            });
+
+        }
+    </script>
+
+
+<!-- <script src="~/js/fullcalendar.js"></script>
+
+  <script src="~/js/leaveCalendar.js"></script>-->
+
+}

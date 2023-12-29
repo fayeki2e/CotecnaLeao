@@ -1,0 +1,24 @@
+﻿@using TechParvaLEAO.Areas.Expense.Services;
+@model IEnumerable<TechParvaLEAO.Areas.Expense.Models.PaymentRequest>
+
+@{
+    ViewData["Title"] = "AdvanceCanNotCreate";
+}
+
+    <h3>Cannot create new advance request as pervious 3 advance are not approved by your manager.</h3>
+
+<table class="table">
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RequestNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PaymentRequestCreatedDate)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

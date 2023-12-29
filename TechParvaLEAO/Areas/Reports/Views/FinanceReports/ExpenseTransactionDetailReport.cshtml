@@ -1,0 +1,470 @@
+﻿@model IEnumerable<TechParvaLEAO.Areas.Reports.Models.ExpenseTransactionDetailReportVm>
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@using X.PagedList.Mvc.Common;
+
+@{
+    ViewData["Title"] = "Expense Transaction Detail Report";
+}
+
+<h1>Expense Transaction Detail Report</h1>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <strong>Report Filter</strong>
+                <span data-toggle="tooltip" data-placement="top" data-original-title="click for Filter">
+                    &nbsp;
+                    <a class="btn btn-info btn-sm" data-toggle="collapse"
+                       data-target="#filter-for-search"><i class="fa fa-angle-double-down"></i></a>
+                </span>
+            </div>
+            <div class="card-body collapse" id="filter-for-search">
+                <form class="form-horizontal" action="" method="get">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="expenseClaim-from-date">Approve/ Reject From</label>
+                                <div class="col-md-9">
+                                    @Html.Editor("ExpenseFromDate", new { htmlAttributes = new { @class = "form-control", type = "date" } })
+                                    @Html.ValidationMessage("ExpenseFromDate", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="expenseClaim-to-date">Approve/ Reject To</label>
+                                <div class="col-md-9">
+                                    @Html.Editor("ExpenseToDate", new { htmlAttributes = new { @class = "form-control", type = "date" } })
+                                    @Html.ValidationMessage("ExpenseToDate", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="expenseClaim-to-date">Branch</label>
+                                <div class="col-md-9">
+                                    @Html.DropDownList("Branch", (SelectList)ViewData["Branch"], "Select", new { @class = "form-control" })
+                                    @Html.ValidationMessage("Branch", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-9">
+                                    <button class="btn btn-md btn-primary" type="submit">
+                                        <i class="fa fa-dot-circle-o"></i> Search
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+ 
+
+    
+		<div class="row">
+    <div class="col-md-12">
+
+        <div id="dataGrid"></div>
+    </div>
+ </div> 
+
+ 
+
+
+<script type="text/javascript" src="~/lib/DevExtreme/jquery-3.5.1.min.js"></script>
+<script type="text/javascript" src="~/lib/DevExtreme/exceljs.js"></script>
+<script type="text/javascript" src="~/lib/DevExtreme/jspdf.min.js"></script>
+<script type="text/javascript" src="~/lib/DevExtreme/jspdf.plugin.autotable.min.js"></script>
+<script type="text/javascript" src="~/lib/DevExtreme/FileSaver.js"></script>
+
+<script>
+
+    function get_ExpenseTransactionDetailReport()
+    {
+           $.ajax(
+            {
+                method: "POST",
+                url: '@Url.Action("ExpenseTransactionDetailReport", "ExpenseTransactionDetailReport")',
+                data: {},
+                success: function (data) {
+                   const PaidLeaveBalanceReport_data = data;
+                     debugger;
+
+                   console.log(data);
+                   get_grid(data);
+                },
+                error: function (msg) {
+                  
+                }
+            });
+    }
+
+
+function get_grid(data)
+{ 
+  
+const gridInstance = $('#dataGrid').dxDataGrid({
+    dataSource: data,
+    keyExpr: 'id',
+    allowColumnReordering: true,
+    allowColumnResizing: true,
+    columnAutoWidth: true,
+    showBorders: true,
+    filterRow: {
+    visible: true,
+    applyFilter: 'auto',
+    },
+     filterPanel: { visible: false },              
+     headerFilter: { 
+     visible: true,
+     allowSearch: true
+        },
+    searchPanel: { visible: false,
+    highlightCaseSensitive: true},
+    columnChooser: {
+    enabled: false,
+    },
+    columnFixing: {
+      enabled: false,
+    },
+     export: {
+      enabled: true,
+      allowExportSelectedData: true,
+    },
+    columns: [ 
+           {
+              caption: 'Month',
+              dataField: 'month',
+                    dataType: 'date',
+      format: 'dd/MM/yyyy',  
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+            {
+              caption: 'Expense Date',
+              dataField: 'expenseDate',
+                    dataType: 'date',
+      format: 'dd/MM/yyyy',  
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+            {
+              caption: 'Comment',
+              dataField: 'comment',
+              dataType: 'String',
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },         
+            {
+              caption: 'Description',
+              dataField: 'description',
+              dataType: 'String',
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+            {
+              caption: 'Operation Type',
+              dataField: 'operationtype',
+              dataType: 'String',
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+            {
+              caption: 'Operation Number',
+              dataField: 'operationno',
+              dataType: 'String',
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+            {
+              caption: 'Expense Head',
+              dataField: 'expenseHead',
+              dataType: 'String',
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+            {
+              caption: 'Branch',
+              dataField: 'branch',
+              dataType: 'String',
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+
+             {
+              caption: 'Business Activity',
+              dataField: 'businessActivity',
+              dataType: 'String',
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+             {
+              caption: 'Customer Market',
+              dataField: 'customerMarket',
+              dataType: 'String',
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+            {
+              caption: 'Expense Claim Number',
+              dataField: 'paymentRequestNumber',
+              dataType: 'String',
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+            {
+              caption: 'Approved/ Rejected',
+              dataField: 'approvedRejected',
+              dataType: 'String',
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+            {
+              caption: 'Status',
+              dataField: 'status',
+              dataType: 'String',
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+            {
+              caption: 'Amount',
+              dataField: 'amount',
+              dataType: 'String',
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+            {
+              caption: 'Submitted By',
+              dataField: 'submittedBy',
+              dataType: 'String',
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+            {
+              caption: 'Approved/ Rejected By',
+              dataField: 'approveRejectedBy',
+              dataType: 'String',
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+            {
+              caption: 'Esclated To',
+              dataField: 'approveRejectEscalatedTo',
+              dataType: 'String',
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+            {
+              caption: 'Approved/ Rejected Escalated',
+              dataField: 'approveRejectEscalated',
+              dataType: 'String',
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+             {
+              caption: 'Rejected Reason',
+              dataField: 'rejectionReason',
+              dataType: 'String',
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+
+             {
+              caption: 'Adjusted Against',
+              dataField: 'adjustedAgainst',
+              dataType: 'String',
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+
+             {
+              caption: 'Currency',
+              dataField: 'currency',
+              dataType: 'String',
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+             {
+              caption: 'Claim Amount',
+              dataField: 'amountOfClaim',
+              dataType: 'String',
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+
+             {
+              caption: 'Amount Of Advance',
+              dataField: 'amountOfAdvance',
+              dataType: 'String',
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+
+             {
+              caption: 'Forex Rate',
+              dataField: 'forexRate',
+              dataType: 'String',
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+             {
+              caption: 'Supportings In System',
+              dataField: 'supportingsInSystem',
+              dataType: 'String',
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+             {
+              caption: 'Hard Copy Submitted',
+              dataField: 'hardcopySubmitted',
+              dataType: 'String',
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+             {
+              caption: 'Number of Line Items',
+              dataField: 'numberOfLineItems',
+              dataType: 'String',
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+             {
+              caption: 'Credit Card',
+              dataField: 'creditCard',
+              dataType: 'String',
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+             {
+              caption: 'Employee Status',
+              dataField: 'employeeStatus',
+              dataType: 'String',
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+             {
+              caption: 'Employee Name',
+              dataField: 'employeeName',
+              dataType: 'String',
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+             {
+              caption: 'Employee Code',
+              dataField: 'employeeCode',
+              dataType: 'String',
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+           
+             {
+              caption: ' Reporting Manager',
+              dataField: 'reportingManager',
+              dataType: 'String',
+              allowFiltering: true,
+              allowSearch: true,
+              filterOperations: ["contains", "=",">","<"],
+            },
+
+      
+       ],
+        toolbar: {
+      items: [
+        'groupPanel',
+        {
+          widget: 'dxButton',
+          location: 'after',
+          options: {
+            icon: 'exportpdf',
+            text: 'Export to PDF',
+            onClick() {
+              const doc = new jsPDF();
+          
+
+              DevExpress.pdfExporter.exportDataGrid({
+                jsPDFDocument: doc,
+                component: gridInstance,
+              }).then(() => {
+                doc.save('ExpenseTransactionDetailReport.pdf');
+              });
+            },
+          },
+        },
+        {
+          widget: 'dxButton',
+          location: 'after',
+          options: {
+            icon: 'exportexcel',
+            text: 'Export to Excel',
+            onClick() {
+          const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('ExpenseTransactionDetailReport');
+      
+
+
+      DevExpress.excelExporter.exportDataGrid({
+        component: gridInstance,
+        worksheet,
+        autoFilterEnabled: true,
+      }).then(() => {
+        workbook.xlsx.writeBuffer().then((buffer) => {
+          saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'ExpenseTransactionDetailReport.xlsx');
+        });
+      });
+       
+            },
+          },
+        },
+        'searchPanel',
+      ],
+    },
+
+
+  }).dxDataGrid('instance');
+  
+ 
+}
+
+</script>
+
+
+
+<script>
+	$(document).ready(function() { 	 
+	get_ExpenseTransactionDetailReport();
+	});
+</script>
+

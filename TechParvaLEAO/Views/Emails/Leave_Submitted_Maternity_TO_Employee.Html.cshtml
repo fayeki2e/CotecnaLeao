@@ -1,0 +1,19 @@
+﻿Content-Type: text/html; charset=utf-8
+@{
+    Layout = null;
+}
+@model TechParvaLEAO.Models.NotificationEmailViewModel
+@using System.Globalization
+
+
+Dear @Model.LeaveRequestData.Employee - @Model.LeaveRequestData.EmployeeCode,
+<br />
+<br />
+Your Maternity leave application of 180 days for the period
+@Model.LeaveRequestData.FromDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture) to
+@Model.LeaveRequestData.ToDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture) -(180 Day/s)
+has been submitted successfully and sent to your Reporting Manager for approval.
+<br />
+<br />
+<br />
+    Best Regards

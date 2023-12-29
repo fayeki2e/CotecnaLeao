@@ -1,0 +1,239 @@
+﻿@model IEnumerable<TechParvaLEAO.Areas.Attendance.Models.TimeSheet>
+@{
+    ViewData["Title"] = "Timesheet Print Report";
+}
+
+<h1>Timesheet Print Report</h1>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <strong>Report Filter</strong>
+                <span data-toggle="tooltip" data-placement="top" data-original-title="click for Filter">
+                    &nbsp;
+                    <a class="btn btn-info btn-sm" data-toggle="collapse"
+                       data-target="#filter-for-search"><i class="fa fa-angle-double-down"></i></a>
+                </span>
+            </div>
+            <div class="card-body collapse" id="filter-for-search">
+                <form class="form-horizontal" action="" method="get">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="expenseClaim-from-date">From Date</label>
+                                <div class="col-md-9">
+                                    @Html.Editor("FromDate", new { htmlAttributes = new { @class = "form-control", type = "date" } })
+                                    @Html.ValidationMessage("FromDate", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="expenseClaim-to-date">To Date</label>
+                                <div class="col-md-9">
+                                    @Html.Editor("ToDate", new { htmlAttributes = new { @class = "form-control", type = "date" } })
+                                    @Html.ValidationMessage("ToDate", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="expenseClaim-to-date">Location</label>
+                                <div class="col-md-9">
+                                    @Html.DropDownList("Location", (SelectList)ViewData["Branch"], "Select", new { @class = "form-control" })
+                                    @Html.ValidationMessage("Location", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="expenseClaim-to-date">Employee</label>
+                                <div class="col-md-9">
+                                    @Html.DropDownList("Employee", (SelectList)ViewData["Branch"], "Select", new { @class = "form-control" })
+                                    @Html.ValidationMessage("Employee", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-9">
+                                    <button class="btn btn-md btn-primary" type="submit">
+                                        <i class="fa fa-dot-circle-o"></i> Search
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        @foreach (var timesheet in Model)
+        {
+            <div class="row">
+                <div class="col-md-6">
+
+                    <div class="row">
+                        <label class="col-md-3 col-form-label" for="week-picker">Date</label>
+                        <div class="col-md-9">
+                            <strong> <span id="startDate">@Html.DisplayFor(model => timesheet.StartDate)</span></strong> To<strong>
+                                <span id="endDate">@Html.DisplayFor(model => timesheet.EndDate)</span>
+                            </strong>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-md-3 col-form-label" for="total-working-hrs">Total Working Hrs</label>
+                        <div class="col-md-9">
+                            <strong><span id="total-working-hrs">@timesheet.TotalWorkHoursTime()</span></strong>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-md-3 col-form-label" for="overtime-hrs">Overtime Hrs</label>
+                        <div class="col-md-9">
+                            <strong><span id="overtime-hrs">@timesheet.OvertimeHoursTS()</span></strong>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-md-3 col-form-label" for="comp-off">C/Off</label>
+                        <div class="col-md-9">
+                            <strong><span id="comp-off">@Html.DisplayFor(model => timesheet.CompOffs)</span></strong>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <label class="col-md-3 col-form-label" for="emp-name">Employee</label>
+                        <div class="col-md-9">
+                            <strong><span id="emp-name">@Html.DisplayFor(model => timesheet.Employee.Name)</span></strong>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-md-3 col-form-label" for="emp-code">Employee Code</label>
+                        <div class="col-md-9">
+                            <strong><span id="emp-code">@Html.DisplayFor(model => timesheet.Employee.EmployeeCode)</span></strong>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-md-3 col-form-label" for="emp-designation">Designation</label>
+                        <div class="col-md-9">
+                            <strong><span id="emp-designation">@Html.DisplayFor(model => timesheet.Employee.Designation.Name)</span></strong>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-md-3 col-form-label" for="status-timesheet">Status</label>
+                        <div class="col-md-9">
+                            <strong><span id="status-timesheet">@Html.DisplayFor(model => timesheet.Status)</span></strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-responsive-sm table-bordered table-striped table-sm">
+                    <thead>
+                        <tr>
+                            <th rowspan="2">Day</th>
+                            <th rowspan="2">Date</th>
+                            <th rowspan="2">Job No</th>
+                            <th rowspan="2">Business Activity</th>
+                            <th colspan="2">Time</th>
+                            <th rowspan="2">Worked Hours</th>
+                        </tr>
+                        <tr>
+                            <th>IN</th>
+                            <th>OUT</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var attendanceRecord in timesheet.AttendanceRecords)
+                        {
+                            <tr>
+                                <td>@attendanceRecord.WorkDate.DayOfWeek</td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => attendanceRecord.WorkDate)
+                                    @if (attendanceRecord.IsWeekend)
+                                    {
+                                        <span>Weekly Off </span>
+                                    }
+                                    @if (attendanceRecord.IsLeave)
+                                    {
+                                        <span>Leave </span>
+                                    }
+                                    @if (attendanceRecord.IsHoliday)
+                                    {
+                                        <span>Holiday </span>
+                                    }
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => attendanceRecord.Job)
+                                    @if (attendanceRecord.IsLeave)
+                                    {
+                                        <span>Leave</span>
+                                    }
+                                </td>
+                                <td>@Html.DisplayFor(modelItem => attendanceRecord.Client)</td>
+                                <td>@Html.DisplayFor(modelItem => attendanceRecord.TimeIn)</td>
+                                <td>@Html.DisplayFor(modelItem => attendanceRecord.TimeOut)</td>
+                                <td>@Html.DisplayFor(modelItem => attendanceRecord.WorkingTime)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Comp Offs in this Timesheet</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (timesheet.TimesheetCompOffs.Count < 1)
+                        {
+                            <tr>
+                                <td>None</td>
+                            </tr>
+                        }
+                        @foreach (var compOff in timesheet.TimesheetCompOffs)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(modelItem => compOff.CompOffDate)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <hr />
+        }
+    </div>
+        <p>
+            @Html.ActionLink("Download PDF", "TimesheetPrintReport",
+                "TimesheetReports",
+                new
+                {
+                    area = "Reports",
+                    FromDate = Context.Request.Query["FromDate"],
+                    ToDate = Context.Request.Query["ToDate"],
+                    JobNumber = Context.Request.Query["JobNumber"],
+                    Client = Context.Request.Query["Client"],
+                    Employee = Context.Request.Query["Employee"],
+                    Location = Context.Request.Query["Location"],
+                    Download = "pdf"
+                }, new { @class = "btn btn-sm btn-info" })
+        </p>
+</div>
+        @Html.PagedListPager((IPagedList)Model, page => Url.Action(
+            "TimesheetPrintReport",
+            "TimesheetReports",
+            new
+            {
+                area = "Reports",
+                id = page,
+                FromDate = Context.Request.Query["FromDate"],
+                ToDate = Context.Request.Query["ToDate"],
+                JobNumber = Context.Request.Query["JobNumber"],
+                Client = Context.Request.Query["Client"],
+                Employee = Context.Request.Query["Employee"],
+                Location = Context.Request.Query["Location"],
+            }), new PagedListRenderOptionsBase
+            {
+                PageClasses = new string[] { "page-link" },
+                UlElementClasses = new string[] { "pagination" },
+                LiElementClasses = new string[] { "page-item" },
+                DisplayItemSliceAndTotal = false,
+            })

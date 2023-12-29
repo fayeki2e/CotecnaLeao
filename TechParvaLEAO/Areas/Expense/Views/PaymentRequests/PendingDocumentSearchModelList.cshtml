@@ -1,0 +1,240 @@
+﻿@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@using X.PagedList.Mvc.Common;
+
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <partial name="_PrimaryInfo" />
+
+        <div class="card">
+            <div class="card-header">
+                <i class="fa fa-align-justify"></i> Pending Document list
+            </div>
+            <form>
+                <div class="card-body">
+                    <nav>
+                        <ul class="pagination">
+                            <li class="page-item">
+                                
+                                <a class="btn btn-success btn-md" href="/Expense/PaymentRequests/PendingDocumentExportCSV">
+                                    Download &nbsp;<i class="fa fa-download" aria-hidden="true"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                              <span style="float: right">
+                                <span class="btn btn-ghost btn-md" data-toggle="tooltip" data-placement="top"
+                                      data-original-title="Select All">
+                                    <input type="checkbox" name="leaverequestId" style="zoom:1.5;" id="select-all">
+                                </span>
+                                @*<a class="btn btn-primary btn-md" href="#" id="approve_btn" onclick="return false">Approve</a>*@
+                                <button class="btn btn-primary btn-md" type="button" id="approve_btn" onclick="show_all_approvepopup();">Support All</button>
+
+
+
+                            </span>
+                    <table class="table table-responsive-sm table-striped">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">Select</th>
+                                <th>Expense Request No</th>
+                                <th>Employee Name</th>
+                                <th>Claim Date</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Amount</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.PendingDocuments.Count == 0)
+                            {
+                                <tr>
+                                    <td colspan="7">No data found</td>
+                                </tr>
+                            }
+                            @foreach (var data in Model.PendingDocuments)
+                            {
+                                <tr class="statusApprove">
+                                     <td>
+                                            <input type="checkbox" class="checkBoxClass pat_check" data-leave_id="@data.Id" data-status="@data.Status"  value="@data.Id" name="leaverequestId">
+                                        </td>
+
+                                    <td>@data.RequestNumber</td>
+                                    <td>@data.EmployeeName</td>
+                                    <td>@data.ClaimDate</td>
+                                    <td>@data.Role</td>
+                                    <td>
+                                        <span class="badge badge-warning">@data.Status</span>
+                                    </td>
+                                    <td>@data.CurrencyName @data.Amount</td>
+                                    <td>
+                                        <a href="/Expense/Paymentrequests/SupportingReceived/@data.Id" class="btn btn-success">Supporting</a>
+
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+        </div>
+        <!--
+    Html.PagedListPager((IPagedList)Model.PendingDocuments, page => Url.Action((String)ViewData["PageLinkURL"],"PaymentRequests", new {area="Expense", id=page}), new PagedListRenderOptionsBase
+                       {PageClasses = new string[] { "page-link" }, UlElementClasses = new string[] { "pagination" }, LiElementClasses = new string[] { "page-item" }, DisplayItemSliceAndTotal = false,
+                       })-->
+    </div>
+</div>
+
+<div id="approve_all_modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+          <h4 class="modal-title">Approve all Selected Request</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        
+      </div>
+      <div class="modal-body">
+        <p>Suporting Received date will be today's date.
+
+Are you sure you want to confirm?</p>
+      </div>
+      <div class="modal-footer">
+           <button type="button" class="btn btn-default" data-dismiss="modal" onclick="approveall();">Support ALL</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div id="approve_all_confirm_modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+          <h4 class="modal-title">Confirmation of Supporting received</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        
+      </div>
+      <div class="modal-body">
+        <p>Suporting Received for the selected documents
+</p>
+      </div>
+      <div class="modal-footer">
+           <button type="button" class="btn btn-default" data-dismiss="modal" onclick="confirmokforsupportingdocs();">OK</button>
+ 
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+<script>
+ 
+    function confirmokforsupportingdocs()
+    {
+  location.reload();
+    }
+
+    function show_all_approvepopup()
+    {
+        var show_confirm_approval=false;
+        var leave_ids = [];
+        $(".pat_check:checked").each(function(){
+           
+        leave_ids.push($(this).data("leave_id"));
+        status = $(this).data("status");
+        $('#approve_all_modal').modal('show');
+
+   });
+      
+
+    }
+
+    function approveall() {
+      
+ 
+       
+        var counter = 0,
+        i = 0,
+      
+        input_obj = document.getElementsByTagName('input');
+        var ids = [];
+
+
+        var obj_length =0;
+
+        if(input_obj.length > 100 )
+        {
+            obj_length = 100;
+        }else
+        {
+            obj_length = input_obj.length;
+        }
+        
+
+    // loop through all collected objects
+    for (i = 0; i < obj_length; i++) {
+        if (input_obj[i].type === 'checkbox' && input_obj[i].checked === true) {
+            counter++;
+            try
+            {
+                var id=parseInt(input_obj[i].value);
+                if(id != "NaN"  )
+                {
+                    if(input_obj[i].value !='on')
+                    {
+                      ids.push(input_obj[i].value);
+                    }
+                }
+            }
+            catch(e)
+            {
+
+            }
+            
+
+      
+        }
+    }
+
+     if (counter > 0) {
+
+        //setTimeout(function () {
+        //    location.reload();
+        //}, 3000);
+
+  
+           $('#approve_all_confirm_modal').modal('show');
+        $.ajax({
+            url: '/Expense/PaymentRequests/SupportingConfirmedAll',
+            type: "GET",
+            data: { s_id: JSON.stringify(ids) },
+            cache: false,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+  alert("Selected document supported ");
+                 $('#approve_all_confirm_modal').modal('show');
+                //location.reload();
+
+            }
+        });
+    }
+
+
+ 
+
+    }
+
+</script>
+
+@section Scripts {
+    <script src="~/js/common.js"></script>
+}

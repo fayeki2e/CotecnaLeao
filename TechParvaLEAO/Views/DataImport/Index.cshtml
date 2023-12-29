@@ -1,0 +1,90 @@
+﻿
+@{
+    ViewData["Title"] = "DataImport";
+}
+
+<h1>Employee Data Import and Creation Tool</h1>
+<hr />
+<form asp-controller="DataImport" asp-action="UploadEmployeeFileAsync" asp-route-operation="EmployeeDataImport" method="post"
+      enctype="multipart/form-data">
+
+    <input type="file" name="file" />
+    <button type="submit">Upload File</button>
+</form>
+
+<hr />
+<h1>Business Activity Customer Market Mapping Import Tool</h1>
+<hr />
+<form asp-controller="DataImport" asp-action="UploadBACMFileAsync" asp-route-operation="BACMMappingImport" method="post"
+      enctype="multipart/form-data">
+
+    <input type="file" name="file" />
+    <button type="submit">Upload File</button>
+</form>
+<hr />
+<form asp-controller="DataImport" asp-action="CreditLeaveBalance" method="post">
+
+    <input type="number" name="number_of_days" />
+    <button type="submit">Add Leaves for All Employees</button>
+</form>
+<hr />
+<form asp-controller="DataImport" asp-action="MapAdvanceExpenses" method="post">
+    <button type="submit">Map Advance Expenses</button>
+</form>
+
+<hr />
+<form asp-controller="DataImport" asp-action="TestReminderAsync" asp-route-operation="AdvanceReminderHandler" method="post">
+    <button type="submit">Advance Reminder Handler</button>
+</form>
+
+<form asp-controller="DataImport" asp-action="TestReminderAsync" asp-route-operation="AdvanceReminderMoreThanThreeDaysHandler" method="post">
+    <button type="submit">Advance Reminder More Than Three Days Handler</button>
+</form>
+
+<form asp-controller="DataImport" asp-action="TestReminderAsync" asp-route-operation="AdvanceFinalReminderHandler" method="post">
+    <button type="submit">Advance Final Reminder Handler</button>
+</form>
+
+<form asp-controller="DataImport" asp-action="TestReminderAsync" asp-route-operation="FinanceAdvanceReminder" method="post">
+    <button type="submit">Finance Advance Reminder</button>
+</form>
+
+<hr />
+<form asp-controller="DataImport" asp-action="TestReminderAsync" asp-route-operation="ExpenseReminderHandler" method="post">
+    <button type="submit">Expense Reminder Handler</button>
+</form>
+<!--
+<form asp-controller="DataImport" asp-action="TestReminderAsync" asp-route-operation="ExpenseFinalReminderHandler" method="post">
+    <button type="submit">Expense Final Reminder Handler</button>
+</form>
+-->
+
+<form asp-controller="DataImport" asp-action="TestReminderAsync" asp-route-operation="FinanceExpenseReminder" method="post">
+    <button type="submit">Finance Expense Reminder</button>
+</form>
+
+<form asp-controller="DataImport" asp-action="TestReminderAsync" asp-route-operation="ExpenseDocumentSubmissionReminder" method="post">
+    <button type="submit">Expense Document Submission Reminder</button>
+</form>
+
+<hr />
+<form asp-controller="DataImport" asp-action="TestReminderAsync" asp-route-operation="LeaveReminderHandler" method="post">
+    <button type="submit">Leave Reminder</button>
+</form>
+
+<form asp-controller="DataImport" asp-action="TestReminderAsync" asp-route-operation="LeaveFinalReminderHandler" method="post">
+    <button type="submit">Leave Final Reminder</button>
+</form>
+
+<form asp-controller="DataImport" asp-action="TestReminderAsync" asp-route-operation="LeaveReminderMoreThanTenDaysHandler" method="post">
+    <button type="submit">Leave Reminder More Than Ten Days Handler</button>
+</form>
+
+<hr />
+<form asp-controller="DataImport" asp-action="TestReminderAsync" asp-route-operation="TimeSheetReminderHandler" method="post">
+    <button type="submit">TimeSheet Reminder Handler</button>
+</form>
+
+<form asp-controller="DataImport" asp-action="TestReminderAsync" asp-route-operation="TimeSheetFinalReminderHandler" method="post">
+    <button type="submit">TimeSheet Final Reminder Handler</button>
+</form>

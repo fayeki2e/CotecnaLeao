@@ -1,0 +1,81 @@
+﻿@model IEnumerable<TechParvaLEAO.Areas.Leave.Models.LeaveCreditAndUtilization>
+
+@{
+    ViewData["Title"] = "CompOffList";
+}
+
+<h1>Comp-Off List</h1>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa fa-align-justify"></i>Comp Off List
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Employee)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.LeaveType)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.NumberOfDays)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.AccrualDate)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ApprovedDate)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ExpiryDate)
+                                </th>
+                                <th>
+                                    Utilization Status
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Employee.Name)-@Html.DisplayFor(modelItem => item.Employee.EmployeeCode)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.LeaveType.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.NumberOfDays)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.AccrualDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ApprovedDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ExpiryDate)
+                                </td>
+                                <td>
+                                    @if (item.AddedUtilized == 1)
+                                    {
+                                        <span>Available</span>
+                                    }
+                                    else
+                                    {
+                                        <span>Utilized</span>
+                                    }
+                                </td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,33 @@
+﻿Content-Type: text/html; charset=utf-8
+@{
+    Layout = null;
+}
+@model TechParvaLEAO.Models.NotificationEmailViewModel
+@using System.Globalization
+
+
+Dear @Model.PaymentRequestData.Employee,<br />
+<br />
+Your advance request has been processed and paid.<br />
+<br />
+<table border="1">
+    <tr>
+
+        <td>Advance Request No</td>
+        <td>Date of Advance Request</td>
+        <td>Date of Payment</td>
+        <td>Amount</td>
+        <td>Comment</td>
+    </tr>
+    <tr>
+        <td>@Model.PaymentRequestData.RequestNumber</td>
+        <td>@Model.PaymentRequestData.CreatedDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</td>
+        <td>@Model.PaymentRequestData.PostedOn.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</td>
+        <td>@Model.PaymentRequestData.Currency  @Model.PaymentRequestData.Amount</td>
+        <td>@Model.PaymentRequestData.Comment</td>
+    </tr>
+</table>
+<br />
+Kindly submit your Expense claim for the unsettled advances at the earliest.<br />
+<br />
+Best Regards

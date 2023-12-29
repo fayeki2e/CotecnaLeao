@@ -1,0 +1,173 @@
+﻿@model TechParvaLEAO.Areas.Organization.Models.Employee
+
+@{
+    ViewBag.Title = "Employee Details";
+}
+
+
+<div class="row">
+    <div class="col-md-12 card-header">
+        <h4>Employee Details</h4>
+    </div>
+
+    <div class="col-md-6">
+
+        <div class="card">
+            <div class="card-header">
+                <strong>Profile Info</strong>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>UserName</th>
+                            <td>@Model.Name</td>
+                        </tr>
+                        <tr>
+                            <th>Employee Code</th>
+                            <td>@Model.EmployeeCode</td>
+                        </tr>
+                        <tr>
+                            <th>Email</th>
+                            <td>@Model.Email</td>
+                        </tr>
+                        <tr>
+                            <th>Date of Birth</th>
+                            <td>@Model.DateOfBirth</td>
+                        </tr>
+                        <tr>
+                            <th>Date of Joining</th>
+                            <td>@Model.DateOfJoining</td>
+                        </tr>
+                        <tr>
+                            <th>Gender</th>
+                            <td>@Model.Gender</td>
+                        </tr>
+                        <tr>
+                            <th>On Field Employee?</th>
+                            <td>@Model.OnFieldEmployee</td>
+                        </tr>
+                        <tr>
+                            <th>Account Number</th>
+                            <td>@Model.AccountNumber</td>
+                        </tr>
+                        <tr>
+                            <th>Expense Profile <br />(Inspector/ Staff/ General)</th>
+                            <td>@Model.ExpenseProfile.Name</td>
+                        </tr>
+                        <tr>
+                            <th>Finance Approval Limit</th>
+                            <td>@Model.AuthorizationProfile.Name - INR @Model.AuthorizationProfile.Approval_Limit</td>
+                        </tr>
+
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <h4></h4>
+        <div class="card">
+            <div class="card-header">
+                <strong>Your Reporting Manager</strong>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Employee Code</th>
+                            <th>Employee Name</th>
+                            <th>Employee Designation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@Model.ReportingTo?.EmployeeCode</td>
+                            <td>@Model.ReportingTo?.Name</td>
+                            <td>@Model.ReportingTo?.Designation?.Name</td>
+                        </tr>
+                    </tbody>
+
+
+                </table>
+            </div>
+        </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <strong>Employees Details</strong>
+                </div>
+                <div class="card-body">
+                    <div class="table table-responsive">
+                        <table class="table-bordered">
+                            <thead>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>On Field Employee</th>
+                                    <td>
+                                        @if (Model.OnFieldEmployee)
+                                        {<span>Yes</span> }
+                                        else
+                                        { <span>No</span>}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Specific Weekly Off</th>
+                                <td>
+                                    @if (Model.SpecificWeeklyOff)
+                                    {<span>Yes</span> }
+                                    else
+                                    { <span>No</span>}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Employee Designation</th>
+                                <td>@Model.Designation.Name</td>
+                            </tr>
+                            <tr>
+                                <th>Employee Location</th>
+                                <td>@Model.Location.Name</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+   
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <strong>Employees Specific Off</strong>
+            </div>  
+            <div class="card-body">
+                <div class="table table-responsive">
+                    <table class="table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Form Date</th>
+                                <th>To Date</th>
+                                <th>Weekly OffDay</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.EmployeeWeeklyOffs)
+                            {
+                                <tr>
+                                    <td>@item.FormDate</td>
+                                    <td>@item.ToDate</td>
+                                    <td>@item.WeeklyOffDay</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="~/js/common.js"></script>
+}

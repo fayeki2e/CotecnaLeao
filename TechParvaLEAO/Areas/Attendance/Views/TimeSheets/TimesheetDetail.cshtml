@@ -1,0 +1,177 @@
+﻿@model TechParvaLEAO.Areas.Attendance.Models.TimeSheet
+@{
+    ViewBag.Title = "Index";
+}
+<form class="form-horizontal" action="" method="post">
+    <div class="container-fluid">
+        <div class="animated fadeIn">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <strong>Actions </strong>
+                            @if (string.Equals(Model.Status, "PENDING") && (bool)ViewData["CanEditTimesheet"])
+                            {
+                                <a style="float: right;" class="btn btn-primary" href="/Attendance/TimeSheets/TimeSheetEdit/@Model.Id">Edit</a>
+                            }
+                        </div>
+                        <div class="card-body">
+
+                            <div class="row">
+                                <div class="col-md-6">
+
+                                    <div class="row">
+                                        <label class="col-md-3 col-form-label" for="week-picker">Date</label>
+                                        <div class="col-md-9">
+                                            <strong> <span id="startDate">@Html.DisplayFor(model => model.StartDate)</span></strong> To<strong>
+                                                <span id="endDate">@Html.DisplayFor(model => model.EndDate)</span>
+                                            </strong>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <label class="col-md-3 col-form-label" for="total-working-hrs">Total Working Hrs</label>
+                                        <div class="col-md-9">
+                                            <strong><span id="total-working-hrs">@Model.TotalWorkHoursTime()</span></strong>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <label class="col-md-3 col-form-label" for="overtime-hrs">Overtime Hrs</label>
+                                        <div class="col-md-9">
+                                            <strong><span id="overtime-hrs">@Model.OvertimeHoursTS()</span></strong>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <label class="col-md-3 col-form-label" for="comp-off">C/Off</label>
+                                        <div class="col-md-9">
+                                            <strong><span id="comp-off">@Html.DisplayFor(model => model.CompOffs)</span></strong>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <label class="col-md-3 col-form-label" for="emp-name">Employee</label>
+                                        <div class="col-md-9">
+                                            <strong><span id="emp-name">@Html.DisplayFor(model => model.Employee.Name)</span></strong>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <label class="col-md-3 col-form-label" for="emp-code">Employee Code</label>
+                                        <div class="col-md-9">
+                                            <strong><span id="emp-code">@Html.DisplayFor(model => model.Employee.EmployeeCode)</span></strong>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <label class="col-md-3 col-form-label" for="emp-designation">Designation</label>
+                                        <div class="col-md-9">
+                                            <strong><span id="emp-designation">@Html.DisplayFor(model => model.Employee.Designation.Name)</span></strong>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <label class="col-md-3 col-form-label" for="status-timesheet">Status</label>
+                                        <div class="col-md-9">
+                                            <strong><span id="status-timesheet">@Html.DisplayFor(model => model.Status)</span></strong>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <label class="col-md-12 col-form-label" for="yes-no-buttons"></label>
+                                        <div>
+
+                                            <nav>
+                                                <ul class="pagination" id="yes-no-buttons">
+                                                    @if ((bool)ViewData["CanApproveReject"] && string.Equals(Model.Status, "PENDING"))
+                                                    {
+                                                        <li class="page-item">
+                                                            @Html.ActionLink("Approve", "Approve", "TimeSheets", new { id = Model.Id }, new { @class = "btn btn-success btn-sm mr-5" })
+                                                        </li>
+                                                        <li class="page-item">
+                                                            @Html.ActionLink("Reject", "Reject", "TimeSheets", new { id = Model.Id }, new { @class = "btn btn-danger btn-sm" })
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            </nav>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table table-responsive-sm table-bordered table-striped table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th rowspan="2">Day</th>
+                                            <th rowspan="2">Date</th>
+                                            <th rowspan="2">Job No</th>
+                                            <th rowspan="2">Business Activity</th>
+                                            <th colspan="2">Time</th>
+                                            <th rowspan="2">Worked Hours</th>
+                                        </tr>
+                                        <tr>
+                                            <th>IN</th>
+                                            <th>OUT</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var attendanceRecord in Model.AttendanceRecords)
+                                        {
+                                            <tr>
+                                                <td>@attendanceRecord.WorkDate.DayOfWeek</td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => attendanceRecord.WorkDate)
+                                                    @if (attendanceRecord.IsWeekend)
+                                                    {
+                                                        <span>Weekly Off </span>
+                                                    }
+                                                    @if (attendanceRecord.IsLeave)
+                                                    {
+                                                        <span>Leave </span>
+                                                    }
+                                                    @if (attendanceRecord.IsHoliday)
+                                                    {
+                                                        <span>Holiday </span>
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => attendanceRecord.Job)
+                                                @if (attendanceRecord.IsLeave)
+                                                {
+                                                    <span>Leave</span>
+                                                }
+                                            </td>
+                                            <td>@Html.DisplayFor(modelItem => attendanceRecord.Client)</td>
+                                            <td>@Html.DisplayFor(modelItem => attendanceRecord.TimeIn)</td>
+                                            <td>@Html.DisplayFor(modelItem => attendanceRecord.TimeOut)</td>
+                                            <td>@Html.DisplayFor(modelItem => attendanceRecord.WorkingTime)</td>
+                                        </tr>
+                                    }
+                                    </tbody>
+                                </table>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Comp Offs in this Timesheet</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var compOff in Model.TimesheetCompOffs)
+                                        {
+                                            <tr>
+                                                <td>@Html.DisplayFor(modelItem => compOff.CompOffDate)</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.col-->
+                </div>
+                <!-- /.row-->
+
+            </div>
+            <!-- /.row-->
+
+        </div>
+    </div>
+</form>

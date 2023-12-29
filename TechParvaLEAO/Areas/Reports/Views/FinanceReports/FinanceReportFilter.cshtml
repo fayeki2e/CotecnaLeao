@@ -1,0 +1,117 @@
+﻿<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <strong>Report Filter</strong>
+                <span data-toggle="tooltip" data-placement="top" data-original-title="click for Filter">
+                    &nbsp;
+                    <a class="btn btn-info btn-sm" data-toggle="collapse"
+                       data-target="#filter-for-search"><i class="fa fa-angle-double-down"></i></a>
+                </span>
+            </div>
+            <div class="card-body collapse" id="filter-for-search">
+                <form class="form-horizontal" action="" method="get">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="name">Approved/ Rejected By</label>
+                                <div class="col-md-9">
+                                    @Html.DropDownList("ApproveRejectedBy", (SelectList)ViewData["Employee"], "Select", new { @class = "form-control" })
+                                    @Html.ValidationMessage("ApproveRejectedBy", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="expenseClaim-from-date">Approve/ Reject From</label>
+                                <div class="col-md-9">
+                                    @Html.Editor("ApproveRejectFromDate", new { htmlAttributes = new { @class = "form-control", type = "date" } })
+                                    @Html.ValidationMessage("ApproveRejectToDate", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="expenseClaim-to-date">Approve/ Reject To</label>
+                                <div class="col-md-9">
+                                    @Html.Editor("ApproveRejectToDate", new { htmlAttributes = new { @class = "form-control", type = "date" } })
+                                    @Html.ValidationMessage("ApproveRejectToDate", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <!--
+                                <div class="form-group row">
+                                    <label class="col-md-3 col-form-label" for="expenseClaim-to-date">Business Activity</label>
+                                    <div class="col-md-9">
+                                        @Html.DropDownList("BusinessActivity", (SelectList)ViewData["BusinessActivity"], "Select", new { @class = "form-control" })
+                                        @Html.ValidationMessage("BusinessActivity", "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 col-form-label" for="expenseClaim-to-date">Customer Market</label>
+                                    <div class="col-md-9">
+                                        @Html.DropDownList("CustomerMarket", (SelectList)ViewData["CustomerMarket"], "Select", new { @class = "form-control" })
+                                        @Html.ValidationMessage("CustomerMarket", "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            -->
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="expenseClaim-from-date">Submission From</label>
+                                <div class="col-md-9">
+                                    @Html.Editor("SubmissionFromDate", new { htmlAttributes = new { @class = "form-control", type = "date" } })
+                                    @Html.ValidationMessage("SubmissionFromDate", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="expenseClaim-to-date">Submission To</label>
+                                <div class="col-md-9">
+                                    @Html.Editor("SubmissionToDate", new { htmlAttributes = new { @class = "form-control", type = "date" } })
+                                    @Html.ValidationMessage("SubmissionToDate", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="expenseClaim-to-date">Branch</label>
+                                <div class="col-md-9">
+                                    @Html.DropDownList("Branch", (SelectList)ViewData["Branch"], "Select", new { @class = "form-control" })
+                                    @Html.ValidationMessage("Branch", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="expenseClaim-to-date">Amount More Than</label>
+                                <div class="col-md-9">
+                                    @Html.Editor("AmountGt", new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessage("AmountGt", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="expenseClaim-to-date">Amount Less Than</label>
+                                <div class="col-md-9">
+                                    @Html.Editor("AmountLt", new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessage("AmountLt", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="name">Submitted By</label>
+                                <div class="col-md-9">
+                                    @Html.DropDownList("SubmittedBy", (SelectList)ViewData["Employee"], "Select", new { @class = "form-control" })
+                                    @Html.ValidationMessage("SubmittedBy", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="name">For Employee</label>
+                                <div class="col-md-9">
+                                    @Html.DropDownList("Employee", (SelectList)ViewData["Employee"], "Select", new { @class = "selectpicker", data_live_search = "true" })
+                                    @Html.ValidationMessage("Employee", "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-9">
+                                <button class="btn btn-md btn-primary" type="submit">
+                                    <i class="fa fa-dot-circle-o"></i> Search
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

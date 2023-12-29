@@ -1,0 +1,108 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base href="./">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta name="description" content="Leave Expense Attendance Overtime System">
+    <link rel="icon" type="image/png" href="~/favicon.png">
+    <title>Cotecna Leave Expense Attendance Overtime System</title>
+    <link rel="stylesheet" href="~/lib/coreui/coreui/dist/css/coreui.min.css" />
+    <link rel="stylesheet" href="~/lib/coreui/icons/css/coreui-icons.min.css" />
+    <link rel="stylesheet" href="~/lib/flag-icon-css/css/flag-icon.min.css" />
+    <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="~/lib/simple-line-icons/css/simple-line-icons.css" />
+    <link rel="stylesheet" href="~/css/leave.css" />
+    <link rel="stylesheet" href="~/css/style.css" />
+   
+   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js" defer></script>
+
+
+
+@*     <link href="~/lib/SearchDDl/select2.css" rel="stylesheet" />
+ <script src="~/lib/SearchDDl/select2.min.js" defer></script> *@
+
+
+
+
+    @RenderSection("Styles", false)
+</head>
+<body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+    <partial name="_Header" />
+    <div class="app-body">
+        <partial name="_MenuBar" />
+        <main class="main">
+            <!-- Breadcrumb-->
+            <partial name="~/Views/Shared/_Breadcrumb.cshtml" />
+            @*container-fluid*@
+            <div class="">
+                <div class="animated fadeIn">
+                    <div class="card">
+                        <div class="card-body">
+                            @RenderBody()
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+        <aside class="aside-menu">
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#timeline" role="tab">
+                        <i class="icon-list"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#messages" role="tab">
+                        <i class="icon-speech"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#settings" role="tab">
+                        <i class="icon-settings"></i>
+                    </a>
+                </li>
+            </ul>
+
+        </aside>
+    </div>
+    <partial name="_Footer" />
+    <!-- CoreUI and necessary plugins-->
+    
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/popper.js/dist/umd/popper.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <script src="~/lib/pace-progress/pace.min.js"></script>
+    <script src="~/lib/perfect-scrollbar/dist/perfect-scrollbar.min.js"></script>
+    <script src="~/lib/coreui/coreui/dist/js/coreui.min.js"></script>
+    <script src="~/lib/luxon/luxon.min.js"></script>
+    <script src="~/lib/bootbox/bootbox.min.js"></script>
+    <script src="~/js/common_manager.js"></script>
+
+ 
+  <!-- Latest compiled and minified CSS -->
+ <link rel="stylesheet" href="~/lib/searchDDl/bootstrap-select.min.css">
+ <!-- Latest compiled and minified JavaScript -->
+ <script src="~/lib/searchDDl/bootstrap-select.min.js"></script>
+ 
+
+@*    <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/21.2.7/css/dx.light.css">
+    <!-- DevExtreme library -->
+    <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/21.2.7/js/dx.all.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/polyfills.umd.js"></script>
+*@
+
+ <link rel="stylesheet" href="~/lib/DevExtreme/dx.light.css">
+  <script type="text/javascript" src="~/lib/DevExtreme/dx.all.js"></script>
+      <script src="~/lib/DevExtreme/polyfills.umd.js"></script>
+
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>

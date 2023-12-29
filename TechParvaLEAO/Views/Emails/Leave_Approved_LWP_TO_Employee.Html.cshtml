@@ -1,0 +1,20 @@
+﻿Content-Type: text/html; charset=utf-8
+@{
+    Layout = null;
+}
+@model TechParvaLEAO.Models.NotificationEmailViewModel
+@using System.Globalization
+
+
+Dear  @Model.LeaveRequestData.Employee - @Model.LeaveRequestData.EmployeeCode,<br />
+<br />
+Note that Your leave for period @Model.LeaveRequestData.FromDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)
+ @if (@Model.LeaveRequestData.HalfDayStart)
+{<span> (Half day Afternoon)</span>}
+ to
+@Model.LeaveRequestData.ToDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)
+@if (Model.LeaveRequestData.HalfDayEnd)
+{<span> (Half Day Morning)</span>}  has been marked as LWP.
+<br />
+<br />
+    Best Regards

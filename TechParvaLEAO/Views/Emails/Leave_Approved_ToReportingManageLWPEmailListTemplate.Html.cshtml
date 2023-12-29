@@ -1,0 +1,39 @@
+﻿Content-Type: text/html; charset=utf-8
+@{
+    Layout = null;
+}
+@model TechParvaLEAO.Models.NotificationEmailViewModel
+@using System.Globalization
+
+Dear @Model.LeaveRequestData.ReportingManager,
+<br />
+<br />
+The list of below mentioned employees have been marked as Leave Without Pay (LWP) by <br />
+
+<br />
+<br />
+<table border="1">
+    <tr>
+        <td>Sr. No.:</td>
+        <td>Emp. Code:</td>
+        <td>Name (Employee):</td>
+        <td>From Date:</td>
+        <td>To Date:</td>
+        <td>Applied Date:</td>
+    </tr>
+    @foreach (var Item in Model.LeaveRequestData.LeaveRequestDetail)
+    {
+        <tr>
+            <td>Item.Id</td>
+            <td>Item.EmployeeCode</td>
+            <td>Item.Employee</td>
+            <td>Item.FromDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</td>
+            <td>Item.ToDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</td>
+            <td>Item.CreatdeDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</td>
+        </tr>
+    }
+</table>
+<br />
+
+<br />
+    Best Regards

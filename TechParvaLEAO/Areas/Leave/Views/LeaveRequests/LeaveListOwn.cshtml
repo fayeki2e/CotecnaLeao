@@ -1,0 +1,196 @@
+﻿@model IEnumerable<TechParvaLEAO.Areas.Leave.Models.LeaveRequest>
+@using TechParvaLEAO.Authorization
+@using TechParvaLEAO.Areas.Leave.Models
+@{
+    ViewBag.Title = "Index";
+}
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <partial name="_PrimaryInfo" />
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fa fa-align-justify"></i>Leave Status List
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-responsive-sm table-bordered table-striped table-sm">
+                                <thead>
+                                    <tr>
+                                        <th rowspan="2">Employee Name</th>
+                                        <th rowspan="2">Employee Code</th>
+                                        <th rowspan="2">Created By</th>
+                                        <th rowspan="2">Duration</th>
+                                        <th rowspan="2">Leave Type</th>
+                                        <th rowspan="2">Status</th>
+                                        <th colspan="2">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <!--<td>@Html.DisplayFor(modelItem => item.Id)</td>-->
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Employee.Name)
+                                            </td>
+                                            <td>
+                                                <a asp-action="AllLeaveIndividual" asp-route-id="@item.CreatedByEmployeeId">@Html.DisplayFor(modelItem => item.Employee.EmployeeCode)</a>
+
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.CreatedByEmployee.Name)<br>
+                                                @Html.DisplayFor(modelItem => item.CreatedByEmployee.EmployeeCode)<br>
+                                                @Html.DisplayFor(modelItem => item.CreatedByEmployee.Location.Name)
+                                            </td>
+                                            <td>
+                                                <span class="badge badge-info">@Html.DisplayFor(modelItem => item.StartDate)</span><br>
+                                                <span class="badge badge-info">@Html.DisplayFor(modelItem => item.EndDate)</span>
+                                            </td>
+                                            <!--Leave type begins-->
+                                            <td>
+                                                <span class="text-info">@Html.DisplayFor(modelItem => item.LeaveType.Name)</span>
+                                                @if (item.documentsPath != null)
+                                                {
+                                                    <span><i class="fa fa-paperclip"></i></span>
+                                                }
+
+                                                <span data-toggle="collapse" class="btn btn-sm" data-target="#LeaveType-@item.Id">
+                                                    <i class="fa fa-chevron-circle-down"></i>
+                                                </span>
+                                            </td>
+                                            <!--Leave type ends-->
+                                            <!--Leave status begins-->
+                                            <td>
+
+                                                @if (string.Equals(item.Status, LeaveRequestStatus.PENDING.ToString()))
+                                                {
+                                                    <span class="badge badge-warning">@Html.DisplayFor(modelItem => item.Status)</span>
+                                                }
+                                                else if (string.Equals(item.Status, LeaveRequestStatus.APPROVED.ToString()))
+                                                {
+                                                    <span class="badge badge-success">@Html.DisplayFor(modelItem => item.Status)</span>
+                                                }
+                                                else if (string.Equals(item.Status, LeaveRequestStatus.REJECTED.ToString()))
+                                                {
+                                                    <span class="badge badge-danger">@Html.DisplayFor(modelItem => item.Status)</span>
+                                                }
+                                                else if (string.Equals(item.Status, LeaveRequestStatus.CANCELED.ToString()))
+                                                {
+                                                    <span class="badge badge-danger">@Html.DisplayFor(modelItem => item.Status)</span>
+                                                }
+                                                <span class="btn btn-sm" data-toggle="collapse" data-target="#LeaveStatus-@item.Id">
+                                                    <i class="fa fa-chevron-circle-down" aria-hidden="true"></i>
+                                                </span>
+                                            </td>
+                                            <td>
+
+                                                @if (item.CanCancelLeaves(false) && (item.CreatedByEmployee.Id == (int)ViewData["LoggedInEmployeeId"] || item.Employee.Id == (int)ViewData["LoggedInEmployeeId"]))
+                                                {
+                                                    @Html.ActionLink("Cancel", "Cancel", "LeaveRequests", new { id = item.Id }, new { @class = "btn btn-danger btn-sm" })
+                                                }
+                                            </td>
+                                        </tr>
+                                        <tr id="LeaveType-@item.Id" class="collapse">
+                                            <td colspan="10">
+                                                <div class="table-responsive">
+                                                    <table>
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Reason</th>
+                                                                <th>Total Days</th>
+                                                                <th>Half Days</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>
+                                                                    @Html.DisplayFor(modelItem => item.LeaveNature)
+                                                                </td>
+                                                                <td>
+                                                                    <span class="badge badge-dark"> @Html.DisplayFor(modelItem => item.NumberOfDays)</span>
+                                                                </td>
+                                                                <td>
+                                                                    @Html.DisplayFor(modelItem => item.IsHalfDay)
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="table-responsive">
+                                                    <table>
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Documents</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach (var data in item.GetDocuments())
+                                                            {
+                                                                <tr>
+                                                                    <td><a href="/@Html.DisplayFor(modelItem => data)" target="_blank">@Html.DisplayFor(modelItem => data)</a></td>
+                                                                </tr>
+                                                            }
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr id="LeaveStatus-@item.Id" class="collapse">
+                                            <td colspan="10">
+                                                <div class="table-responsive">
+                                                    <table>
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Applied Date</th>
+                                                                <th>Approved/Reject By</th>
+                                                                <th>Timestamp</th>
+                                                                <th>Status</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>@Html.DisplayFor(modelItem => item.LeaveRequestCreatedDate)</td>
+                                                                <td>
+                                                                    @Html.DisplayFor(modelItem => item.LeaveRequestApprovedBy.Name)<br>
+                                                                    <span class="badge badge-info">@Html.DisplayFor(modelItem => item.LeaveRequestApprovedBy.Designation.Name)</span>
+                                                                </td>
+                                                                <td>@Html.DisplayFor(modelItem => item.LastActionDate)</td>
+                                                                <td>
+                                                                    @if (string.Equals(item.Status, LeaveRequestStatus.PENDING.ToString()))
+                                                                    {
+                                                                        <span class="badge badge-warning">@Html.DisplayFor(modelItem => item.Status)</span>
+                                                                    }
+                                                                    else if (string.Equals(item.Status, LeaveRequestStatus.APPROVED.ToString()))
+                                                                    {
+                                                                        <span class="badge badge-success">@Html.DisplayFor(modelItem => item.Status)</span>
+                                                                    }
+                                                                    else if (string.Equals(item.Status, LeaveRequestStatus.REJECTED.ToString()))
+                                                                    {
+                                                                        <span class="badge badge-danger">@Html.DisplayFor(modelItem => item.Status)</span>
+                                                                    }
+                                                                    else if (string.Equals(item.Status, LeaveRequestStatus.CANCELED.ToString()))
+                                                                    {
+                                                                        <span class="badge badge-danger">@Html.DisplayFor(modelItem => item.Status)</span>
+                                                                    }
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- /.col-->
+        </div>
+    </div>
+</div>

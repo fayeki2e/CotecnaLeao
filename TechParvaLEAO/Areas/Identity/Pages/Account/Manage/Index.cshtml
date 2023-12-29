@@ -1,0 +1,155 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Profile";
+    ViewData["ActivePage"] = ManageNavPages.Index;
+}
+<partial name="_StatusMessage" for="StatusMessage" />
+<div class="row">
+    <div class="col-md-6">
+
+        @*<h4>@ViewData["Title"]</h4>*@
+
+        <form id="profile-form" method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="card">
+                <div class="card-header">
+                    <strong>Profile Info</strong>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <td>@Model.Employee.Name</td>
+                            </tr>
+                            <tr>
+
+                                <th>Employee Code</th>
+                                <td>@Model.Employee.EmployeeCode</td>
+                            </tr>
+                            <tr>
+                                <th>Email</th>
+                                <td>@Model.Employee.Email</td>
+                            </tr>
+                            <tr>
+                                <th>System Login Name</th>
+                                <td>@Model.Username</td>
+                            </tr>
+                            <tr>
+                                <th>Date of Birth</th>
+                                <td>@Html.DisplayFor(modelItem => Model.Employee.DateOfBirth)</td>
+                            </tr>
+                            <tr>
+                                <th>Date of Joining</th>
+                                <td>@Html.DisplayFor(modelItem => Model.Employee.DateOfJoining)</td>
+                            </tr>
+                            <tr>
+                                <th>Gender</th>
+                                <td>@Model.Employee.Gender</td>
+                            </tr>
+                            <tr>
+                                <th>On Field Employee</th>
+                                <td>@Model.Employee.OnFieldEmployee</td>
+                            </tr>
+                            <tr>
+                                <th>Location</th>
+                                <td>@Model.Employee.Location.Name</td>
+                            </tr>
+                            <tr>
+                                <th>Account Number</th>
+                                <td>@Model.Employee.AccountNumber</td>
+                            </tr>
+                            <tr>
+                                <th>Expense Profile <br />(Inspector/ Staff/ General)</th>
+                                <td>@Model.Employee.ExpenseProfile.Name</td>
+                            </tr>
+                            <tr>
+                                <th>Finance Approval Limit</th>
+                                <td>@Model.Employee.AuthorizationProfile.Name- INR @Model.Employee.AuthorizationProfile.Approval_Limit</td>
+                            </tr>
+                             <tr>
+                                <th>Team</th>
+                                <td>  
+                             @if (@ViewBag.teams != null)
+                            {
+                                @foreach (var item in @ViewBag.teams)
+                                {
+                                    @item.TeamName <span>,</span>
+                                }
+                            }
+                            
+                        </td>
+                            </tr>
+                        </thead>                        
+                    </table>
+                </div>
+            </div>
+
+
+        </form>
+    </div>
+    <div class="col-md-6">
+        <h4></h4>
+        <div class="card">
+            <div class="card-header">
+                <strong>Your Reporting Manager</strong>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Employee Code</th>
+                            <th>Employee Name</th>
+                            <th>Employee Designation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@Model.ReportingTo?.EmployeeCode</td>
+                            <td>@Model.ReportingTo?.Name</td>
+                            <td>@Model.ReportingTo?.Designation?.Name</td>
+                        </tr>
+                    </tbody>
+
+
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <strong>Employees Reporting to You</strong>
+            </div>
+            <div class="card-body">
+                <div class="table table-responsive">
+                    <table class="table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Employee Code</th>
+                                <th>Employee Name</th>
+                                <th>Employee Designation</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var reportee in Model.DirectReportee)
+                            {
+                                <tr>
+                                    <td>@reportee.EmployeeCode</td>
+                                    <td>@reportee.Name</td>
+                                    <td>@reportee.Designation.Name</td>
+                                </tr>
+
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

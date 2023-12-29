@@ -1,0 +1,54 @@
+﻿Content-Type: text/html; charset=utf-8
+@{
+    Layout = null;
+}
+@model TechParvaLEAO.Models.NotificationEmailViewModel
+@using System.Globalization
+
+
+Dear HR,<br />
+<br />
+@Model.LeaveRequestData.Employee @Model.LeaveRequestData.EmployeeCode has been marked as Leave Without Pay (LWP) <br />
+<br />
+<table border="1">
+    <tr>
+        <td>Leave Eligibility</td>
+        <td>Carried Forward</td>
+        <td>Total Opening Balance</td>
+        <td>Leave Utilized</td>
+        <td>Leave Balance</td>
+        <td>LWP days</td>
+    </tr>
+    <tr>
+        <td>@Model.LeaveRequestData.LeaveEligibility</td>
+        <td>@Model.LeaveRequestData.LeaveCarriedForward</td>
+        <td>@Model.LeaveRequestData.LeavesOpeningBalance</td>
+        <td>@Model.LeaveRequestData.LeavesUtilized</td>
+        <td>@Model.LeaveRequestData.LeavesBalance</td>
+        <td>@Model.LeaveRequestData.LWPDays</td>
+    </tr>
+</table>
+<br />
+<br />
+<table width="100%" cellspacing="0" cellpadding="0">
+    <tr>
+        <td>
+            <table cellspacing="0" cellpadding="0">
+                <tr>
+                    <td style="border-radius: 2px;" bgcolor="#228B22">
+                        <a href="@Model.AcceptButtonUrl" target="_blank" style="padding: 8px 12px; border: 1px solid #ED2939;border-radius: 2px;font-family: Helvetica, Arial, sans-serif;font-size: 14px; color: #ffffff;text-decoration: none;font-weight:bold;display: inline-block;">
+                            Accept
+                        </a>
+                    </td>
+                    <td>&nbsp;</td>
+                    <td style="border-radius: 2px;" bgcolor="#ED2939">
+                        <a href="@Model.RejectButtonUrl" target="_blank" style="padding: 8px 12px; border: 1px solid #228B22;border-radius: 2px;font-family: Helvetica, Arial, sans-serif;font-size: 14px; color: #ffffff;text-decoration: none;font-weight:bold;display: inline-block;">
+                            Reject
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table><br />
+    Best Regards

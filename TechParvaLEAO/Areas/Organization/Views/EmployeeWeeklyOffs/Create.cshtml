@@ -1,0 +1,47 @@
+﻿@using TechParvaLEAO.Areas.Organization.Models;
+@model TechParvaLEAO.Areas.Organization.Models.ViewModels.EmployeeWeeklyOffViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+<form class="form-horizontal" action="" method="post">
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Add new effective date for employee weekly Off:</h4>
+                </div>
+                <div class="card-body">
+                    @Html.Hidden("EmployeeId", ViewData["EmployeeId"])
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label><h6>Employee Name:</h6></label>
+                            @Html.DisplayFor(Model => Model.EmployeeName)
+                        </div>
+                        <div class="form-group">
+                            @Html.EditorFor(Model => Model.FromDate, new { htmlAttributes = new { @class = "form-control", type = "date" } })
+                            @Html.ValidationMessageFor(Model => Model.FromDate, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="WeeklyOffDay" class="control-label"></label>
+                            @Html.DropDownListFor(Model => Model.WeeklyOffDay, new SelectList(Enum.GetValues(typeof(DayOfWeek))), "select", htmlAttributes: new { @class = "form-control " })
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="OtherWeeklyOffDay" class="control-label"></label>
+                            @Html.DropDownListFor(Model => Model.OtherWeeklyOffDay, new SelectList(Enum.GetValues(typeof(DayOfWeek))), "select", htmlAttributes: new { @class = "form-control " })
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="OtherWeeklyOffRule" class="control-label"></label>
+                            @Html.DropDownListFor(Model => Model.OtherWeeklyOffRule, new SelectList(Enum.GetValues(typeof(WorkDayType))), "select", htmlAttributes: new { @class = "form-control " })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+

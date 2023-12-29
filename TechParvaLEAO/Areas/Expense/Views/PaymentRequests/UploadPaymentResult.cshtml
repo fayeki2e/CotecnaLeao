@@ -1,0 +1,98 @@
+﻿@model IEnumerable<TechParvaLEAO.Areas.Expense.Models.FinancePaymentDataImportResult>
+
+@{
+    ViewData["Title"] = "UploadPaymentResult";
+}
+
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="card">
+            <div class="card-header">
+                <i class="fa fa-align-justify"></i>Paymnet File Processing Status
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.TransactionType)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.EmployeeCode)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.BenificiaryCode)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.TransactionAmount)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.BenificiaryName)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.StatementNarration)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.PaymentDetail1)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ChequeNo)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ChqTime)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.IsPaymentRequestFound)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.IsRecordUpdatedSuccessfully)
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.TransactionType)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.EmployeeCode)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.BenificiaryCode)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.TransactionAmount)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.BenificiaryName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.StatementNarration)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.PaymentDetail1)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ChequeNo)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ChqTime)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.IsPaymentRequestFound)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.IsRecordUpdatedSuccessfully)
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
