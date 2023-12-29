@@ -1,0 +1,30 @@
+--boundry ---
+Content-Disposition: form-data; name=file; filename=tst.txt; filename*=utf-8''tst.txt
+
+
+Log Entry : 02:09:08 18 July 2022
+  :
+  :test
+-------------------------------
+
+Log Entry : 02:09:53 18 July 2022
+  :
+  :test
+-------------------------------
+
+Log Entry : 02:12:36 18 July 2022
+ Error in Function : TestSharepoint()
+  :test
+-------------------------------
+
+Log Entry : 2:23:45 AM Monday, July 18, 2022
+ Error in Function : NewRequestLeave()
+  :String '31/12/2021' was not recognized as a valid DateTime.
+-------------------------------
+
+Log Entry : 2:23:45 AM Monday, July 18, 2022
+ Error in Function : NewRequestLeave()
+  :String '31/12/2021' was not recognized as a valid DateTime.
+-------------------------------
+
+--boundry -----
