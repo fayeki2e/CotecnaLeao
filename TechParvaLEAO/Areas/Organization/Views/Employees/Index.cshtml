@@ -1,6 +1,7 @@
-﻿@model IEnumerable<TechParvaLEAO.Areas.Organization.Models.Employee>
+﻿@using TechParvaLEAO.Authorization
+@model IEnumerable<TechParvaLEAO.Areas.Organization.Models.Employee>
 
- 
+
 @{
     ViewData["Title"] = "Index";
 }
@@ -11,9 +12,9 @@
     <a class="btn btn-sm btn-success" asp-action="Create">Create New</a>
     <a class="btn btn-sm btn-info" asp-action="AssignReportingManager">Assign Reporting Manager</a>
     <button onclick="exportData('employee_data' ,'EmployeeList')" class="btn btn-sm btn-info">
-    <span class="fa fa-download"></span>
-    Download Excel
-</button>
+        <span class="fa fa-download"></span>
+        Download Excel
+    </button>
 
 </p>
 
@@ -89,154 +90,397 @@
     </div>
 </div>
 
-     
+<div class="row">
+    <div class="col-md-12">
 
-<div  style="overflow-x:auto;overflow-y:auto;height:700px">
-<table class="table" id="employee_data">
-    <thead>
-        <tr>
-             
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EmployeeCode)
-            </th>
-              <th>
-                @Html.DisplayNameFor(model => model.Designation)
-            </th>
-             <th>
-               @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th></th>
-              <th style="font-size: 0px;">
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-          
-             <th style="font-size: 0px;">
-                @Html.DisplayNameFor(model => model.AccountNumber)
-            </th>
-             <th style="font-size: 0px;">
-                @Html.DisplayNameFor(model => model.DateOfJoining)
-            </th>
-              <th style="font-size: 0px;">
-                @Html.DisplayNameFor(model => model.DateOfBirth)
-            </th>
-             <th style="font-size: 0px;">
-                @Html.DisplayNameFor(model => model.ExpenseProfile)
-            </th>
-             <th style="font-size: 0px;">
-                @Html.DisplayNameFor(model => model.Gender)
-            </th>
-             <th style="font-size: 0px;">
-                @Html.DisplayNameFor(model => model.Location)
-            </th>
-             <th style="font-size: 0px;">
-                @Html.DisplayNameFor(model => model.ReportingTo)
-            </th>
-            <th style="font-size: 12px;">
-                @Html.DisplayNameFor(model => model.TeamId)
-            </th>
-              <th style="font-size: 0px;">
-               @Html.DisplayNameFor(model => model.AuthorizationProfileId)
-            </th>
-              <th style="font-size: 0px;">
-               Roles Assigned
-            </th>
-            
-             <th style="font-size: 0px;">
-              Created By
-            </th>
-             <th style="font-size: 0px;">
-               Created Date
-            </th>
-             <th style="font-size: 0px;">
-               Modified By
-            </th>
-             <th style="font-size: 0px;">
-              Modified Date
-            </th>
-           
-        </tr>
-    </thead>
-    <tbody>
-        
-        @foreach (var item in Model)
+        <div id="dataGrid"></div>
+    </div>
+
+</div>
+
+
+
+
+<script type="text/javascript" src="~/lib/DevExtreme/jquery-3.5.1.min.js"></script>
+<script type="text/javascript" src="~/lib/DevExtreme/exceljs.js"></script>
+<script type="text/javascript" src="~/lib/DevExtreme/jspdf.min.js"></script>
+<script type="text/javascript" src="~/lib/DevExtreme/jspdf.plugin.autotable.min.js"></script>
+<script type="text/javascript" src="~/lib/DevExtreme/FileSaver.js"></script>
+
+
+
+<script>
+
+    function get_TrendReport3()
+    {
+           $.ajax(
+            {
+                method: "POST",
+                url: '@Url.Action("Index", "Employees")',
+               // data: '{svm: ' + JSON.stringify(model) + '}',
+                   data: {
+
+
+            },
+
+                success: function (data) {
+                   const PaidLeaveBalanceReport_data = data;
+                   console.log(data);
+                   get_grid(data);
+                 //if(data[0].is_hr >=1)
+                 //  {
+
+                 //       $("#dataGrid").dxDataGrid("columnOption", "reportingManager", "visible", true);
+                 //  }
+                 //  else
+                 //  {
+                 //       $("#dataGrid").dxDataGrid("columnOption", "reportingManager", "visible",false );
+                 //  }
+                },
+                error: function (msg) {
+
+                }
+            });
+    }
+
+
+function get_grid(data)
+{
+const gridInstance = $('#dataGrid').dxDataGrid({
+    dataSource: data,
+    keyExpr: 'Id',
+    allowColumnReordering: true,
+    allowColumnResizing: true,
+    columnAutoWidth: true,
+    showBorders: true,
+    filterRow: {
+    visible: true,
+    applyFilter: 'auto',
+    },
+     filterPanel: { visible: false },
+     headerFilter: {
+     visible: true,
+     allowSearch: true
+        },
+    searchPanel: { visible: false,
+    highlightCaseSensitive: true},
+    columnChooser: {
+    enabled: false,
+    },
+    columnFixing: {
+      enabled: false,
+    },
+     export: {
+      enabled: true,
+      allowExportSelectedData: true,
+    },
+    columns: [
+    {
+      caption: 'Emp Code',
+            dataField: 'EmployeeCode',
+      dataType: 'String',
+      allowFiltering: true,
+      allowSearch: true,
+      filterOperations: ["contains", "=",">","<"],
+    },
         {
+        caption:'Employee Name',
+            dataField: 'EmployeeName',
+      dataType: 'String',
+      allowFiltering: true,
+      allowSearch: true,
+      filterOperations: ["contains", "=",">","<"],
+
+    },
+      {
+          dataField: 'Designation',
+      dataType: 'String',
+      allowFiltering: true,
+      allowSearch: true,
+      filterOperations: ["contains", "=",">","<"],
+    },
+
+    {
+      datafield: 'Status',
+      datatype: 'string',
+      allowfiltering: true,
+      allowsearch: true,
+      filteroperations: ["contains", "=",">","<"],
+      visible: true,
+    }
+    //{
+    //  caption: 'From Date',
+    //  dataField: 'fromDate',
+    //  dataType: 'date',
+    //  format: 'dd/MM/yyyy',
+    //  allowFiltering: true,
+    //  allowSearch: true,
+    //  filterOperations: ["contains", "=",">","<"],
+    //},
+    //{
+    //  caption: 'To Date',
+    //  dataField: 'toDate',
+    //  dataType: 'date',
+    //  format: 'dd/MM/yyyy',
+    //  allowFiltering: true,
+    //  allowSearch: true,
+    //  filterOperations: ["contains", "=",">","<"],
+    //},
+    //{
+    //  caption: 'Number Of Days',
+    //  dataField: 'numberOfDays',
+    //  dataType: 'String',
+    //  allowFiltering: true,
+    //  allowSearch: true,
+    //  filterOperations: ["contains", "=",">","<"],
+    //},
+    //{
+    //  caption: 'Leave Type',
+    //  dataField: 'leaveType',
+    //  dataType: 'String',
+    //  allowFiltering: true,
+    //  allowSearch: true,
+    //  filterOperations: ["contains", "=",">","<"],
+    //},
+    //{
+    //  caption: 'Leave Sub Type',
+    //  dataField: 'leaveSubType',
+    //  dataType: 'String',
+    //  allowFiltering: true,
+    //  allowSearch: true,
+    //  filterOperations: ["contains", "=",">","<"],
+    //},
+    // {
+    //  caption: 'Leave Category',
+    //  dataField: 'leaveCatagory',
+    //  dataType: 'String',
+    //  allowFiltering: true,
+    //  allowSearch: true,
+    //  filterOperations: ["contains", "=",">","<"],
+    //},
+
+    // {
+    //  caption: 'Comp Off Against Date',
+    //  dataField: 'compOffAgainstDate',
+    //  dataType: 'date',
+    //  format: 'dd/MM/yyyy',
+    //  allowFiltering: true,
+    //  allowSearch: true,
+    //  filterOperations: ["contains", "=",">","<"],
+    //}
+     ],
+        toolbar: {
+      items: [
+        'groupPanel',
+        {
+          widget: 'dxButton',
+          location: 'after',
+          options: {
+            icon: 'exportpdf',
+            text: 'Export to PDF',
+            onClick() {
+              const doc = new jsPDF();
+
+
+              DevExpress.pdfExporter.exportDataGrid({
+                jsPDFDocument: doc,
+                component: gridInstance,
+              }).then(() => {
+                doc.save('PaidLeaveBalance.pdf');
+              });
+            },
+          },
+        },
+        {
+          widget: 'dxButton',
+          location: 'after',
+          options: {
+            icon: 'exportexcel',
+            text: 'Export to Excel',
+            onClick() {
+          const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('DateWiseleave');
+
+
+
+      DevExpress.excelExporter.exportDataGrid({
+        component: gridInstance,
+        worksheet,
+        autoFilterEnabled: true,
+      }).then(() => {
+        workbook.xlsx.writeBuffer().then((buffer) => {
+          saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'DateWiseleave.xlsx');
+        });
+      });
+
+            },
+          },
+        },
+        'searchPanel',
+      ],
+    },
+
+
+  }).dxDataGrid('instance');
+
+
+}
+
+</script>
+
+
+
+<script>
+    $(document).ready(function () {
+        get_TrendReport3();
+    });
+</script>
+
+@*<div  style="overflow-x:auto;overflow-y:auto;height:700px">
+    <table class="table" id="employee_data">
+        <thead>
             <tr>
-            
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                  <a>@Html.DisplayFor(modelItem => item.EmployeeCode)</a>  
-                </td>
-              
-                <td style="width: 10px;">
-                    @Html.DisplayFor(modelItem => item.Designation.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Status)
-                </td>
-                     <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Deactive" asp-route-id="@item.Id">Deactive</a> |
-                         <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
 
-                  <td  style="font-size: 0px;">
-                    @Html.DisplayFor(modelItem => item.Email)
-                </td>
-                  <td style="font-size: 0px;">
-                    @Html.DisplayFor(modelItem => item.AccountNumber)
-                </td >
-                  <td style="font-size: 0px;">
-                    @Html.DisplayFor(modelItem => item.DateOfJoining)
-                </td>
-                  <td style="font-size: 0px;">
-                    @Html.DisplayFor(modelItem => item.DateOfBirth)
-                </td>
-                  <td style="font-size: 0px;">
-                    @Html.DisplayFor(modelItem => item.ExpenseProfile.Name)
-                </td>
-                 <td style="font-size: 0px;">
-                    @Html.DisplayFor(modelItem => item.Gender)
-                </td>
-                  <td style="font-size: 0px;">
-                    @Html.DisplayFor(modelItem => item.Location.Name)
-                </td>
-                  <td style="font-size: 0px;">
-                    @Html.DisplayFor(modelItem => item.ReportingTo.Name)
-                </td>
-                   <td style="font-size: 12px;">
-                        @Html.DisplayFor(modelItem => item.teamlist)
-                </td>
-                 <td style="font-size: 0px;">
-                    @Html.DisplayFor(modelItem => item.AuthorizationProfile.Name)
-                </td>
-                    <td style="font-size: 0px;">
-                        
-              @Html.DisplayFor(modelItem => item.roles)
-            </td>
-                
-                  <td style="font-size: 0px;">
-                    @Html.DisplayFor(modelItem => item.Created_by)
-                </td>
-                  <td style="font-size: 0px;">
-                    @Html.DisplayFor(modelItem => item.Created_Date)
-                </td>
-                  <td style="font-size: 0px;">
-                    @Html.DisplayFor(modelItem => item.Modified_by)
-                </td>
-                  <td style="font-size: 0px;">
-                    @Html.DisplayFor(modelItem => item.Modified_Date)
-                </td>
-               
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EmployeeCode)
+                </th>
+                  <th>
+                    @Html.DisplayNameFor(model => model.Designation)
+                </th>
+                 <th>
+                   @Html.DisplayNameFor(model => model.Status)
+                </th>
+                <th></th>
+                  <th style="font-size: 0px;">
+                    @Html.DisplayNameFor(model => model.Email)
+                </th>
+
+                 <th style="font-size: 0px;">
+                    @Html.DisplayNameFor(model => model.AccountNumber)
+                </th>
+                 <th style="font-size: 0px;">
+                    @Html.DisplayNameFor(model => model.DateOfJoining)
+                </th>
+                  <th style="font-size: 0px;">
+                    @Html.DisplayNameFor(model => model.DateOfBirth)
+                </th>
+                 <th style="font-size: 0px;">
+                    @Html.DisplayNameFor(model => model.ExpenseProfile)
+                </th>
+                 <th style="font-size: 0px;">
+                    @Html.DisplayNameFor(model => model.Gender)
+                </th>
+                 <th style="font-size: 0px;">
+                    @Html.DisplayNameFor(model => model.Location)
+                </th>
+                 <th style="font-size: 0px;">
+                    @Html.DisplayNameFor(model => model.ReportingTo)
+                </th>
+                <th style="font-size: 12px;">
+                    @Html.DisplayNameFor(model => model.TeamId)
+                </th>
+                  <th style="font-size: 0px;">
+                   @Html.DisplayNameFor(model => model.AuthorizationProfileId)
+                </th>
+                  <th style="font-size: 0px;">
+                   Roles Assigned
+                </th>
+
+                 <th style="font-size: 0px;">
+                  Created By
+                </th>
+                 <th style="font-size: 0px;">
+                   Created Date
+                </th>
+                 <th style="font-size: 0px;">
+                   Modified By
+                </th>
+                 <th style="font-size: 0px;">
+                  Modified Date
+                </th>
+
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
 
- </div>
- 
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                      <a>@Html.DisplayFor(modelItem => item.EmployeeCode)</a>
+                    </td>
+
+                    <td style="width: 10px;">
+                        @Html.DisplayFor(modelItem => item.Designation.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                         <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Deactive" asp-route-id="@item.Id">Deactive</a> |
+                             <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+
+                      <td  style="font-size: 0px;">
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                      <td style="font-size: 0px;">
+                        @Html.DisplayFor(modelItem => item.AccountNumber)
+                    </td >
+                      <td style="font-size: 0px;">
+                        @Html.DisplayFor(modelItem => item.DateOfJoining)
+                    </td>
+                      <td style="font-size: 0px;">
+                        @Html.DisplayFor(modelItem => item.DateOfBirth)
+                    </td>
+                      <td style="font-size: 0px;">
+                        @Html.DisplayFor(modelItem => item.ExpenseProfile.Name)
+                    </td>
+                     <td style="font-size: 0px;">
+                        @Html.DisplayFor(modelItem => item.Gender)
+                    </td>
+                      <td style="font-size: 0px;">
+                        @Html.DisplayFor(modelItem => item.Location.Name)
+                    </td>
+                      <td style="font-size: 0px;">
+                        @Html.DisplayFor(modelItem => item.ReportingTo.Name)
+                    </td>
+                       <td style="font-size: 12px;">
+                            @Html.DisplayFor(modelItem => item.teamlist)
+                    </td>
+                     <td style="font-size: 0px;">
+                        @Html.DisplayFor(modelItem => item.AuthorizationProfile.Name)
+                    </td>
+                        <td style="font-size: 0px;">
+
+                  @Html.DisplayFor(modelItem => item.roles)
+                </td>
+
+                      <td style="font-size: 0px;">
+                        @Html.DisplayFor(modelItem => item.Created_by)
+                    </td>
+                      <td style="font-size: 0px;">
+                        @Html.DisplayFor(modelItem => item.Created_Date)
+                    </td>
+                      <td style="font-size: 0px;">
+                        @Html.DisplayFor(modelItem => item.Modified_by)
+                    </td>
+                      <td style="font-size: 0px;">
+                        @Html.DisplayFor(modelItem => item.Modified_Date)
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+
+     </div>*@
