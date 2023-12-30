@@ -43,6 +43,7 @@ using DinkToPdf;
 using System.Runtime.Loader;
 using TechParvaLEAO.Service;
 using System.Data;
+using TechParvaLEAO.Areas.BulkUploads.Services;
 
 namespace TechParvaLEAO
 {
@@ -107,7 +108,7 @@ namespace TechParvaLEAO
 
             services.AddScoped<IAuditLogServices, AuditLog>();
 
-
+            services.AddScoped<UploadService, UploadService>();
             services.AddAutoMapper(typeof(Startup));
             services.AddSession(options =>
                 options.IdleTimeout = TimeSpan.FromMinutes(30)

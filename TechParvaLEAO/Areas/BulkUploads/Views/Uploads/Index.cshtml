@@ -1,0 +1,55 @@
+﻿@model TimeSheetOverviewViewModel
+@using TechParvaLEAO.Authorization
+@using TechParvaLEAO.Areas.BulkUploads.Models
+
+@{
+    ViewBag.Title = "Index";
+}
+@{
+    var CanApproveReject = (bool)ViewData["CanApproveReject"];
+}
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <form method="get">
+                            <strong>Uploads</strong>
+                        </form>
+                    </div>
+                    <div class="text-center">
+                        <form asp-controller="Uploads" asp-action="Index" method="post" enctype="multipart/form-data">
+                            <div class="row">
+                                <div class="col-6">
+                                    <input type="file" name="postedFile" class="form-control" />
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-3 mt-3">
+                                    <input type="submit" value="Import" class="btn btn-primary" />
+                                </div>
+
+                            </div>
+                        </form>
+                        <form asp-controller="Uploads" asp-action="Export" method="post">
+                            <div class="col-1">
+                                <input type="submit" value="Export" class="btn btn-primary" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- /.col-->
+            </div>
+            <!-- /.row-->
+
+        </div>
+        <!-- /.row-->
+
+    </div>
+</div>
+
+@section scripts {
+    <script src="~/js/common.js"></script>
+}

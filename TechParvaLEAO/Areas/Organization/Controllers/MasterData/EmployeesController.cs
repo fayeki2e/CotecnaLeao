@@ -153,19 +153,22 @@ namespace TechParvaLEAO.Areas.Organization.Controllers.MasterData
                     str_roles = "";
                 }
 
-                var team_ids= emp.teamlist.ToString();
+                var team_ids= (emp.teamlist!=null)? emp.teamlist.ToString():"";
                 var str_emp_teams = "";
-                if (team_ids.ToString() != "0")
+                if (team_ids != "")
                 {
-                    var team_id = _employeeServices.GetTeam(team_ids.ToString());
-
-                   
-                    foreach (var t in team_id)
+                    if (team_ids.ToString() != "0")
                     {
-                        str_emp_teams = str_emp_teams + t.TeamName + ";";
-                        
-                    }
+                        var team_id = _employeeServices.GetTeam(team_ids.ToString());
 
+
+                        foreach (var t in team_id)
+                        {
+                            str_emp_teams = str_emp_teams + t.TeamName + ";";
+
+                        }
+
+                    }
                 }
 
                 model_list.Add(new AddEditEmployeeVM

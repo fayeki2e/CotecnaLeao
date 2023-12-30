@@ -273,37 +273,37 @@
                     </li>
                 }
                 @if (User.IsInRole(AuthorizationRoles.MASTER) ||
-            User.IsInRole(AuthorizationRoles.FINANCE_MASTER) ||
-            User.IsInRole(AuthorizationRoles.HR_MASTER))
+           User.IsInRole(AuthorizationRoles.FINANCE_MASTER) ||
+           User.IsInRole(AuthorizationRoles.HR_MASTER))
                 {
                     <li class="divider"></li>
                     <li class="nav-title">Masters</li>
                     @if (User.IsInRole(AuthorizationRoles.HR_MASTER))
                     {
                         <!--
-                            <li class="nav-item nav-dropdown">
-                                <a class="nav-link nav-dropdown-toggle" href="#">
-                                    <i class="nav-icon fa fa-calendar"></i> Timesheet
+                    <li class="nav-item nav-dropdown">
+                        <a class="nav-link nav-dropdown-toggle" href="#">
+                            <i class="nav-icon fa fa-calendar"></i> Timesheet
+                        </a>
+                        <ul class="nav-dropdown-items">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Attendance/LocationOvertimeRules">
+                                    <i class="nav-icon icon-puzzle"></i> Location Overtime Rules
                                 </a>
-                                <ul class="nav-dropdown-items">
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="/Attendance/LocationOvertimeRules">
-                                            <i class="nav-icon icon-puzzle"></i> Location Overtime Rules
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="/Attendance/Clients">
-                                            <i class="nav-icon icon-puzzle"></i> Client
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="/Attendance/Jobs">
-                                            <i class="nav-icon icon-puzzle"></i> Job
-                                        </a>
-                                    </li>
-                                </ul>
                             </li>
-                        -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Attendance/Clients">
+                                    <i class="nav-icon icon-puzzle"></i> Client
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Attendance/Jobs">
+                                    <i class="nav-icon icon-puzzle"></i> Job
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                -->
                         <li class="nav-item nav-dropdown">
                             <a class="nav-link nav-dropdown-toggle" href="#">
                                 <i class="nav-icon fa fa-tasks" aria-hidden="true"></i> Leave
@@ -385,12 +385,12 @@
                                     </a>
                                 </li>
                                 <!--
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="/Organization/EmployeeClaimSeries">
-                                            <i class="nav-icon icon-puzzle"></i> Expense Claim Series
-                                        </a>
-                                    </li>
-                                -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Organization/EmployeeClaimSeries">
+                                    <i class="nav-icon icon-puzzle"></i> Expense Claim Series
+                                </a>
+                            </li>
+                        -->
                                 <li class="nav-item">
                                     <a class="nav-link" href="/Organization/ApprovalLimitProfiles">
                                         <i class="nav-icon icon-puzzle"></i> Approval Limit Profiles
@@ -432,12 +432,12 @@
                                     </a>
                                 </li>
                                 <!--
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="/ApplicationUsers">
-                                            <i class="nav-icon icon-puzzle"></i> Login Accounts
-                                        </a>
-                                    </li>
-                                -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="/ApplicationUsers">
+                                    <i class="nav-icon icon-puzzle"></i> Login Accounts
+                                </a>
+                            </li>
+                        -->
                                 <li class="nav-item">
                                     <a class="nav-link" href="/Organization/Designations">
                                         <i class="nav-icon icon-puzzle"></i> Designation
@@ -456,17 +456,30 @@
                             </ul>
                         </li>
                     }
+                    <li class="nav-item nav-dropdown">
+                        <a class="nav-link nav-dropdown-toggle" href="#">
+                            <i class="nav-icon fa fa-upload"></i> Uploads
+                        </a>
+                        <ul class="nav-dropdown-items">
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="/BulkUploads/Uploads/">
+                                    <i class="nav-icon fa fa-upload"></i> Bulk Upload
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                 }
             }
 
             @if (User.IsInRole(AuthorizationRoles.FINANCE) ||
-         User.IsInRole(AuthorizationRoles.HR) || User.IsInRole(AuthorizationRoles.MANAGER))
+        User.IsInRole(AuthorizationRoles.HR) || User.IsInRole(AuthorizationRoles.MANAGER))
             {
                 <li class="divider"></li>
                 <li class="nav-title">Reports</li>
             }
 
-            @if (User.IsInRole(AuthorizationRoles.FINANCE)  || User.IsInRole(AuthorizationRoles.MANAGER))
+            @if (User.IsInRole(AuthorizationRoles.FINANCE) || User.IsInRole(AuthorizationRoles.MANAGER))
             {
                 <li class="nav-item nav-dropdown">
                     <a class="nav-link " href="/Reports/FinanceReports">
