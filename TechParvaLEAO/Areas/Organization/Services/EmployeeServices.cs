@@ -2,14 +2,21 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
+using System.Data.SqlClient;
+using System.Data;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using TechParvaLEAO.Areas.Leave.Models;
+using TechParvaLEAO.Areas.Leave.Services;
 using TechParvaLEAO.Areas.Organization.Models;
 using TechParvaLEAO.Areas.Organization.Models.ViewModels;
+using TechParvaLEAO.Areas.Reports.Models;
 using TechParvaLEAO.Authorization;
 using TechParvaLEAO.Data;
 using TechParvaLEAO.Models;
+using TechParvaLEAO.Service;
 
 namespace TechParvaLEAO.Areas.Organization.Services
 {
@@ -40,6 +47,8 @@ namespace TechParvaLEAO.Areas.Organization.Services
         Task<Employee> GetVOCHead();
 
         IEnumerable<Employee> GetReportingManager();
+
+        DataSet  GetAllEmployeeList_Report();
     }
 
 
@@ -48,12 +57,15 @@ namespace TechParvaLEAO.Areas.Organization.Services
         private readonly IApplicationRepository _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext dbContext;
+        private readonly IDBConnectionEnhance dbConnection;
 
-        public EmployeeServices(IApplicationRepository context, UserManager<ApplicationUser> userManager , ApplicationDbContext dbContext)
+        public EmployeeServices(IApplicationRepository context, UserManager<ApplicationUser> userManager ,
+            ApplicationDbContext dbContext, IDBConnectionEnhance DBconnection)
         {
             this._context = context;
             this._userManager = userManager;
             this.dbContext = dbContext;
+            dbConnection = DBconnection;
         }
 
         public async Task<Employee> GetEmployee(ClaimsPrincipal User)
@@ -327,6 +339,39 @@ namespace TechParvaLEAO.Areas.Organization.Services
             return query;
         }
 
+     
+
+        public IEnumerable<Employee> GetAllEmployeeList()
+        {
+            var result = dbContext.Employees.FromSql("dbo.sp_GetBalancePayable_Report");
+
+            return result;
+        }
+
+        public DataSet GetAllEmployeeList_Report()
+        {
+            DataSet ds = new DataSet();
+
+            try
+            {
+                SqlCommand cmd = new SqlCommand("sp_GetAllEmployees", dbConnection.Get_DB_Connection());
+                //cmd.Parameters.Add("@BankName", SqlDbType.NVarChar).Value = Bank_Name;
+                cmd.CommandType = CommandType.StoredProcedure;
+                SqlDataAdapter adpt = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                adpt.Fill(dt);
+
+                ds.Tables.Add(dt);
+
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+
+        }
 
 
 

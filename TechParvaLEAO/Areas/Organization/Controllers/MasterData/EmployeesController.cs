@@ -21,6 +21,9 @@ using AutoMapper;
 using TechParvaLEAO.Areas.Organization.Services;
 using DocumentFormat.OpenXml.Presentation;
 using Microsoft.SharePoint.Client.Sharing;
+using TechParvaLEAO.Areas.Reports.Models;
+using TechParvaLEAO.Areas.Reports.Services;
+using System.Data;
 
 namespace TechParvaLEAO.Areas.Organization.Controllers.MasterData
 {
@@ -79,8 +82,89 @@ namespace TechParvaLEAO.Areas.Organization.Controllers.MasterData
   
         }
 
+
+        public async Task<IActionResult> Index()
+        {
+            //var model_list = new List<AddEditEmployeeVM>();
+
+            //return View(model_list);
+            ViewData["DesignationId"] = new SelectList(_context.Designations, "Id", "Name");
+            ViewData["LocationId"] = new SelectList(_context.Locations, "Id", "Name");
+           // var result = _context.Employees.FromSql("dbo.sp_GetAllEmployees");
+
+              return View();
+
+           // return result.ToList();
+
+        }
+
+        [HttpPost, ActionName("GetAllEmployeeList")]
+        public List<EmployeeListViewModel> GetAllEmployeeList_json()
+        {
+            DataSet ds = new DataSet();
+
+            // dt = (DataTable)financeReportsServices.GetBalancePayableOrReceivable_Report();
+
+            //ds = (DataSet)EmployeeServices.GetAllEmployeeList_Report();
+
+            ds = _employeeServices.GetAllEmployeeList_Report();
+
+            var model_list = new List<EmployeeListViewModel>();
+
+            foreach (DataRow row in ds.Tables[0].Rows)
+            {
+
+                model_list.Add(new EmployeeListViewModel
+                {
+                    Id = Convert.ToInt32(row["Id"]),
+                    name = row["Name"].ToString(),
+                    employeeCode = row["employeeCode"].ToString(),
+                    Designation = row["Designation"].ToString(),
+                    status = row["Status"].ToString(),
+                    email = row["Email"].ToString(),
+                    accountNumber = row["AccountNumber"].ToString(),
+                    dateOfJoining = row["DateOfJoining"].ToString(),
+                    dateOfBirth = row["DateOfBirth"].ToString(),
+                    expenseProfile = row["expenseProfile"].ToString(),
+                    gender = row["Gender"].ToString(),
+                    location = row["Location"].ToString(),
+                    reportingTo = row["ReportingTo"].ToString(),
+                    teamlist = row["TeamsList"].ToString(),
+                    authorizationProfile = row["AuthorizationProfile"].ToString(),
+                    roles = row["roles"].ToString(),
+                    created_by = row["Created_By"].ToString(),
+                    created_Date = row["Created_Date"].ToString(),
+                    modified_by = row["Modified_By"].ToString(),
+                    modified_Date = row["Modified_Date"].ToString()
+                });
+
+            }
+
+
+            return model_list.ToList();
+        }
+
+
+
+        [HttpPost, ActionName("GetAllEmployeeList1")]
+            public List<Employee> BalancePayableOrReceivableReport_json1()
+            {
+            //string emp_code = User.Identity.Name;
+            //var model = EmployeeServices.GetAllEmployeeList();
+            ////ViewData["is_reporting_exist"] = model.ToList()[0].is_reporting_exist;
+
+            //return model.ToList();
+            ViewData["DesignationId"] = new SelectList(_context.Designations, "Id", "Name");
+            ViewData["LocationId"] = new SelectList(_context.Locations, "Id", "Name");
+            var result = _context.Employees.FromSql("dbo.sp_GetBalancePayable_Report");
+
+            return result.ToList();
+
+        }
+
+
         // GET: Organization/Employees
-        public async Task<IActionResult> Index(EmployeeSearchViewModel employeeSearchViewModel)
+        public async Task<IActionResult> Index1(EmployeeSearchViewModel employeeSearchViewModel)
         {
             ViewData["DesignationId"] = new SelectList(_context.Designations, "Id", "Name");
             ViewData["LocationId"] = new SelectList(_context.Locations, "Id", "Name");
