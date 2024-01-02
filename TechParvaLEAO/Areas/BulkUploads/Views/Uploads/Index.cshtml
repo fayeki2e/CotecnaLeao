@@ -1,4 +1,4 @@
-﻿@model TimeSheetOverviewViewModel
+﻿@model TechParvaLEAO.Models.UploadStatusViewModel;
 @using TechParvaLEAO.Authorization
 @using TechParvaLEAO.Areas.BulkUploads.Models
 
@@ -15,29 +15,87 @@
                 <div class="card">
                     <div class="card-header">
                         <form method="get">
-                            <strong>Uploads</strong>
+                            <strong>Upload Employee Details</strong>
                         </form>
                     </div>
                     <div class="text-center">
                         <form asp-controller="Uploads" asp-action="Index" method="post" enctype="multipart/form-data">
                             <div class="row">
+
+                                <label class="col-md-2 col-form-label" for="uploadexcel"><b>Upload Excel</b></label>
                                 <div class="col-6">
                                     <input type="file" name="postedFile" class="form-control" />
                                 </div>
-
-                            </div>
-                            <div class="row">
-                                <div class="col-3 mt-3">
-                                    <input type="submit" value="Import" class="btn btn-primary" />
+                                <div class="col-1 md-1">
+                                    <input type="submit" value="Upload" class="btn btn-primary" />
                                 </div>
+                            </div>
 
-                            </div>
                         </form>
+                        <div class="row">
+                            <br />
+
+                        </div>
                         <form asp-controller="Uploads" asp-action="Export" method="post">
-                            <div class="col-1">
-                                <input type="submit" value="Export" class="btn btn-primary" />
+                            <div class="row">
+                                <div class="col-6">
+                                    <input type="submit" value="Download Template" class="btn btn-primary" />
+                                </div>
                             </div>
                         </form>
+                        <div class="row">
+                            <br />
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12" id="#latest-advance-request">
+                    @*card*@
+                    <div class="">
+                        <div class="card-header">
+                            <b class=""> Uploaded Status</b>
+                        </div>
+                        @*card-body*@
+                        <div class="">
+                            <table class="table table-responsive-sm table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Uploaded On</th>
+                                        <th>Uploaded By</th>
+                                        <th>Added Records</th>
+                                        <th>Updated Records</th>
+                                        <th>Failed Records</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.StatusListItems.Count == 0)
+                                        {
+                                            <tr>
+                                                <td colspan="5">No data found</td>
+                                            </tr>
+                                        }
+                                        @foreach (var data in Model.StatusListItems)
+                                        {
+                                <tr>
+                                    <td><a href="#">@data.Row_ID</a></td>
+                                    <td>@data.UploadedOn</td>
+                                    <td>@data.UploadedBy</td>
+                                    <td>
+                                        <span class="badge badge-success">@data.AddedRecords</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-success">@data.UpdatedRecords</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-success">@data.FailedRecords</span>
+                                    </td>
+                                </tr>
+                                        }
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
                 <!-- /.col-->

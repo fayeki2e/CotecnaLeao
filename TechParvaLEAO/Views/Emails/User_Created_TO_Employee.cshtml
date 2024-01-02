@@ -1,0 +1,23 @@
+﻿Content-Type: text/html; charset=utf-8
+@{
+    Layout = null;
+}
+@model TechParvaLEAO.Models.NotificationEmailViewModel
+@using System.Globalization
+
+
+Dear @Model.Receiver.Name   ,
+<br />
+<br />
+
+As requested, Your user is created with default password: @Model.Receiver.EmployeeCode.ToUpper() +"123";
+
+<br />
+
+
+
+<br />
+
+
+<br />
+    Best Regards

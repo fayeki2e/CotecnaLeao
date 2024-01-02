@@ -851,6 +851,8 @@ namespace TechParvaLEAO.Areas.Organization.Controllers.MasterData
             return _context.Employees.Any(e => e.Id == id);
         }
 
+      
+
         [AcceptVerbs("GET", "POST")]
         public IActionResult VerifyDuplicateExists(int id, string employeeCode, string email)
         {
@@ -864,7 +866,7 @@ namespace TechParvaLEAO.Areas.Organization.Controllers.MasterData
                 if (employeeAlreadyExists.Any(emp => emp.EmployeeCode == employeeCode))
                     return Json($"A user with Employee Code {employeeCode} already exists.");
               
-                if (employee_oldrecord.ToList()[0].Email == email)
+                    if (employee_oldrecord.ToList()[0].Email == email)
                 {
                     return Json(true);
                 }
