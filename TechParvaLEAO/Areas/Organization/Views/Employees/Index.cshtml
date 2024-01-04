@@ -289,7 +289,16 @@ const gridInstance = $('#dataGrid').dxDataGrid({
        allowSearch: true,
       filterOperations: ["contains", "=",">","<"],
       visible: true,
-    },
+        },
+        {
+            caption: 'Teams',
+            dataField: 'teams',
+            datatype: 'string',
+            allowFiltering: true,
+            allowSearch: true,
+            filterOperations: ["contains", "=", ">", "<"],
+            visible: true,
+        },
     {
         caption: 'Authorization Profile',
       dataField: 'authorizationProfile',
@@ -347,8 +356,65 @@ const gridInstance = $('#dataGrid').dxDataGrid({
       filterOperations: ["contains", "=",">","<"],
       visible: true,
     }
-    
-
+      
+        , {
+            caption: 'Overtime Rule',
+            dataField: 'overtimerule',
+            datatype: 'string',
+            allowFiltering: true,
+            allowSearch: true,
+            filterOperations: ["contains", "=", ">", "<"],
+            visible: false,
+        }
+        , {
+            caption: 'Can Apply Mission Leaves',
+            dataField: 'canApplyMissionLeaves',
+            datatype: 'string',
+            allowFiltering: true,
+            allowSearch: true,
+            filterOperations: ["contains", "=", ">", "<"],
+            visible: false,
+        }, {
+            caption: 'Can Create Forex Requests',
+            dataField: 'canCreateForexRequests',
+            datatype: 'string',
+            allowFiltering: true,
+            allowSearch: true,
+            filterOperations: ["contains", "=", ">", "<"],
+            visible: false,
+        }, {
+            caption: 'Can have Credit Card',
+            dataField: 'canHoldCreditCard',
+            datatype: 'string',
+            allowFiltering: true,
+            allowSearch: true,
+            filterOperations: ["contains", "=", ">", "<"],
+            visible: false,
+        }, {
+            caption: 'Is HR',
+            dataField: 'isHr',
+            datatype: 'string',
+            allowFiltering: true,
+            allowSearch: true,
+            filterOperations: ["contains", "=", ">", "<"],
+            visible: false,
+        }, {
+            caption: 'On Field Employee',
+            dataField: 'onFieldEmployee',
+            datatype: 'string',
+            allowFiltering: true,
+            allowSearch: true,
+            filterOperations: ["contains", "=", ">", "<"],
+            visible: false,
+        }, {
+            caption: 'SpecificWeeklyOff',
+            dataField: 'specificWeeklyOff',
+            datatype: 'string',
+            allowFiltering: true,
+            allowSearch: true,
+            filterOperations: ["contains", "=", ">", "<"],
+            visible: false,
+        }
     // {
     //  caption: 'Comp Off Against Date',
     //  dataField: 'compOffAgainstDate',
@@ -358,10 +424,63 @@ const gridInstance = $('#dataGrid').dxDataGrid({
     //   allowSearch: true,
     //  filterOperations: ["contains", "=",">","<"],
     //}
-     ],
+    ],
+
+    //onExporting: function (e) {
+    //    console.log('inside exporting');
+    //    e.component.beginUpdate();
+    //    e.component.columnOption('ID', 'accountNumber', true);
+    //    var workbook = new ExcelJS.Workbook();
+    //    var worksheet = workbook.addWorksheet('Template');
+
+    //    DevExpress.excelExporter.exportDataGrid({
+    //        component: e.component,
+    //        worksheet: worksheet
+    //    }).then(function () {
+    //        workbook.xlsx.writeBuffer().then(function (buffer) {
+    //            saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'EmployeeTemplate.xlsx');
+    //        });
+    //    }).then(function () {
+    //        e.component.columnOption('ID', 'accountNumber', false);
+    //        e.component.endUpdate();
+    //    });
+
+    //    e.cancel = true;
+    //},
+
+    onExporting: function (e) {
+        e.component.beginUpdate();
+        e.component.columnOption("Column", "accountNumber", false);
+    },
+    onExported: function (e) {
+        e.component.columnOption("Column", "accountNumber", true);
+        e.component.endUpdate();
+    },
         toolbar: {
       items: [
-        'groupPanel',
+                'groupPanel',
+                {
+                    widget: 'dxButton',
+                    location: 'after',
+                    options: {
+                        icon: 'exportexcel',
+                        text: 'Export to Excel Employee Template',
+                        onClick() {
+                            const workbook = new ExcelJS.Workbook();
+                            const worksheet = workbook.addWorksheet('Template');
+                            DevExpress.excelExporter.exportDataGrid({
+                                component: gridInstance,
+                                worksheet,
+                                autoFilterEnabled: true,
+                            }).then(() => {
+                                workbook.xlsx.writeBuffer().then((buffer) => {
+                                    saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'EmployeeTemplate.xlsx');
+                                });
+                            });
+
+                        },
+                    },
+                },
         {
           widget: 'dxButton',
           location: 'after',

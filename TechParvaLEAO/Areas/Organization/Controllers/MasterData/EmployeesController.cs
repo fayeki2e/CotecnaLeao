@@ -24,6 +24,7 @@ using Microsoft.SharePoint.Client.Sharing;
 using TechParvaLEAO.Areas.Reports.Models;
 using TechParvaLEAO.Areas.Reports.Services;
 using System.Data;
+using TechParvaLEAO.Areas.BulkUploads.Models;
 
 namespace TechParvaLEAO.Areas.Organization.Controllers.MasterData
 {
@@ -135,13 +136,70 @@ namespace TechParvaLEAO.Areas.Organization.Controllers.MasterData
                     created_by = row["Created_By"].ToString(),
                     created_Date = row["Created_Date"].ToString(),
                     modified_by = row["Modified_By"].ToString(),
-                    modified_Date = row["Modified_Date"].ToString()
+                    modified_Date = row["Modified_Date"].ToString(),
+                    teams = row["Teams"].ToString(),
+                    overtimerule=row["Overtimerule"].ToString(),
+                    canApplyMissionLeaves=row["Can Apply Mission Leaves"].ToString(),
+                    canCreateForexRequests=row["Can Create Forex Requests"].ToString(),
+                    canHoldCreditCard=row["Can have Credit Card"].ToString(),
+                    isHr=row["Is Hr"].ToString(),
+                    onFieldEmployee=row["On Field Employee"].ToString(),
+                    specificWeeklyOff=row["SpecificWeeklyOff"].ToString()
+
                 });
 
             }
 
 
             return model_list.ToList();
+        }
+
+
+        [HttpPost, ActionName("GetAllEmployeeTemplate")]
+        public ActionResult GetAllEmployeeTemplate(List<EmployeeListViewModel> emodel )
+        {
+            DataSet ds = new DataSet();
+
+            // dt = (DataTable)financeReportsServices.GetBalancePayableOrReceivable_Report();
+
+            //ds = (DataSet)EmployeeServices.GetAllEmployeeList_Report();
+
+            ds = _employeeServices.GetAllEmployeeList_TemplateReport();
+
+            var model_list = new List<ExcelStructure>();
+
+            foreach (DataRow row in ds.Tables[0].Rows)
+            {
+
+                model_list.Add(new ExcelStructure
+                {
+                    Row_ID = Convert.ToInt32(row["ID"]),
+                    Employee = row["Name"].ToString(),
+                    Employee_Code = row["Employee Code"].ToString(),
+                    Designation = row["Designation"].ToString(),
+                    Overtime_Rule = row["Overtime Rule"].ToString(),
+                    Email = row["Email"].ToString(),
+                    Account_Number = row["AccountNumber"].ToString(),
+                    Date_of_Joining = row["Date Of Joining"].ToString(),
+                    Date_of_Birth = row["Date Of Birth"].ToString(),
+                    Expense_Profile = row["Expense Profile"].ToString(),
+                    Gender = row["Gender"].ToString(),
+                    Location = row["Location"].ToString(),
+                    Reporting_To = row["Reporting To"].ToString(),
+                    Teams = row["Teams"].ToString(),
+                    Authorization_Profile = row["Authorization Profile"].ToString(),
+                    Can_Apply_Mission_Leaves=row["Can Apply Mission Leaves"].ToString(),
+                    Can_Create_Forex_Requests=row["Can Create Forex Requests"].ToString(),
+                    Can_have_Credit_card=row["Can have Credit Card"].ToString(),
+                    Is_Hr=Convert.ToBoolean (row["Is Hr"].ToString()),
+                    On_Field_Employee=row["On Field Employee"].ToString(),
+                    Specific_Weekly_Off=row["Specific Weekly-Off"].ToString()
+                });
+
+            }
+
+            ViewData["Employeetemplate"] = model_list;
+            return View();
         }
 
 

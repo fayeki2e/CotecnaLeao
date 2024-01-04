@@ -49,6 +49,7 @@ namespace TechParvaLEAO.Areas.Organization.Services
         IEnumerable<Employee> GetReportingManager();
 
         DataSet  GetAllEmployeeList_Report();
+        DataSet GetAllEmployeeList_TemplateReport();
     }
 
 
@@ -373,7 +374,30 @@ namespace TechParvaLEAO.Areas.Organization.Services
 
         }
 
+        public DataSet GetAllEmployeeList_TemplateReport()
+        {
+            DataSet ds = new DataSet();
 
+            try
+            {
+                SqlCommand cmd = new SqlCommand("sp_GetAllEmployees", dbConnection.Get_DB_Connection());
+                cmd.Parameters.Add("@Action", SqlDbType.NVarChar).Value = "Select";
+                cmd.CommandType = CommandType.StoredProcedure;
+                SqlDataAdapter adpt = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                adpt.Fill(dt);
+
+                ds.Tables.Add(dt);
+
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+
+        }
 
     }
 }
