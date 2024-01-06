@@ -105,9 +105,9 @@ namespace TechParvaLEAO.Areas.Expense.Handler
                 if (paymentRequest.Amount > limit)
                 {
                     paymentRequest.Status = PaymentRequestStatus.APPROVED_ESCALATED.ToString();
-                    //paymentRequest.PaymentRequestActionedById = (await GetNextApprover(paymentRequest, actionByEmployee)).Id;
+                    paymentRequest.PaymentRequestActionedById = (await GetNextApprover(paymentRequest, actionByEmployee)).Id;
 
-                    paymentRequest.PaymentRequestActionedById = paymentRequestVm.ActionById;
+                  //  paymentRequest.PaymentRequestActionedById = paymentRequestVm.ActionById;
                     paymentRequest.ActionDate = null;
                     approvalActions.Action = PaymentRequestActions.APPROVED.ToString();
                 }
