@@ -32,6 +32,11 @@ using TechParvaLEAO.Services;
 using TechParvaLEAO.Models;
 using Microsoft.AspNetCore.Identity;
 using TechParvaLEAO.Areas.Organization.Controllers.MasterData;
+using System.Net.Mail;
+using Postal;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Hosting;
+using System.Net;
 
 namespace Cotecna.Areas.BulkUploads.Controllers
 {
@@ -44,19 +49,33 @@ namespace Cotecna.Areas.BulkUploads.Controllers
         private readonly ILogger<UploadsController> _logger;
         private IConfiguration Configuration;
         private readonly UploadService uploadService;
-
         private readonly ApplicationDbContext _context;
         private readonly IEmployeeServices employeeServices;
+        private readonly EmailSenderOptions emailOptions;
         private readonly IEmailSenderEnhance _emailSender;
+        private readonly IHostingEnvironment env;
+        private SmtpClient client;
+        private readonly IAuditLogServices _auditlog;
         private  UserManager<ApplicationUser> userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IEmailService emailService;
         //private readonly LeaveRequestServices _leaveRequestServices;
         UploadStatusViewModel uploadViewModel = new UploadStatusViewModel();
         UploadStatusViewModel dashboardViewModel = new UploadStatusViewModel();
         //  private IWebHostEnvironment Environment;
 
-        public UploadsController(ILogger<UploadsController> logger, IConfiguration _configuration, UploadService uploadService, ApplicationDbContext context, IEmployeeServices employeeServices, IEmailSenderEnhance emailSender, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public UploadsController(IEmailService emailService,
+            IEmailViewRender emailViewRenderer,
+            IHostingEnvironment env,
+            IOptions<EmailSenderOptions> emailOptions,
+            IAuditLogServices auditlog, ILogger<UploadsController> logger, IConfiguration _configuration, UploadService uploadService, ApplicationDbContext context, IEmployeeServices employeeServices, IEmailSenderEnhance emailSender, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
+            this.emailOptions = emailOptions.Value;
+            this.emailService = emailService;
+            this.env = env;
+            ((EmailViewRender)emailViewRenderer).EmailViewDirectoryName = @"Emails";
+            client = CreateSmtpClient();
+            _auditlog = auditlog;
             _logger = logger;
             Configuration = _configuration;
             this.uploadService = uploadService;
@@ -65,12 +84,20 @@ namespace Cotecna.Areas.BulkUploads.Controllers
             this._emailSender = emailSender;
             this.userManager = userManager;
             this._roleManager = roleManager;
+         
         }
 
+        private SmtpClient CreateSmtpClient()
+        {
+            var client = new SmtpClient(emailOptions.Host, emailOptions.Port)
+            {
+                Credentials = new NetworkCredential(emailOptions.UserName, emailOptions.Password),
+                EnableSsl = emailOptions.EnableSSL
+            };
+            return client;
+        }
 
-        /*
-         * Show List of own timesheets
-         */
+       
         // GET: BulkUploads
         [Authorize(Roles = AuthorizationRoles.MANAGER + "," + AuthorizationRoles.EMPLOYEE)]
         public ActionResult Index()
@@ -265,9 +292,11 @@ case when [Can have Credit Card] ='yes' then 1 else 0 end,case when[Is Hr] ='yes
                                         command.ExecuteNonQuery();
                                         InsertCount = InsertCount + 1;
 
-                                        Employee employee = new Employee();
-                                        employee.EmployeeCode = row["Employee Code"].ToString();
-                                        employee.Name = row["Employee"].ToString();
+                                       // Employee employee = new Employee();
+                                        //var employee = await _context.Employees.Where(m => m.EmployeeCode =row["Employee Code"].ToString());
+                                        var employee = _context.Employees.Where(m => m.EmployeeCode == row["Employee Code"].ToString()).FirstOrDefault();
+                                      //  employee.EmployeeCode = row["Employee Code"].ToString();
+                                        //employee.Name = row["Employee"].ToString();
                                         //employee.DesignationId = 1;
                                         //employee.LocationId = 1;
                                         //employee.AuthorizationProfileId = 1;
@@ -275,7 +304,7 @@ case when [Can have Credit Card] ='yes' then 1 else 0 end,case when[Is Hr] ='yes
                                         //employee.TeamId = 1;
                                         //employee.AccountNumber= row["Account Number"].ToString();
                                         //employee.ReportingToId = 12;
-                                        employee.Email = row["Email"].ToString();
+                                        //employee.Email = row["Email"].ToString();
                                         //employee.Gender = row["Gender"].ToString();
                                         //employee.DateOfBirth = Convert.ToDateTime(row["Date of Birth"]);
                                         //employee.DateOfJoining=Convert.ToDateTime(row["Date of Joining"]);
@@ -286,8 +315,8 @@ case when [Can have Credit Card] ='yes' then 1 else 0 end,case when[Is Hr] ='yes
                                         //employee.IsHr = (row["Is Hr"].ToString() == "yes") ? true : false;
                                         //employee.OnFieldEmployee = (row["On Field Employee"].ToString() == "yes") ? true : false;
                                         //employee.SpecificWeeklyOff = (row["Specific Weekly-Off"].ToString() == "yes") ? true : false;
-                                        employee.Created_Date = DateTime.Now;
-                                        employee.Created_by = User.Identity.Name;
+                                        //employee.Created_Date = DateTime.Now;
+                                        //employee.Created_by = User.Identity.Name;
 
                                         //_context.Add(employee);
                                         //await _context.SaveChangesAsync();
@@ -299,11 +328,44 @@ case when [Can have Credit Card] ='yes' then 1 else 0 end,case when[Is Hr] ='yes
                                                 Email = employee.Email,
                                                 UserName = employee.EmployeeCode,
                                                 EmployeeProfileId = employee.Id
-                                            }, employee.DefaultPassword()); ;
+                                            }, "Cotecna@123"); ;
 
-            
+                                            ApplicationUser user = await userManager.FindByNameAsync(employee.EmployeeCode);
+                                           // var user = await _userManager.FindByIdAsync(userId);
+                                            if (user == null)
+                                            {
+                                                ViewBag.ErrorMessage = $"User with Id = {user.UserName} cannot be found";
+                                                return View("NotFound");
+                                            }
+                                            var roles = await userManager.GetRolesAsync(user);
 
+                                            var result = await userManager.RemoveFromRolesAsync(user, roles);
+                                            if (!result.Succeeded)
+                                            {
+                                                ModelState.AddModelError("", "Cannot remove user existing roles");
+                                                //return View(model);
+                                            }
+                                            var model = new List<UserRolesViewModel>();
+                                           
+                                                var role = _roleManager.Roles.FirstOrDefault();
+                                                var userRolesViewModel = new UserRolesViewModel
+                                                {
+                                                    RoleId = role.NormalizedName,
+                                                    RoleName = role.NormalizedName
+                                                };
+                                               
+                                                userRolesViewModel.IsSelected = true;
+                                                model.Add(userRolesViewModel);
+                                            
+                                            result = await userManager.AddToRolesAsync(user,
+                                                model.Where(x => x.IsSelected).Select(y => y.RoleId));
+                                            if (!result.Succeeded)
+                                            {
+                                                ModelState.AddModelError("", "Cannot add selected roles to user");
+                                                //return View(model);
+                                            }
                                         }
+
 
                                       
                                         sendEmail(row["Email"].ToString(), row["Employee Code"].ToString(),employee);
@@ -434,8 +496,60 @@ Gender,[Date Of Joining],[Date Of Birth],[Overtime Rule],[Can Apply Mission Leav
             return View("Index", dashboardViewModel);
         }
 
+        public async Task SendEmailAsync(MailMessage mailMessage)
+        {
+            try
+            {
+                var al = new Auditlog_DM();
+                al.module = "HanfireEmailsender.cs";
+                al.url = "SendEmailAsync";
+                al.comment = mailMessage.ToString();
+                al.userid = "";
+                al.line = "Before Sending";
+                al.path = "";
+                al.exception = "";
+                al.reportingto = "";
+                al.details = mailMessage.To.ToString();
+                al.status = "";
+                _auditlog.InsertLog(al);
+            }
+            catch (Exception ex)
+            {
 
-        public async void sendEmail( string Email,string EmployeeCode, Employee employee)
+            }
+
+            mailMessage.From = new MailAddress(emailOptions.FromAddress);
+            try
+            {
+                await client.SendMailAsync(mailMessage);
+            }
+            catch (SmtpException e)
+            {
+                client = CreateSmtpClient();
+            }
+
+            try
+            {
+                var al = new Auditlog_DM();
+                al.module = "HanfireEmailsender.cs";
+                al.url = "SendEmailAsync";
+                al.comment = mailMessage.ToString();
+                al.userid = "";
+                al.line = "After Sending";
+                al.path = "";
+                al.exception = "";
+                al.reportingto = "";
+                al.details = mailMessage.To.ToString();
+                al.status = "";
+                _auditlog.InsertLog(al);
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public async Task sendEmail( string Email,string EmployeeCode, Employee employee)
         {
             var url = "";
 
@@ -456,7 +570,7 @@ Gender,[Date Of Joining],[Date Of Birth],[Overtime Rule],[Can Apply Mission Leav
             var email = new NotificationEmailViewModel
             {
                 ViewName = configuration[0].TemplatePathHtml,
-                To = Email,
+                To = employee.Email,
                 Subject = configuration[0].SubjectLine,
                 PaymentRequestData = null,
                 LeaveRequestData = null,
@@ -473,7 +587,25 @@ Gender,[Date Of Joining],[Date Of Birth],[Overtime Rule],[Can Apply Mission Leav
                 ToDate = DateTime.Now,
                 Receiver = employee
             };
-            await _emailSender.SendEmailAsync(email);
+            try
+            {
+                try
+                {
+                    MailMessage message = await emailService.CreateMailMessageAsync(email);
+                    message.From = new MailAddress(emailOptions.FromAddress);
+                    await SendEmailAsync(message);
+                }
+                catch (Exception)
+                {
+                    await _emailSender.SendEmailAsync(email);
+                }
+                
+            }
+            catch (Exception)
+            {
+              
+            }
+            
         }
         [HttpPost]
         public IActionResult Export()

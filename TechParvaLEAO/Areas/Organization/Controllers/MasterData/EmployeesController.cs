@@ -924,7 +924,8 @@ namespace TechParvaLEAO.Areas.Organization.Controllers.MasterData
                 if (employeeAlreadyExists.Any(emp => emp.EmployeeCode == employeeCode))
                     return Json($"A user with Employee Code {employeeCode} already exists.");
               
-                    if (employee_oldrecord.ToList()[0].Email == email)
+                    
+                if (employee_oldrecord.ToList()[0].Email == email)
                 {
                     return Json(true);
                 }

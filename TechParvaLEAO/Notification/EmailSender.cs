@@ -152,7 +152,7 @@ namespace TechParvaLEAO.Services
             try
             {
                 await client.SendMailAsync(mailMessage);
-            }catch(SmtpException)
+            }catch(SmtpException e)
             {
                 client = CreateSmtpClient();
             }
