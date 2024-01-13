@@ -365,9 +365,10 @@ case when [Can have Credit Card] ='yes' then 1 else 0 end,case when[Is Hr] ='yes
                                                 //return View(model);
                                             }
                                         }
-
-
-                                      
+                                        //string test = row["Email"].ToString();
+                                        //string FNAme = test.Substring(0, test.IndexOf("."));
+                                        //string LNAMe= test.Substring(test.IndexOf(".") + 1, test.IndexOf("@") - test.IndexOf(".") - 1);
+                                       
                                         sendEmail(row["Email"].ToString(), row["Employee Code"].ToString(),employee);
                                     }
                                     catch (Exception ex)
@@ -593,15 +594,16 @@ Gender,[Date Of Joining],[Date Of Birth],[Overtime Rule],[Can Apply Mission Leav
                 {
                     MailMessage message = await emailService.CreateMailMessageAsync(email);
                     message.From = new MailAddress(emailOptions.FromAddress);
+                    message.To.Add(employee.Email);
                     await SendEmailAsync(message);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     await _emailSender.SendEmailAsync(email);
                 }
                 
             }
-            catch (Exception)
+            catch (Exception e)
             {
               
             }
