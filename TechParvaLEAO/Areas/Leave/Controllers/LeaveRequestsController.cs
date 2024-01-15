@@ -499,14 +499,27 @@ namespace TechParvaLEAO.Areas.Leave.Controllers
                 LeaveRequestId = id,
                 ActionById = GetEmployee().Id
             };
-            var result = await mediator.Send(vm);
-            if (!result)
-            {
-                return StatusCode(401);
-            }
 
 
             var leave = leaveRequestServices.Get_Leave(id);
+            var workingDays = leaveRequestServices.GetBusinessDays(leave.FirstOrDefault().Employee,
+                    leave.FirstOrDefault().LeaveRequestCreatedDate, DateTime.Today, false, false);
+            if (workingDays > 4) //Working days considers day of application as one day, which is not the case
+            {
+                return View("AutoCancelConfirmation");
+            }
+            else
+            {
+                var result = await mediator.Send(vm);
+                if (!result)
+                {
+                    return StatusCode(401);
+                }
+            }
+            
+
+
+          //  var leave = leaveRequestServices.Get_Leave(id);
 
 
             if(leave.ToList()[0].LeaveCategoryId !=1)
@@ -812,13 +825,23 @@ namespace TechParvaLEAO.Areas.Leave.Controllers
             LeaveRequest leaveRequest = repository.GetFirst<LeaveRequest>(p => p.Id == vm.LeaveRequestId);
             if (ModelState.IsValid && vm.RejectionReasonId != 0)
             {
-                vm.ActionById = GetEmployee().Id;
-                var result = await mediator.Send(vm);
-                if (!result)
+                var workingDays = leaveRequestServices.GetBusinessDays(leaveRequest.Employee,
+                    leaveRequest.LeaveRequestCreatedDate, DateTime.Today, false, false);
+                if (workingDays > 4) //Working days considers day of application as one day, which is not the case
                 {
-                    return StatusCode(401);
+                    return View("AutoCancelConfirmation");
                 }
-                return RedirectToAction("LeavesPendingApprovalList");
+                else
+                {
+
+                    vm.ActionById = GetEmployee().Id;
+                    var result = await mediator.Send(vm);
+                    if (!result)
+                    {
+                        return StatusCode(401);
+                    }
+                    return RedirectToAction("LeavesPendingApprovalList");
+                }
             }
             ViewData["RejectionReasonId"] = new SelectList(repository.GetAll<LeaveRejectionReason>(),
                 "Id", "Text");

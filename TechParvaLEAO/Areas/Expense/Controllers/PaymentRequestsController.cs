@@ -309,12 +309,6 @@ namespace TechParvaLEAO.Areas.Expense.Controllers
                 PaymentRequestsId = paymentRequestId,
                 ActionById = GetEmployee().Id,
             };
-            var result = mediator.Send(vm).Result;
-
-            if (!result)
-            {
-                return StatusCode(401);
-            }
 
             int prId = 0;
             if (id.HasValue)
@@ -326,6 +320,24 @@ namespace TechParvaLEAO.Areas.Expense.Controllers
                 prId = paymentRequestId[0];
             }
             var paymentRequest = repository.GetById<PaymentRequest>(prId);
+            var workingDays = leaveRequestService.GetBusinessDays(paymentRequest.Employee,
+                    paymentRequest.PaymentRequestCreatedDate, DateTime.Today, false, false);
+            if (workingDays > 4) //Working days considers day of application as one day, which is not the case
+            {
+                return View("AutoCancelConfirmation");
+            }
+            else
+            {
+
+                var result = mediator.Send(vm).Result;
+
+                if (!result)
+                {
+                    return StatusCode(401);
+                }
+            }
+
+            
             if (string.Equals(paymentRequest.Type, PaymentRequestType.ADVANCE.ToString())){
                 return RedirectToAction("AdvancePendingApprovalList");
             }
@@ -400,21 +412,30 @@ namespace TechParvaLEAO.Areas.Expense.Controllers
                 return NotFound();
             }
             PaymentRequest paymentRequest = repository.GetFirst<PaymentRequest>(p => p.Id == vm.PaymentRequestId);
-            if (ModelState.IsValid && vm.RejectionReasonId!=0)
+            var workingDays = leaveRequestService.GetBusinessDays(paymentRequest.Employee,
+                    paymentRequest.PaymentRequestCreatedDate, DateTime.Today, false, false);
+            if (workingDays > 4) //Working days considers day of application as one day, which is not the case
             {
-                vm.ActionById = GetEmployee().Id;
-                var result = mediator.Send(vm).Result;
-                if (!result)
+                return View("AutoCancelConfirmation");
+            }
+            else
+            {
+                if (ModelState.IsValid && vm.RejectionReasonId != 0)
                 {
-                    return StatusCode(401);
-                }
-                if (string.Equals(paymentRequest.Type, PaymentRequestType.ADVANCE.ToString()))
-                {
-                    return RedirectToAction("AdvancePendingApprovalList");
-                }
-                else
-                {
-                    return RedirectToAction("ExpensePendingApprovalList");
+                    vm.ActionById = GetEmployee().Id;
+                    var result = mediator.Send(vm).Result;
+                    if (!result)
+                    {
+                        return StatusCode(401);
+                    }
+                    if (string.Equals(paymentRequest.Type, PaymentRequestType.ADVANCE.ToString()))
+                    {
+                        return RedirectToAction("AdvancePendingApprovalList");
+                    }
+                    else
+                    {
+                        return RedirectToAction("ExpensePendingApprovalList");
+                    }
                 }
             }
             ViewBag.RejectionReasonId = new SelectList(repository.Get<PaymentRequestRejectionReason>().Where(r => r.Type == paymentRequest.Type),
