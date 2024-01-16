@@ -37,6 +37,7 @@ using Postal;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Hosting;
 using System.Net;
+using System.Net.Http.Headers;
 
 namespace Cotecna.Areas.BulkUploads.Controllers
 {
@@ -163,7 +164,8 @@ namespace Cotecna.Areas.BulkUploads.Controllers
                             connExcel.Open();
                             DataTable dtExcelSchema;
                             dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
-                            string sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
+
+                            string sheetName = "Employee Import$"; //dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
                             connExcel.Close();
 
                             //Read Data from First Sheet.
@@ -390,12 +392,12 @@ Gender,[Date Of Joining],[Date Of Birth],[Overtime Rule],[Can Apply Mission Leav
                                 else {
                                     try
                                     {
-                                        command.CommandText = @"UPDATE e SET Name = es.Employee,DesignationId=d.Id,
-  LocationId=l.Id,AuthorizationProfileId=ap.Id,ExpenseProfileId=ep.Id,TeamId=t.Id,
-  AccountNumber=es.[Account Number],ReportingToId=e.ReportingToId,Email=es.Email,Gender=es.Gender,DateOfJoining=convert(datetime,es.[Date Of Joining],105),
-  DateOfBirth=convert(datetime,es.[Date Of Birth],105),OvertimeMultiplierId=o.OvertimeMultiplier,CanApplyMissionLeaves=case when es.[Can Apply Mission Leaves]='yes' then 1 else 0 end,
-  CanCreateForexRequests= case when es.[Can Create Forex Requests]='yes' then 1 else 0 end,CanHoldCreditCard= case when es.[Can have Credit Card]='yes' then 1 else 0 end ,
-  ISHr=case when es.[Is Hr]='yes' then 1 else 0 end,OnFieldEmployee=case when es.[On Field Employee]='yes' then 1 else 0 end,SpecificWeeklyOff= case when es.[Specific Weekly-Off]='yes' then 1 else 0 end,  Modified_Date=GETDATE()
+                                        command.CommandText = @"UPDATE e SET Name = isnull(es.Employee,e.Name),DesignationId=isnull(d.Id,e.DesignationId),
+  LocationId=isnull(l.Id,e.LocationId),AuthorizationProfileId=isnull(ap.Id,e.AuthorizationProfileId),ExpenseProfileId=isnull(ep.Id,e.ExpenseProfileId),teamlist=isnull(t.Id,e.teamlist),
+  AccountNumber=isnull(es.[Account Number],e.AccountNumber),ReportingToId=isnull(e.ReportingToId,e.ReportingToId),Email=isnull(es.Email,e.Email),Gender=isnull(es.Gender,e.Gender),DateOfJoining=isnull(convert(datetime,es.[Date Of Joining],105),e.DateOfJoining),
+  DateOfBirth=isnull(convert(datetime,es.[Date Of Birth],105),e.DateOfBirth),OvertimeMultiplierId=isnull(o.OvertimeMultiplier,e.OvertimeMultiplierId),CanApplyMissionLeaves=case when isnull(es.[Can Apply Mission Leaves],e.CanApplyMissionLeaves)='yes' then 1 else 0 end,
+  CanCreateForexRequests= case when isnull(es.[Can Create Forex Requests],e.CanCreateForexRequests)='yes' then 1 else 0 end,CanHoldCreditCard= case when isnull(es.[Can have Credit Card],e.CanHoldCreditCard)='yes' then 1 else 0 end ,
+  ISHr=case when isnull(es.[Is Hr],e.IsHr)='yes' then 1 else 0 end,OnFieldEmployee=case when isnull(es.[On Field Employee],e.OnFieldEmployee)='yes' then 1 else 0 end,SpecificWeeklyOff= case when isnull(es.[Specific Weekly-Off],e.SpecificWeeklyOff)='yes' then 1 else 0 end,  Modified_Date=GETDATE()
   from Employees e LEFT OUTER JOIN Employees m ON e.ReportingToId = m.Id inner join #TempExcelStructure es on e.EmployeeCode=es.[Employee Code]  left join Designations d on es.Designation=d.[Name] left join Locations l on es.[Location]=l.[Name]
   left join ApprovalLimitProfiles ap on es.[Authorization Profile]= ap.[Name]  left join ExpenseProfiles ep on es.[Expense Profile]=ep.Name
   left join Team t on es.Teams=t.TeamName  left join OvertimeRule o on es.[Overtime Rule]=o.[Name]  where es.[Employee Code] ='" + row["Employee Code"] + "'";
@@ -434,7 +436,8 @@ Gender,[Date Of Joining],[Date Of Birth],[Overtime Rule],[Can Apply Mission Leav
                                 {
                                     using (XLWorkbook wb = new XLWorkbook())
                                     {
-                                        wb.Worksheets.Add(dttemp, "Template");
+                                        wb.Worksheets.Add(dttemp, "Employee Import");
+
                                         using (MemoryStream stream = new MemoryStream())
                                         {
                                             wb.SaveAs(stream);
@@ -627,7 +630,7 @@ Gender,[Date Of Joining],[Date Of Birth],[Overtime Rule],[Can Apply Mission Leav
                DataTable dt6 = ds.Tables[6];
                 DataTable dt7 = ds.Tables[7];
 
-                wb.Worksheets.Add(dt,"Template");
+                wb.Worksheets.Add(dt, "Employee Import");
                 wb.Worksheets.Add(dt1,"Designation Master");
                 wb.Worksheets.Add(dt2,"Location Master");
                 wb.Worksheets.Add(dt3,"AuthorzationProfile Master");
@@ -636,10 +639,22 @@ Gender,[Date Of Joining],[Date Of Birth],[Overtime Rule],[Can Apply Mission Leav
                 wb.Worksheets.Add(dt5, "Teams Master");
                 wb.Worksheets.Add(dt6, "Employee Reporting Master");
                 wb.Worksheets.Add(dt7,"OverTime Master");
+                 
+
+                // where "A1" to "G1" is your header range
+
                 using (MemoryStream stream = new MemoryStream())
                 {
                     wb.SaveAs(stream);
-                    return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "DownloadTemplate.xlsx");
+                    //            HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
+                    //var stream = new FileStream(path, FileMode.Open, FileAccess.Read);
+                    //result.Content = new StreamContent(stream);
+                    //result.Content.Headers.ContentType =
+                    //    new MediaTypeHeaderValue("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                    string contentype = new MediaTypeHeaderValue("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet").ToString();
+                   // CreateExcelFile.CreateExcelDocument(ds, "C:\\Sample.xlsx");
+
+                    return File(stream.ToArray(),contentype, "DownloadTemplate.xlsx");
                 }
             }
         }
