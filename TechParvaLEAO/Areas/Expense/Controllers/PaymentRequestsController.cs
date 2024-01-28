@@ -1145,65 +1145,60 @@ namespace TechParvaLEAO.Areas.Expense.Controllers
             int recordNumber = 1;
             foreach (var item in result)
             {
-                if (item.PostedById == null)
+                if (item.LineItems.Count() > 0)
                 {
-                    item.PostedById = loggedInEmployeeId;
-                    item.PostedOn = DateTime.Now;
-                    item.Status = PaymentRequestStatus.POSTED.ToString();
-                    PaymentRequestApprovalAction approvalActions = new PaymentRequestApprovalAction
+                    if (item.PostedById == null)
                     {
-                        ActionById = loggedInEmployeeId,
-                        PaymentRequest = item,
-                        Timestamp = DateTime.Now,
-                        Action = PaymentRequestActions.POSTED.ToString(),
-                        Type = PaymentRequestType.REIMBURSEMENT.ToString()
-                    };
-                    context.Entry<PaymentRequest>(item).State = EntityState.Modified;
-                    context.Entry<PaymentRequestApprovalAction>(approvalActions).State = EntityState.Added;
-                }
-                foreach (var l in item.LineItems)
-                {
-                    data.Add(new ExpenseDataExportViewModel
+                        item.PostedById = loggedInEmployeeId;
+                        item.PostedOn = DateTime.Now;
+                        item.Status = PaymentRequestStatus.POSTED.ToString();
+                        PaymentRequestApprovalAction approvalActions = new PaymentRequestApprovalAction
+                        {
+                            ActionById = loggedInEmployeeId,
+                            PaymentRequest = item,
+                            Timestamp = DateTime.Now,
+                            Action = PaymentRequestActions.POSTED.ToString(),
+                            Type = PaymentRequestType.REIMBURSEMENT.ToString()
+                        };
+                        context.Entry<PaymentRequest>(item).State = EntityState.Modified;
+                        context.Entry<PaymentRequestApprovalAction>(approvalActions).State = EntityState.Added;
+                    }
+                    foreach (var l in item.LineItems)
                     {
-                        EmployeeCode = item.Employee.EmployeeCode,
-                         PostingDate = item.ActionDate.Value.ToString("dd-MM-yyyy"),
-                        //  PostingDate = Convert.ToDateTime(item.ActionDate.Value.ToString("dd-MMM-yyyy")),
-                        // PostingDate = item.ActionDate.Value,
-                        // DocumentDate = item.PaymentRequestCreatedDate,
-                        DocumentDate =  item.PaymentRequestCreatedDate.ToString("dd-MM-yyyy"),
-
-                        //   PostingDate = DateTime.ParseExact(item.ActionDate.Value.ToString("dd-MMM-yyyy"), "dd-MMM-yyyy", CultureInfo.InvariantCulture),
-                        //   DocumentDate = DateTime.ParseExact(item.PaymentRequestCreatedDate.ToString("dd-MMM-yyyy"), "dd-MMM-yyyy", CultureInfo.InvariantCulture),
-
-                        // PostingDate = DateTime.ParseExact(item.ActionDate.Value.ToString(), formats, new CultureInfo("en-US"), DateTimeStyles.None),
-
-                        //PostingDate = Convert.ToDateTime(item.ActionDate.Value.Day +"/" + item.ActionDate.Value.Month +"/"+ item.ActionDate.Value.Year),
-                        //  PostingDate = DateTime.Parse(item.ActionDate.Value.ToString(), CultureInfo.CurrentCulture).Date,
-
-                        // PostingDate = Convert.ToDateTime(item.ActionDate.Value.ToShortDateString()),
-                        // PostingDate = DateTime.Parse(item.ActionDate.Value.ToString("dd-MMM-yyyy"), CultureInfo.CreateSpecificCulture("fr-FR")),
-
-
-                        // DocumentDate = Convert.ToDateTime(DateTime.ParseExact(item.PaymentRequestCreatedDate.ToString("dd-MM-yyyy"), "dd-MM-yyyy", CultureInfo.InvariantCulture)),
-
-
-                        DocumentNumber = recordNumber,
-                        ForeignAmount = item.CurrencyId == 1 ? l.Amount : l.Amount,
-                        Currency = item.Currency.Name,
-                        FxRate = item.ExchangeRate,
-                        Amount = item.CurrencyId == 1 ? l.Amount : l.Amount * item.ExchangeRate,
-                        AccountNumber = item.Employee.AccountNumber,
-                        ExpenseHead = l.ExpenseHead.AccountNumber,
-                        BillNumber = item.RequestNumber,
-                        LocationCode = item.Employee.Location.Code,
-                        BusinessMarket = l.BusinessActivity.Code,
-                        CustomerMarket = l.CustomerMarket.Code,
-                        PostingDescription = item.Comment,
-                        LineDescription = l.VoucherDescription,
-                        Dimension3 = item.CreditCard ? "CREDITCARD" : "",
-                        Dimension4 = PaymentRequestStatus.PAID.ToString().Equals(item.Status) ? "PAID" : "",
-                        Dimension8 = item.CurrencyId != 1 ? item.AdvancePaymentRequest?.RequestNumber:""
-                    });
+                        data.Add(new ExpenseDataExportViewModel
+                        {
+                            EmployeeCode = item.Employee.EmployeeCode,
+                            PostingDate = item.ActionDate.Value.ToString("dd-MM-yyyy"),
+                            //  PostingDate = Convert.ToDateTime(item.ActionDate.Value.ToString("dd-MMM-yyyy")),
+                            // PostingDate = item.ActionDate.Value,
+                            // DocumentDate = item.PaymentRequestCreatedDate,
+                            DocumentDate = item.PaymentRequestCreatedDate.ToString("dd-MM-yyyy"),
+                            //   PostingDate = DateTime.ParseExact(item.ActionDate.Value.ToString("dd-MMM-yyyy"), "dd-MMM-yyyy", CultureInfo.InvariantCulture),
+                            //   DocumentDate = DateTime.ParseExact(item.PaymentRequestCreatedDate.ToString("dd-MMM-yyyy"), "dd-MMM-yyyy", CultureInfo.InvariantCulture),
+                            // PostingDate = DateTime.ParseExact(item.ActionDate.Value.ToString(), formats, new CultureInfo("en-US"), DateTimeStyles.None),
+                            //PostingDate = Convert.ToDateTime(item.ActionDate.Value.Day +"/" + item.ActionDate.Value.Month +"/"+ item.ActionDate.Value.Year),
+                            //  PostingDate = DateTime.Parse(item.ActionDate.Value.ToString(), CultureInfo.CurrentCulture).Date,
+                            // PostingDate = Convert.ToDateTime(item.ActionDate.Value.ToShortDateString()),
+                            // PostingDate = DateTime.Parse(item.ActionDate.Value.ToString("dd-MMM-yyyy"), CultureInfo.CreateSpecificCulture("fr-FR")),
+                            // DocumentDate = Convert.ToDateTime(DateTime.ParseExact(item.PaymentRequestCreatedDate.ToString("dd-MM-yyyy"), "dd-MM-yyyy", CultureInfo.InvariantCulture)),
+                            DocumentNumber = recordNumber,
+                            ForeignAmount = item.CurrencyId == 1 ? l.Amount : l.Amount,
+                            Currency = item.Currency.Name,
+                            FxRate = item.ExchangeRate,
+                            Amount = item.CurrencyId == 1 ? l.Amount : l.Amount * item.ExchangeRate,
+                            AccountNumber = item.Employee.AccountNumber,
+                            ExpenseHead = l.ExpenseHead.AccountNumber,
+                            BillNumber = item.RequestNumber,
+                            LocationCode = item.Employee.Location.Code,
+                            BusinessMarket = l.BusinessActivity.Code,
+                            CustomerMarket = l.CustomerMarket.Code,
+                            PostingDescription = item.Comment,
+                            LineDescription = l.VoucherDescription,
+                            Dimension3 = item.CreditCard ? "CREDITCARD" : "",
+                            Dimension4 = PaymentRequestStatus.PAID.ToString().Equals(item.Status) ? "PAID" : "",
+                            Dimension8 = item.CurrencyId != 1 ? item.AdvancePaymentRequest?.RequestNumber : ""
+                        });
+                    }
                 }
                 recordNumber++;
             }
