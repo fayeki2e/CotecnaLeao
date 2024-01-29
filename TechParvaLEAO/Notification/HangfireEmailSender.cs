@@ -237,66 +237,66 @@ namespace TechParvaLEAO.Notification
                 };
                 try
                 {
-                    try
-                    {
-                        var al = new Auditlog_DM();
-                        al.module = "HanfireEmailsender.cs";
-                        al.url = "";
-                        al.comment = "htmlTemplateName:" + htmlTemplateName + "PaymentRequestData:" + email.PaymentRequestData;
-                        al.userid = "";
-                        al.line = "Before Sending";
-                        al.path = "";
-                        al.exception = "";
-                        al.reportingto = "";
-                        al.details = "Email to:" + email.To.ToString();
-                        al.status = "";
-                        _auditlog.InsertLog(al);
-                    }catch(Exception ex)
-                    {
+                    //try
+                    //{
+                    //    var al = new Auditlog_DM();
+                    //    al.module = "HanfireEmailsender.cs";
+                    //    al.url = "";
+                    //    al.comment = "htmlTemplateName:" + htmlTemplateName + "PaymentRequestData:" + email.PaymentRequestData;
+                    //    al.userid = "";
+                    //    al.line = "Before Sending";
+                    //    al.path = "";
+                    //    al.exception = "";
+                    //    al.reportingto = "";
+                    //    al.details = "Email to:" + email.To.ToString();
+                    //    al.status = "";
+                    //    _auditlog.InsertLog(al);
+                    //}catch(Exception ex)
+                    //{
 
-                    }
+                    //}
 
                     if (email.To != "" || email.To != null)
                     {
                         await emailSender.SendEmailAsync(email);
                     }
 
-                    try
-                    {
-                        var al = new Auditlog_DM();
-                        al.module = "HanfireEmailsender.cs";
-                        al.url = "";
-                        al.comment = "htmlTemplateName:" + htmlTemplateName + "PaymentRequestData:" + email.PaymentRequestData;
-                        al.userid = "";
-                        al.line = "After Sending";
-                        al.path = "";
-                        al.exception = "";
-                        al.reportingto = "";
-                        al.details = "Email to:" + email.To.ToString();
-                        al.status = "";
-                        _auditlog.InsertLog(al);
-                    }
-                    catch (Exception ex)
-                    {
+                    //try
+                    //{
+                    //    var al = new Auditlog_DM();
+                    //    al.module = "HanfireEmailsender.cs";
+                    //    al.url = "";
+                    //    al.comment = "htmlTemplateName:" + htmlTemplateName + "PaymentRequestData:" + email.PaymentRequestData;
+                    //    al.userid = "";
+                    //    al.line = "After Sending";
+                    //    al.path = "";
+                    //    al.exception = "";
+                    //    al.reportingto = "";
+                    //    al.details = "Email to:" + email.To.ToString();
+                    //    al.status = "";
+                    //    _auditlog.InsertLog(al);
+                    //}
+                    //catch (Exception ex)
+                    //{
 
-                    }
+                    //}
                 }
                 catch (Exception ex)
                 {
-                    var al = new Auditlog_DM();
-                    al.module = "HanfireEmailsender.cs";
-                    al.url = "";
-                    al.comment = "htmlTemplateName:" + htmlTemplateName + "PaymentRequestData:" + email.PaymentRequestData;
-                    al.userid = "";
-                    al.line = "";
-                    al.path = "";
-                    al.exception = ex.Message;
-                    al.reportingto = "";
-                    al.details = "Email to:"+ email.To.ToString();
-                    al.status = "";
-                    _auditlog.InsertLog(al);
+                    //var al = new Auditlog_DM();
+                    //al.module = "HanfireEmailsender.cs";
+                    //al.url = "";
+                    //al.comment = "htmlTemplateName:" + htmlTemplateName + "PaymentRequestData:" + email.PaymentRequestData;
+                    //al.userid = "";
+                    //al.line = "";
+                    //al.path = "";
+                    //al.exception = ex.Message;
+                    //al.reportingto = "";
+                    //al.details = "Email to:"+ email.To.ToString();
+                    //al.status = "";
+                    //_auditlog.InsertLog(al);
 
-                    LogWriter.WriteLog(" HangfireEmailSender - SendEmailNotification", ex.Message);
+                    //LogWriter.WriteLog(" HangfireEmailSender - SendEmailNotification", ex.Message);
                 }
             }
         }
