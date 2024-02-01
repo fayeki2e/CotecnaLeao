@@ -1196,6 +1196,7 @@ namespace TechParvaLEAO.Areas.Expense.Controllers
                             LineDescription = l.VoucherDescription,
                             Dimension3 = item.CreditCard ? "CREDITCARD" : "",
                             Dimension4 = PaymentRequestStatus.PAID.ToString().Equals(item.Status) ? "PAID" : "",
+                            Dimension7=DateTime.Now.ToShortDateString(),
                             Dimension8 = item.CurrencyId != 1 ? item.AdvancePaymentRequest?.RequestNumber : ""
                         });
                     }
