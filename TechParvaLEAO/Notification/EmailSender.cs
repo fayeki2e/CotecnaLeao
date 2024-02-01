@@ -76,25 +76,25 @@ namespace TechParvaLEAO.Services
 
         public async Task SendEmailAsync(Postal.Email emailData)
         {
-            try
-            {
-                var al = new Auditlog_DM();
-                al.module = "EmailSender.cs";
-                al.url = "";
-                al.comment =  emailData.ViewName;
-                al.userid = "";
-                al.line = "Before Sending";
-                al.path = "";
-                al.exception = "";
-                al.reportingto = "";
-                al.details = "";
-                al.status = "";
-                _auditlog.InsertLog(al);
-            }
-            catch (Exception ex)
-            {
+            //try
+            //{
+            //    var al = new Auditlog_DM();
+            //    al.module = "EmailSender.cs";
+            //    al.url = "";
+            //    al.comment =  emailData.ViewName;
+            //    al.userid = "";
+            //    al.line = "Before Sending";
+            //    al.path = "";
+            //    al.exception = "";
+            //    al.reportingto = "";
+            //    al.details = "";
+            //    al.status = "";
+            //    _auditlog.InsertLog(al);
+            //}
+            //catch (Exception ex)
+            //{
 
-            }
+            //}
 
             try
             {
@@ -106,47 +106,47 @@ namespace TechParvaLEAO.Services
             {
 
             }
-            try
-            {
-                var al = new Auditlog_DM();
-                al.module = "HanfireEmailsender.cs";
-                al.url = "";
-                al.comment = emailData.ViewName;
-                al.userid = "";
-                al.line = "After Sending";
-                al.path = "";
-                al.exception = "";
-                al.reportingto = "";
-                al.details = "";
-                al.status = "";
-                _auditlog.InsertLog(al);
-            }
-            catch (Exception ex)
-            {
+            //try
+            //{
+            //    var al = new Auditlog_DM();
+            //    al.module = "HanfireEmailsender.cs";
+            //    al.url = "";
+            //    al.comment = emailData.ViewName;
+            //    al.userid = "";
+            //    al.line = "After Sending";
+            //    al.path = "";
+            //    al.exception = "";
+            //    al.reportingto = "";
+            //    al.details = "";
+            //    al.status = "";
+            //    _auditlog.InsertLog(al);
+            //}
+            //catch (Exception ex)
+            //{
 
-            }
+            //}
         }
         public async Task SendEmailAsync(MailMessage mailMessage)
         {
-            try
-            {
-                var al = new Auditlog_DM();
-                al.module = "HanfireEmailsender.cs";
-                al.url = "SendEmailAsync";
-                al.comment = mailMessage.ToString();
-                al.userid = "";
-                al.line = "Before Sending";
-                al.path = "";
-                al.exception = "";
-                al.reportingto = "";
-                al.details = mailMessage.To.ToString();
-                al.status = "";
-                _auditlog.InsertLog(al);
-            }
-            catch (Exception ex)
-            {
+            //try
+            //{
+            //    var al = new Auditlog_DM();
+            //    al.module = "HanfireEmailsender.cs";
+            //    al.url = "SendEmailAsync";
+            //    al.comment = mailMessage.ToString();
+            //    al.userid = "";
+            //    al.line = "Before Sending";
+            //    al.path = "";
+            //    al.exception = "";
+            //    al.reportingto = "";
+            //    al.details = mailMessage.To.ToString();
+            //    al.status = "";
+            //    _auditlog.InsertLog(al);
+            //}
+            //catch (Exception ex)
+            //{
 
-            }
+            //}
 
             mailMessage.From = new MailAddress(emailOptions.FromAddress);     
             try
@@ -157,25 +157,25 @@ namespace TechParvaLEAO.Services
                 client = CreateSmtpClient();
             }
 
-            try
-            {
-                var al = new Auditlog_DM();
-                al.module = "HanfireEmailsender.cs";
-                al.url = "SendEmailAsync";
-                al.comment = mailMessage.ToString();
-                al.userid = "";
-                al.line = "After Sending";
-                al.path = "";
-                al.exception = "";
-                al.reportingto = "";
-                al.details = mailMessage.To.ToString();
-                al.status = "";
-                _auditlog.InsertLog(al);
-            }
-            catch (Exception ex)
-            {
+            //try
+            //{
+            //    var al = new Auditlog_DM();
+            //    al.module = "HanfireEmailsender.cs";
+            //    al.url = "SendEmailAsync";
+            //    al.comment = mailMessage.ToString();
+            //    al.userid = "";
+            //    al.line = "After Sending";
+            //    al.path = "";
+            //    al.exception = "";
+            //    al.reportingto = "";
+            //    al.details = mailMessage.To.ToString();
+            //    al.status = "";
+            //    _auditlog.InsertLog(al);
+            //}
+            //catch (Exception ex)
+            //{
 
-            }
+            //}
         }
 
     }

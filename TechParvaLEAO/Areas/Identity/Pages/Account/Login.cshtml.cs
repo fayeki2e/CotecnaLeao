@@ -101,20 +101,20 @@ namespace TechParvaLEAO.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
-                    var al = new Auditlog_DM();
-                    al.module = "Login";
-                    al.url = "Startup";
-                    al.comment = Input.Password;
-                    al.userid = Input.Email;
-                    al.line = "";
-                    al.path = "returnurl : "+ returnUrl;
-                    al.exception = "";
-                    al.reportingto = "";
-                    al.details = result.ToString();
-                    al.status = "";
-                    _auditlog.InsertLog(al);
+                    //var al = new Auditlog_DM();
+                    //al.module = "Login";
+                    //al.url = "Startup";
+                    //al.comment = Input.Password;
+                    //al.userid = Input.Email;
+                    //al.line = "";
+                    //al.path = "returnurl : "+ returnUrl;
+                    //al.exception = "";
+                    //al.reportingto = "";
+                    //al.details = result.ToString();
+                    //al.status = "";
+                    //_auditlog.InsertLog(al);
 
-                    _logger.LogInformation("User logged in.");
+                    //_logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)

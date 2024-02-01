@@ -559,25 +559,25 @@ Gender,[Date Of Joining],[Date Of Birth],[Overtime Rule],[Can Apply Mission Leav
 
         public async Task SendEmailAsync(MailMessage mailMessage)
         {
-            try
-            {
-                var al = new Auditlog_DM();
-                al.module = "HanfireEmailsender.cs";
-                al.url = "SendEmailAsync";
-                al.comment = mailMessage.ToString();
-                al.userid = "";
-                al.line = "Before Sending";
-                al.path = "";
-                al.exception = "";
-                al.reportingto = "";
-                al.details = mailMessage.To.ToString();
-                al.status = "";
-                _auditlog.InsertLog(al);
-            }
-            catch (Exception ex)
-            {
+            //try
+            //{
+            //    var al = new Auditlog_DM();
+            //    al.module = "HanfireEmailsender.cs";
+            //    al.url = "SendEmailAsync";
+            //    al.comment = mailMessage.ToString();
+            //    al.userid = "";
+            //    al.line = "Before Sending";
+            //    al.path = "";
+            //    al.exception = "";
+            //    al.reportingto = "";
+            //    al.details = mailMessage.To.ToString();
+            //    al.status = "";
+            //    _auditlog.InsertLog(al);
+            //}
+            //catch (Exception ex)
+            //{
 
-            }
+            //}
 
             mailMessage.From = new MailAddress(emailOptions.FromAddress);
             try
@@ -589,25 +589,25 @@ Gender,[Date Of Joining],[Date Of Birth],[Overtime Rule],[Can Apply Mission Leav
                 client = CreateSmtpClient();
             }
 
-            try
-            {
-                var al = new Auditlog_DM();
-                al.module = "HanfireEmailsender.cs";
-                al.url = "SendEmailAsync";
-                al.comment = mailMessage.ToString();
-                al.userid = "";
-                al.line = "After Sending";
-                al.path = "";
-                al.exception = "";
-                al.reportingto = "";
-                al.details = mailMessage.To.ToString();
-                al.status = "";
-                _auditlog.InsertLog(al);
-            }
-            catch (Exception ex)
-            {
+            //try
+            //{
+            //    var al = new Auditlog_DM();
+            //    al.module = "HanfireEmailsender.cs";
+            //    al.url = "SendEmailAsync";
+            //    al.comment = mailMessage.ToString();
+            //    al.userid = "";
+            //    al.line = "After Sending";
+            //    al.path = "";
+            //    al.exception = "";
+            //    al.reportingto = "";
+            //    al.details = mailMessage.To.ToString();
+            //    al.status = "";
+            //    _auditlog.InsertLog(al);
+            //}
+            //catch (Exception ex)
+            //{
 
-            }
+            //}
         }
 
         public async Task sendEmail( string Email,string EmployeeCode, Employee employee)
