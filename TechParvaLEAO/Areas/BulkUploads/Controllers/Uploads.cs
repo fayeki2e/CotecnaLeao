@@ -148,6 +148,25 @@ namespace Cotecna.Areas.BulkUploads.Controllers
                 }
 
                 //Read the connection string for the Excel file.
+                try
+                {
+                    var al = new Auditlog_DM();
+                    al.module = "Upload.cs";
+                    al.url = "http://124.153.86.163/BulkUploads/Uploads";
+                    al.comment = "Before Excel Connection string";
+                    al.userid = User.Identity.Name;
+                    al.line = "Before Excel Connection string";
+                    al.path = "";
+                    al.exception = "";
+                    al.reportingto = "";
+                    al.details = "Before Excel Connection string";
+                    al.status = "";
+                    _auditlog.InsertLog(al);
+                }
+                catch (Exception ex)
+                {
+
+                }
                 string conString = this.Configuration.GetConnectionString("ExcelConString");
                 DataTable dt = new DataTable();
                 conString = string.Format(conString, filePath);
@@ -274,6 +293,25 @@ namespace Cotecna.Areas.BulkUploads.Controllers
                             // con.Open();
                             sqlBulkCopy.WriteToServer(dt);
                             //con.Close();
+                            try
+                            {
+                                var al = new Auditlog_DM();
+                                al.module = "Upload.cs";
+                                al.url = "http://124.153.86.163/BulkUploads/Uploads";
+                                al.comment = "After Bulk Upload";
+                                al.userid = User.Identity.Name;
+                                al.line = "After Bulk Upload";
+                                al.path = "";
+                                al.exception = "";
+                                al.reportingto = "";
+                                al.details = "After Bulk Upload";
+                                al.status = "";
+                                _auditlog.InsertLog(al);
+                            }
+                            catch (Exception ex)
+                            {
+
+                            }
                             int InsertCount = 0, UpdateCount = 0, FailedCount = 0;
                             foreach (DataRow row in dt.Rows)
                             {
@@ -429,6 +467,25 @@ Gender,[Date Of Joining],[Date Of Birth],[Overtime Rule],[Can Apply Mission Leav
 
                                 command.CommandText = @"insert into [UploadStatus](UploadedOn,UploadedBy,AddedRecords,UpdatedRecords,FailedREcords) values(GETDATE(),'"+ User.Identity.Name +"'," + InsertCount + "," + UpdateCount + "," + FailedCount + ")";
                                 command.ExecuteNonQuery();
+                                try
+                                {
+                                    var al = new Auditlog_DM();
+                                    al.module = "Upload.cs";
+                                    al.url = "http://124.153.86.163/BulkUploads/Uploads";
+                                    al.comment = "After added in Upload Status";
+                                    al.userid = User.Identity.Name;
+                                    al.line = "After added in Upload Status";
+                                    al.path = "";
+                                    al.exception = "";
+                                    al.reportingto = "";
+                                    al.details = "After added in Upload Status";
+                                    al.status = "";
+                                    _auditlog.InsertLog(al);
+                                }
+                                catch (Exception ex)
+                                {
+
+                                }
                                 dashboardViewModel = new UploadStatusViewModel();
                                 List<StatusViewModel> obj = uploadService.BindStatus();
                                 dashboardViewModel.StatusListItems = obj;
