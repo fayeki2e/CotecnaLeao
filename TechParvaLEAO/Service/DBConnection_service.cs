@@ -7,7 +7,6 @@ using Newtonsoft.Json.Linq;
 using System.IO;
 using System.Xml.Linq;
 using System.Net.Http.Headers;
-using Microsoft.SharePoint.Client;
 using System.Text;
 using System.Configuration;
 using Microsoft.Extensions.Configuration;

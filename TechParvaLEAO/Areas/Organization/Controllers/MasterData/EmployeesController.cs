@@ -20,7 +20,6 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using AutoMapper;
 using TechParvaLEAO.Areas.Organization.Services;
 using DocumentFormat.OpenXml.Presentation;
-using Microsoft.SharePoint.Client.Sharing;
 using TechParvaLEAO.Areas.Reports.Models;
 using TechParvaLEAO.Areas.Reports.Services;
 using System.Data;
