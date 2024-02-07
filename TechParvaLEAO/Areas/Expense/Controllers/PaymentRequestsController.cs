@@ -1152,7 +1152,7 @@ namespace TechParvaLEAO.Areas.Expense.Controllers
                         item.PostedById = loggedInEmployeeId;
                         item.PostedOn = DateTime.Now;
                         item.Status = PaymentRequestStatus.POSTED.ToString();
-                        item.DownloadedDate = DateTime.Today;//.ToString("dd-MM-yyyy");
+                        item.DownloadedDate = DateTime.Now;//.ToString("dd-MM-yyyy");
                         PaymentRequestApprovalAction approvalActions = new PaymentRequestApprovalAction
                         {
                             ActionById = loggedInEmployeeId,
@@ -1198,17 +1198,18 @@ namespace TechParvaLEAO.Areas.Expense.Controllers
                                 LineDescription = l.VoucherDescription,
                                 Dimension3 = item.CreditCard ? "CREDITCARD" : "",
                                 Dimension4 = PaymentRequestStatus.PAID.ToString().Equals(item.Status) ? "PAID" : "",
-                                Dimension7 = item.DownloadedDate.ToString(),
+                                Dimension7 =  item.DownloadedDate.ToString(),
                                 Dimension8 = item.CurrencyId != 1 ? item.AdvancePaymentRequest.RequestNumber : ""
                             });
                     }
                 }
                 recordNumber++;
             }
-            context.SaveChanges();
+            
             var writer = new StringWriter();
             var csv = new CsvWriter(writer);
             csv.WriteRecords(data);
+            context.SaveChanges();
             return File(Encoding.ASCII.GetBytes(writer.ToString()), "text/csv", "FinanceExpenseToNavigen.csv");
         }
 
