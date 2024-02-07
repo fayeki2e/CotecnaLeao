@@ -99,7 +99,9 @@ namespace TechParvaLEAO.Services
             try
             {
                 MailMessage message = await emailService.CreateMailMessageAsync(emailData);
-                message.From = new MailAddress(emailOptions.FromAddress);    
+                message.From = new MailAddress(emailOptions.FromAddress);   
+                
+                //message.Subject=emailData
                 await SendEmailAsync(message);
             }
             catch (Exception ex)
@@ -151,6 +153,7 @@ namespace TechParvaLEAO.Services
             mailMessage.From = new MailAddress(emailOptions.FromAddress);     
             try
             {
+               
                 await client.SendMailAsync(mailMessage);
             }catch(SmtpException e)
             {

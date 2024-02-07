@@ -187,6 +187,8 @@ namespace TechParvaLEAO.Areas.Expense.Models
                 return this.Amount - this.PaidAmount;
             }
         }
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = false)]
+        public DateTime? DownloadedDate { get; set; } = DateTime.Today;
 
         public string EscalationStatus
         {

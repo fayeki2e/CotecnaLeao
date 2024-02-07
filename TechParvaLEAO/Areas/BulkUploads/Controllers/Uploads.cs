@@ -650,12 +650,13 @@ Gender,[Date Of Joining],[Date Of Birth],[Overtime Rule],[Can Apply Mission Leav
             };
             try
             {
+                MailMessage message = await emailService.CreateMailMessageAsync(email);
                 try
                 {
-                    MailMessage message = await emailService.CreateMailMessageAsync(email);
+                   
                     message.From = new MailAddress(emailOptions.FromAddress,configuration[0].SubjectLine);
                     message.To.Add(employee.Email);
-                 //   message.Subject  Add(configuration[0].SubjectLine);
+                    message.Subject= (configuration[0].SubjectLine);
                     await SendEmailAsync(message);
                 }
                 catch (Exception e)

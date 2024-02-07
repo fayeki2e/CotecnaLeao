@@ -69,7 +69,10 @@ namespace TechParvaLEAO.Areas.Expense.Models
         public string Dimension4 { get; set; } = "";
         public string Dimension5 { get; set; } = "";
         public string Dimension6 { get; set; } = "";
+
         public string Dimension7 { get; set; } = "";
+
+
         public string Dimension8 { get; set; } = "";
         public string GeneralProductPostingGroup { get; set; } = "SERVICE";
         public string PostingDescription { get; set; }
