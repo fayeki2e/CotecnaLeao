@@ -1147,7 +1147,7 @@ namespace TechParvaLEAO.Areas.Expense.Controllers
             {
                 if (item.LineItems.Count() > 0)
                 {
-                    if (item.PostedById == null)
+                    if (item.PostedById == null && paymentRequestSearchViewModel.Status== "APPROVED")
                     {
                         item.PostedById = loggedInEmployeeId;
                         item.PostedOn = DateTime.Now;
@@ -1170,7 +1170,7 @@ namespace TechParvaLEAO.Areas.Expense.Controllers
                             data.Add(new ExpenseDataExportViewModel
                             {
                                 EmployeeCode = item.Employee.EmployeeCode,
-                                PostingDate = item.ActionDate.Value.ToString("dd-MM-yyyy"),
+                                PostingDate =(item.ActionDate.HasValue)? item.ActionDate.Value.ToString("dd-MM-yyyy"):"",
                                 //  PostingDate = Convert.ToDateTime(item.ActionDate.Value.ToString("dd-MMM-yyyy")),
                                 // PostingDate = item.ActionDate.Value,
                                 // DocumentDate = item.PaymentRequestCreatedDate,
@@ -1198,7 +1198,7 @@ namespace TechParvaLEAO.Areas.Expense.Controllers
                                 LineDescription = l.VoucherDescription,
                                 Dimension3 = item.CreditCard ? "CREDITCARD" : "",
                                 Dimension4 = PaymentRequestStatus.PAID.ToString().Equals(item.Status) ? "PAID" : "",
-                                Dimension7 =  item.DownloadedDate.ToString(),
+                                Dimension7 = (item.DownloadedDate.HasValue)? item.DownloadedDate.ToString():"",
                                 Dimension8 = item.CurrencyId != 1 ? item.AdvancePaymentRequest.RequestNumber : ""
                             });
                     }
