@@ -552,13 +552,15 @@ namespace TechParvaLEAO.Areas.Expense.Controllers
         [Authorize(Roles = AuthorizationRoles.EMPLOYEE)]
         public async Task<ActionResult> Expense(List<IFormFile> supportings, [Bind] ExpenseViewModel paymentRequest)
         {
-          //  string wwwPath = this.Environment.WebRootPath;
+            //  string wwwPath = this.Environment.WebRootPath;
             //string contentPath = this.Environment.ContentRootPath;
+            TempData["ButtonDisabled"] = true;
 
             string domain = Request.Scheme + "://" + Request.Host;
 
 
-           // LogWriter.WriteLog(" TestSharepoint()", domain);
+
+            // LogWriter.WriteLog(" TestSharepoint()", domain);
             paymentRequest.fake_path = domain;
 
             //SharePoint_service sps = new SharePoint_service();

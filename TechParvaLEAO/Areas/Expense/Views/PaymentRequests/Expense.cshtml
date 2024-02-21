@@ -4,7 +4,7 @@
     ViewBag.Title = "Expense";
 }
 
-<form asp-action="Expense" id="ExpenseForm" enctype="multipart/form-data">
+<form asp-action="Expense" id="ExpenseForm" enctype="multipart/form-data" method="post">
     <div class="container-fluid">
         <div class="animated fadeIn">
             <div class="row">
@@ -146,48 +146,48 @@
                                     </div>
                                 </div>
                                 <!--expense head table-->
-                                <div class="col-md-12"  >
-                                     <div   id="dv_print" class="dv_print_close">
-                                         <span id="ui-id-1" class="ui-dialog-title" style="display:none">Basic dialog</span>
+                                <div class="col-md-12">
+                                    <div id="dv_print" class="dv_print_close">
+                                        <span id="ui-id-1" class="ui-dialog-title" style="display:none">Basic dialog</span>
 
- 
-                                    <table class="table table-responsive-sm table-bordered table-striped table-sm"
-                                           id="myTable">
-                                        <thead>
-                                            
 
-                                            <tr>
-                                                <th rowspan="2">Sr No.</th>
-                                                <th rowspan="2">Operation Type</th>
-                                                   <th rowspan="2">Operation Number</th>
-                                                <th rowspan="2">Expense Head</th>
-                                                <th rowspan="2">Business Activity</th>
-                                                <th rowspan="2">Customer Market</th>
-                                                <th rowspan="2">Expense Voucher<br> Reference No.</th>
-                                                <th rowspan="2">Description (Max 50 chars.)</th>
-                                                <th rowspan="2">Date</th>
-                                                <th rowspan="2">Amount</th>
-                                                <th colspan="2">Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @if (Model.ExpenseLineItems != null)
-                                            {
-                                                for (var i = 0; i < Model.ExpenseLineItems.Count(); i++)
+                                        <table class="table table-responsive-sm table-bordered table-striped table-sm"
+                                               id="myTable">
+                                            <thead>
+
+
+                                                <tr>
+                                                    <th rowspan="2">Sr No.</th>
+                                                    <th rowspan="2">Operation Type</th>
+                                                    <th rowspan="2">Operation Number</th>
+                                                    <th rowspan="2">Expense Head</th>
+                                                    <th rowspan="2">Business Activity</th>
+                                                    <th rowspan="2">Customer Market</th>
+                                                    <th rowspan="2">Expense Voucher<br> Reference No.</th>
+                                                    <th rowspan="2">Description (Max 50 chars.)</th>
+                                                    <th rowspan="2">Date</th>
+                                                    <th rowspan="2">Amount</th>
+                                                    <th colspan="2">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if (Model.ExpenseLineItems != null)
                                                 {
-                                                    <tr class="mycontainer">
-                                                        <td>@(i + 1)</td>
-                                                         <td>
-                                                          
-                                         @Html.DropDownListFor(m => Model.ExpenseLineItems[i].operationtype, new List<SelectListItem>()
-                                            {
-                                                new SelectListItem{Text="Miscellaneous", Value="1"},
-                                                new SelectListItem{Text="Job No", Value="2"}
-                                            },   new { @class = "pc form-control ", @onchange = "OperationNumber(this)" })
-                                                            @Html.ValidationMessageFor(model => Model.ExpenseLineItems[i].operationtype, "", new { @class = "text-danger" })
-                                                       
-                                             
-                                                                @if( Model.ExpenseLineItems[i].operationtype == "2")
+                                                    for (var i = 0; i < Model.ExpenseLineItems.Count(); i++)
+                                                    {
+                                                        <tr class="mycontainer">
+                                                            <td>@(i + 1)</td>
+                                                            <td>
+
+                                                                @Html.DropDownListFor(m => Model.ExpenseLineItems[i].operationtype, new List<SelectListItem>()
+                                                                   {
+                                                                       new SelectListItem{Text="Miscellaneous", Value="1"},
+                                                                       new SelectListItem{Text="Job No", Value="2"}
+                                                                   }, new { @class = "pc form-control ", @onchange = "OperationNumber(this)" })
+                                                                @Html.ValidationMessageFor(model => Model.ExpenseLineItems[i].operationtype, "", new { @class = "text-danger" })
+
+
+                                                                @if (Model.ExpenseLineItems[i].operationtype == "2")
                                                                 {
                                                                     ViewBag.operationno_setvisibility = "visible";
                                                                 }
@@ -195,67 +195,67 @@
                                                                 {
                                                                     ViewBag.operationno_setvisibility = "hidden";
                                                                 }
-                                                        
-                                                        </td>
-                                                           <td>
-                                                            @Html.TextBoxFor(x => Model.ExpenseLineItems[i].operationno, new { @class = "form-control" , @style="visibility:"+@ViewBag.operationno_setvisibility,@onchange = "check_operationnumber(this)"})
-                                                            @Html.ValidationMessageFor(model => model.ExpenseLineItems[i].operationno, "", new { @class = "text-danger" })
-                                                           <div id="validation_@(i)__operationnumber" class="text-danger field-validation-error" style="visibility:hidden">Please Enter Operation Number </div>   
- 
 
-                                                        </td>
-                                                        <td>
-                                                            @Html.DropDownListFor(m => Model.ExpenseLineItems[i].ExpenseHead, (IEnumerable<SelectListItem>)ViewData["ExpenseHead"], "select expense head", htmlAttributes: new { @class = "pc form-control expensehead", @onchange = "LoadBusinessActivity(this)" })
-                                                            @Html.ValidationMessageFor(model => Model.ExpenseLineItems[i].ExpenseHead, "", new { @class = "text-danger" })
-                                                        </td>
-                                                        <td>
-                                                            @Html.DropDownListFor(m => Model.ExpenseLineItems[i].BusinessActivity, (IEnumerable<SelectListItem>)ViewData["BusinessActivity"], "select business activity", htmlAttributes: new { @class = "pc form-control businessactivity", @onchange = "LoadCustomerMarket(this)" })
-                                                            @Html.ValidationMessageFor(model => Model.ExpenseLineItems[i].BusinessActivity, "", new { @class = "text-danger" })
-                                                        </td>
-                                                        <td>
-                                                            @Html.DropDownListFor(m => Model.ExpenseLineItems[i].CustomerMarket, (IEnumerable<SelectListItem>)ViewData["CustomerMarket"], "select customer market", htmlAttributes: new { @class = "pc form-control customermarket" })
-                                                            @Html.ValidationMessageFor(model => Model.ExpenseLineItems[i].CustomerMarket, "", new { @class = "text-danger" })
-                                                        </td>
-                                                        <td>
-                                                            @Html.TextBoxFor(x => Model.ExpenseLineItems[i].ExpenseVoucherReferenceNo, new { @class = "form-control" })
-                                                            @Html.ValidationMessageFor(model => model.ExpenseLineItems[i].ExpenseVoucherReferenceNo, "", new { @class = "text-danger" })
-                                                        </td>
-                                                        <td>
-                                                            @Html.TextBoxFor(x => Model.ExpenseLineItems[i].Description, new { @class = "form-control" })
-                                                            @Html.ValidationMessageFor(model => model.ExpenseLineItems[i].Description, "", new { @class = "text-danger" })
-                                                        </td>
-                                                        <td>
-                                                            @Html.EditorFor(model => model.ExpenseLineItems[i].Date, new { htmlAttributes = new { @class = "form-control expenseDate", type = "date", @onfocusout = "ExpenseCreateDate()" } })
-                                                            <span class="error1">Date should be in between From and To date</span>
-                                                            @Html.ValidationMessageFor(model => model.ExpenseLineItems[i].Date, "", new { @class = "text-danger" })
-                                                        </td>
-                                                        <td>
-                                                            @Html.TextBoxFor(x => Model.ExpenseLineItems[i].Amount, new { @class = "form-control" , onchange = "get_balance()"}) 
-                                                            @Html.ValidationMessageFor(model => model.ExpenseLineItems[i].Amount, "", new { @class = "text-danger" })
-                                                        </td>
-                                                        @*<td><input class="btn btn-success" type="submit" value="Add" name="add_row" onclick="get_balance();add_line_item();" formaction="/Expense/PaymentRequests/AddLineItem" formnovalidate></td>
-*@
-                                                        <td><input class="btn btn-success" type="button" value="Add" name="add_row" onclick="get_balance();add_line_item();" ></td>
-                                                      @*     <td><input class="btn btn-success" type="button" value="Add" name="add_row" onclick="get_balance();remove_line_item(@(i));" ></td>*@
+                                                            </td>
+                                                            <td>
+                                                                @Html.TextBoxFor(x => Model.ExpenseLineItems[i].operationno, new { @class = "form-control", @style = "visibility:" + @ViewBag.operationno_setvisibility, @onchange = "check_operationnumber(this)" })
+                                                                @Html.ValidationMessageFor(model => model.ExpenseLineItems[i].operationno, "", new { @class = "text-danger" })
+                                                                <div id="validation_@(i)__operationnumber" class="text-danger field-validation-error" style="visibility:hidden">Please Enter Operation Number </div>
 
-                                                        <td><input class="btn btn-success" type="submit" value="Delete" name="remove_row"  onclick="get_balance()" formaction="/Expense/PaymentRequests/RemoveLineItem/@(i+0)" formnovalidate></td>
-                                                    </tr>
+
+                                                            </td>
+                                                            <td>
+                                                                @Html.DropDownListFor(m => Model.ExpenseLineItems[i].ExpenseHead, (IEnumerable<SelectListItem>)ViewData["ExpenseHead"], "select expense head", htmlAttributes: new { @class = "pc form-control expensehead", @onchange = "LoadBusinessActivity(this)" })
+                                                                @Html.ValidationMessageFor(model => Model.ExpenseLineItems[i].ExpenseHead, "", new { @class = "text-danger" })
+                                                            </td>
+                                                            <td>
+                                                                @Html.DropDownListFor(m => Model.ExpenseLineItems[i].BusinessActivity, (IEnumerable<SelectListItem>)ViewData["BusinessActivity"], "select business activity", htmlAttributes: new { @class = "pc form-control businessactivity", @onchange = "LoadCustomerMarket(this)" })
+                                                                @Html.ValidationMessageFor(model => Model.ExpenseLineItems[i].BusinessActivity, "", new { @class = "text-danger" })
+                                                            </td>
+                                                            <td>
+                                                                @Html.DropDownListFor(m => Model.ExpenseLineItems[i].CustomerMarket, (IEnumerable<SelectListItem>)ViewData["CustomerMarket"], "select customer market", htmlAttributes: new { @class = "pc form-control customermarket" })
+                                                                @Html.ValidationMessageFor(model => Model.ExpenseLineItems[i].CustomerMarket, "", new { @class = "text-danger" })
+                                                            </td>
+                                                            <td>
+                                                                @Html.TextBoxFor(x => Model.ExpenseLineItems[i].ExpenseVoucherReferenceNo, new { @class = "form-control" })
+                                                                @Html.ValidationMessageFor(model => model.ExpenseLineItems[i].ExpenseVoucherReferenceNo, "", new { @class = "text-danger" })
+                                                            </td>
+                                                            <td>
+                                                                @Html.TextBoxFor(x => Model.ExpenseLineItems[i].Description, new { @class = "form-control" })
+                                                                @Html.ValidationMessageFor(model => model.ExpenseLineItems[i].Description, "", new { @class = "text-danger" })
+                                                            </td>
+                                                            <td>
+                                                                @Html.EditorFor(model => model.ExpenseLineItems[i].Date, new { htmlAttributes = new { @class = "form-control expenseDate", type = "date", @onfocusout = "ExpenseCreateDate()" } })
+                                                                <span class="error1">Date should be in between From and To date</span>
+                                                                @Html.ValidationMessageFor(model => model.ExpenseLineItems[i].Date, "", new { @class = "text-danger" })
+                                                            </td>
+                                                            <td>
+                                                                @Html.TextBoxFor(x => Model.ExpenseLineItems[i].Amount, new { @class = "form-control", onchange = "get_balance()" })
+                                                                @Html.ValidationMessageFor(model => model.ExpenseLineItems[i].Amount, "", new { @class = "text-danger" })
+                                                            </td>
+                                                            @*<td><input class="btn btn-success" type="submit" value="Add" name="add_row" onclick="get_balance();add_line_item();" formaction="/Expense/PaymentRequests/AddLineItem" formnovalidate></td>
+                                                            *@
+                                                            <td><input class="btn btn-success" type="button" value="Add" name="add_row" onclick="get_balance();add_line_item();"></td>
+                                                            @*     <td><input class="btn btn-success" type="button" value="Add" name="add_row" onclick="get_balance();remove_line_item(@(i));" ></td>*@
+
+                                                            <td><input class="btn btn-success" type="submit" value="Delete" name="remove_row" onclick="get_balance()" formaction="/Expense/PaymentRequests/RemoveLineItem/@(i+0)" formnovalidate></td>
+                                                        </tr>
+                                                    }
                                                 }
-                                            }
-                                            <tr>
-                                                <th rowspan="2"></th>
-                                                <th rowspan="2"> </th>
-                                                <th rowspan="2"> </th>
-                                                <th rowspan="2"> </th>
-                                                <th rowspan="2"> </th>
-                                                <th rowspan="2"> </th>
-                                                <th rowspan="2">Total Amount</th>
-                                                <th rowspan="2"><label id="lbl_total"></label></th>
-                                                <th colspan="2"> </th>
-                                            </tr>
+                                                <tr>
+                                                    <th rowspan="2"></th>
+                                                    <th rowspan="2"> </th>
+                                                    <th rowspan="2"> </th>
+                                                    <th rowspan="2"> </th>
+                                                    <th rowspan="2"> </th>
+                                                    <th rowspan="2"> </th>
+                                                    <th rowspan="2">Total Amount</th>
+                                                    <th rowspan="2"><label id="lbl_total"></label></th>
+                                                    <th colspan="2"> </th>
+                                                </tr>
 
-                                        </tbody>
-                                    </table>
+                                            </tbody>
+                                        </table>
                                     </div>
                                     <table>
                                         <tr>
@@ -264,18 +264,21 @@
                                                     <label class="col-md-6 col-form-label" for="supportings">Supportings</label>
                                                     <div class="col-md-6">
                                                         <input id="supportings-reuim" type="file" name="supportings"
-                                                               multiple  >
+                                                               multiple>
                                                     </div>
                                                 </div>
                                             </td>
                                         </tr>
 
                                     </table>
-                                    
+
                                     <div style="padding:10px 0; text-align:left">
-                                        <input id="submit" type="submit" value="Submit" class="btn btn-success" style="padding:10px 20px" onclick="validate_expense(event);"/>
-                                         <input id="btn_preview" type="submit" value="Preview" class="btn btn-warning" style="padding:10px 20px" onclick="show_preview(event)" /> 
+                                        @*<input id="submit" type="submit" value="Submit" class="btn btn-success" style="padding:10px 20px" onclick="validate_expense(event);" />*@
+                                        <button id="submitButton" onclick="validate_expense(event)" class="btn btn-success" style="padding:10px 20px" >Submit</button>
+                                        <input id="btn_preview" type="submit" value="Preview" class="btn btn-warning" style="padding:10px 20px" onclick="show_preview(event)" />
                                     </div>
+                                    <img src="/img/Loader.gif" id="img" style="display:none" />
+
                                 </div>
                             </div>
                         </div>
@@ -316,6 +319,11 @@
 
 <script>
 
+    //$(document).ready(function () {
+    //    $('#submitButton').one('click', function () {
+    //        $(this).prop('disabled', true);
+    //    });
+    //});
 
 
          //function uploadFiles(inputId) {
@@ -346,9 +354,11 @@
 
     function validate_expense(e)
     {
+        $('#submitButton').disabled = true;
+        $('#submitButton').innerHTML = "Processing...";
+        $('#img').show();
+        var form_validate = false;
        
-
-        var form_validate =false;
        // e.preventDefault();
          for(i=1;i<$('#myTable tr').length;i++)
          {
@@ -374,6 +384,7 @@
              }
              else
              {
+                 $('#img').hide();
                  form_validate =true;
              }
          }
