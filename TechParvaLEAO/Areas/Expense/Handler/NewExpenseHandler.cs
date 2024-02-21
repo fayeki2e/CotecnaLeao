@@ -14,6 +14,7 @@ using TechParvaLEAO.Areas.Expense.Models.ViewModels;
 using TechParvaLEAO.Areas.Expense.Services;
 using TechParvaLEAO.Areas.Organization.Models;
 using TechParvaLEAO.Data;
+using TechParvaLEAO.Models;
 using TechParvaLEAO.Notification;
 using TechParvaLEAO.Service;
 
@@ -31,13 +32,16 @@ namespace TechParvaLEAO.Areas.Expense.Handler
         private readonly IMapper _mapper;
         private readonly IMediator _mediator;
         private readonly IsharepointEnhance sharepointSender;
+        private readonly SharePointOptions sharepointOptions;
+        private readonly SharePoint_service _SharePointservice;
 
+   
 
         public NewExpenseHandler(IApplicationRepository repository, IMapper mapper,
             PaymentRequestSequenceService paymentRequestSequenceService,
             PaymentRequestService paymentRequestService,
             ApplicationDbContext dbContext,
-            IMediator mediator, IsharepointEnhance sharepointsender)
+            IMediator mediator, IsharepointEnhance sharepointsender, SharePointOptions sharepointOptions, SharePoint_service sharePointservice)
         {
             _repository = repository;
             _mapper = mapper;
@@ -46,6 +50,8 @@ namespace TechParvaLEAO.Areas.Expense.Handler
             _dbContext = dbContext;
             _mediator = mediator;
             sharepointSender = sharepointsender;
+            this.sharepointOptions = sharepointOptions;
+            _SharePointservice = sharePointservice;
         }
 
         public async Task<bool> Handle(ExpenseViewModel paymentRequestVm, CancellationToken cancellationToken)
@@ -157,6 +163,14 @@ namespace TechParvaLEAO.Areas.Expense.Handler
                 }
             }
 
+           
+
+            var isPaymentexist = _paymentRequestService.CheckTodaysPaymentRequest(employee, totalAmount);
+
+            if(isPaymentexist == true)
+            {
+                return true;
+            }
             _dbContext.SaveChanges();
             var notification = new NotificationEventModel
             {
@@ -167,51 +181,60 @@ namespace TechParvaLEAO.Areas.Expense.Handler
             };
             long size = paymentRequestVm.Supportings.Sum(f => f.Length);
             string filePathData = "";
-            foreach (var formFile in paymentRequestVm.Supportings)
+
+            var SPO = _SharePointservice.get_sharepointOption();
+            if (SPO.SwitchOn == "yes")
             {
-                if (formFile.Length > 0)
+
+
+                foreach (var formFile in paymentRequestVm.Supportings)
                 {
-                    string filename = expenseRequestRecord.RequestNumber.Replace('/', '_') + formFile.FileName;
-                   
-                    string filePath = Path.Combine("Uploads", expenseRequestRecord.RequestNumber.Replace('/','_')+formFile.FileName);
-                    filePathData = filePathData + filePath;
-                    filePathData = filePathData + "*";
-                    // full path to file in temp location
-                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    if (formFile.Length > 0)
                     {
-                        // stream.Name
-                        await formFile.CopyToAsync(stream);                                           
-                        //await sps.Upload_file_sharepoint_Async("2022", stream.Name);                       
+                        string filename = expenseRequestRecord.RequestNumber.Replace('/', '_') + formFile.FileName;
+
+                        string filePath = Path.Combine("Uploads", expenseRequestRecord.RequestNumber.Replace('/', '_') + formFile.FileName);
+                        filePathData = filePathData + filePath;
+                        filePathData = filePathData + "*";
+                        // full path to file in temp location
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            // stream.Name
+                            await formFile.CopyToAsync(stream);
+                            //await sps.Upload_file_sharepoint_Async("2022", stream.Name);                       
+                        }
+
+                        string m_exePath = string.Empty;
+                        m_exePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+
+                        string file_of_sharepoint = "";
+                        //  file_to_sharepoint = Path.Combine(paymentRequestVm.fake_path, "//", filePath);
+                        file_of_sharepoint = m_exePath + "/Uploads/" + filename;
+                        //SharePoint_service sps = new SharePoint_service();
+                        //await sps.Upload_file_sharepoint_Async(filename, DateTime.Now.Year.ToString(), file_of_sharepoint);
+                        file_of_sharepoint = file_of_sharepoint.Replace('\\', '/');
+
+                        var SPUD = new SharePointUploadData
+                        {
+                            filename = filename,
+                            foldername = DateTime.Now.Year.ToString(),
+                            filePath = file_of_sharepoint
+                        };
+
+
+
+                        await sharepointSender.Upload_file_sharepoint_Async(SPUD);
                     }
-
-                    string m_exePath = string.Empty;
-                    m_exePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
- 
-
-                    string file_of_sharepoint = "";
-                    //  file_to_sharepoint = Path.Combine(paymentRequestVm.fake_path, "//", filePath);
-                    file_of_sharepoint = m_exePath + "/Uploads/" + filename;
-                    //SharePoint_service sps = new SharePoint_service();
-                    //await sps.Upload_file_sharepoint_Async(filename, DateTime.Now.Year.ToString(), file_of_sharepoint);
-                    file_of_sharepoint = file_of_sharepoint.Replace('\\', '/');
-
-                    var SPUD = new SharePointUploadData
-                    {
-                        filename = filename,
-                        foldername = DateTime.Now.Year.ToString(),
-                        filePath = file_of_sharepoint
-                    };
-
-                    await sharepointSender.Upload_file_sharepoint_Async(SPUD);
                 }
-            }
+          
 
             if (paymentRequestVm.Supportings.Count > 0)
             {
                 expenseRequestRecord.SupportingDocumentsPath = filePathData;
                 _dbContext.SaveChanges();
             }
-
+            }
             await _mediator.Publish<NotificationEventModel>(notification);
             return true;
         }

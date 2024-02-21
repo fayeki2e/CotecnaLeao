@@ -16,6 +16,7 @@ using Microsoft.Extensions.Options;
 using System.Reflection;
 using Postal;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using System.Diagnostics;
 
 
 namespace TechParvaLEAO.Service
@@ -27,6 +28,7 @@ namespace TechParvaLEAO.Service
         public string client_secret { get; set; }
         public string site { get; set; }
         public string upload_folder { get; set; }
+        public string SwitchOn { get; set; }
 
     }
 
@@ -67,6 +69,7 @@ namespace TechParvaLEAO.Service
                client_secret = sharepointOptions.client_secret,
                site = sharepointOptions.site,
                upload_folder = sharepointOptions.upload_folder,
+               SwitchOn=sharepointOptions.SwitchOn,
 
            };
    
@@ -116,6 +119,7 @@ namespace TechParvaLEAO.Service
             string domain = SPO.domain;
             string client_id = SPO.client_id;
             string client_secret = SPO.client_secret;
+            string SwitchOn = SPO.SwitchOn;
 
 
             var auth_token = "";
@@ -163,6 +167,7 @@ namespace TechParvaLEAO.Service
             string client_secret = SPO.client_secret;
             string site = SPO.site;
             string upload_folder = SPO.upload_folder;
+            string SwitchOn = SPO.SwitchOn;
 
             try
             {         
@@ -224,6 +229,7 @@ namespace TechParvaLEAO.Service
             string client_secret = SPO.client_secret;
             string site = SPO.site;
             string upload_folder = SPO.upload_folder;
+            string SwitchOn = SPO.SwitchOn;
 
 
           string  webUrl = "https://"+ domain +"/" + site;
