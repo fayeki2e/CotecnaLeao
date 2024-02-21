@@ -344,9 +344,9 @@ select [Employee Code],Employee,d.Id,l.Id,ap.Id,ep.Id,t.Id,[Account Number],e.Re
 es.Gender, convert(datetime,[Date Of Joining],105),convert(datetime,[Date Of Birth],105),o.OvertimeMultiplier,case when[Can Apply Mission Leaves]='yes' then 1 else 0 end,case when [Can Create Forex Requests]='yes' then 1 else 0 end,
 case when [Can have Credit Card] ='yes' then 1 else 0 end,case when[Is Hr] ='yes' then 1 else 0 end,case when[On Field Employee]='yes' then 1 else 0 end, case when [Specific Weekly-Off] ='yes' then 1 else 0 end,es.LastWorkingDate,es.ResignationDate,es.SettlementDate,es.SettlementAmount
 ,case when es.Status ='Resigned' then 1  when es.Status ='Service Terminated' then 2 else 0 end,case when isnull(es.Deactivated,'no') ='yes' then 1 else 0 end,GETDATE()
-  from #TempExcelStructure es left join Employees e LEFT OUTER JOIN Employees m ON e.ReportingToId = m.Id on es.[Employee Code]=e.EmployeeCode left join Designations d on es.Designation=d.[Name] left join Locations l on es.[Location]=l.[Name]
+  from Employees e  inner join #TempExcelStructure es on e.EmployeeCode=es.[Employee Code] inner join Employees m on es.[Reporting To] = m.Name  left join Designations d on es.Designation=d.[Name] left join Locations l on es.[Location]=l.[Name]
   left join ApprovalLimitProfiles ap on es.[Authorization Profile]= ap.[Name]  left join ExpenseProfiles ep on es.[Expense Profile]=ep.Name
-  left join Team t on es.Teams=t.TeamName  left join OvertimeRule o on es.[Overtime Rule]=o.[Name]  where [Employee Code] ='" + row["Employee Code"] + "'";
+  left join Team t on es.Teams=t.TeamName  left join OvertimeRule o on es.[Overtime Rule]=o.[Name]   where [Employee Code] ='" + row["Employee Code"] + "'";
 
                                         command.ExecuteNonQuery();
                                         InsertCount = InsertCount + 1;
@@ -451,14 +451,14 @@ Gender,[Date Of Joining],[Date Of Birth],[Overtime Rule],[Can Apply Mission Leav
                                     {
                                         command.CommandText = @"UPDATE e SET Name = isnull(es.Employee,e.Name),DesignationId=isnull(d.Id,e.DesignationId),
   LocationId=isnull(l.Id,e.LocationId),AuthorizationProfileId=isnull(ap.Id,e.AuthorizationProfileId),ExpenseProfileId=isnull(ep.Id,e.ExpenseProfileId),teamlist=isnull(t.Id,e.teamlist),
-  AccountNumber=isnull(es.[Account Number],e.AccountNumber),ReportingToId=isnull(e.ReportingToId,e.ReportingToId),Email=isnull(es.Email,e.Email),Gender=isnull(es.Gender,e.Gender),DateOfJoining=isnull(convert(datetime,es.[Date Of Joining],105),e.DateOfJoining),
+  AccountNumber=isnull(es.[Account Number],e.AccountNumber),ReportingToId=isnull(m.Id,e.ReportingToId),Email=isnull(es.Email,e.Email),Gender=isnull(es.Gender,e.Gender),DateOfJoining=isnull(convert(datetime,es.[Date Of Joining],105),e.DateOfJoining),
   DateOfBirth=isnull(convert(datetime,es.[Date Of Birth],105),e.DateOfBirth),OvertimeMultiplierId=isnull(o.OvertimeMultiplier,e.OvertimeMultiplierId),CanApplyMissionLeaves=case when isnull(es.[Can Apply Mission Leaves],e.CanApplyMissionLeaves)='yes' then 1 else 0 end,
   CanCreateForexRequests= case when isnull(es.[Can Create Forex Requests],e.CanCreateForexRequests)='yes' then 1 else 0 end,CanHoldCreditCard= case when isnull(es.[Can have Credit Card],e.CanHoldCreditCard)='yes' then 1 else 0 end ,
   ISHr=case when isnull(es.[Is Hr],e.IsHr)='yes' then 1 else 0 end,OnFieldEmployee=case when isnull(es.[On Field Employee],e.OnFieldEmployee)='yes' then 1 else 0 end,SpecificWeeklyOff= case when isnull(es.[Specific Weekly-Off],e.SpecificWeeklyOff)='yes' then 1 else 0 end,  Modified_Date=GETDATE()
 ,LastWorkingDate=es.LastWorkingDate,ResignationDate=es.ResignationDate,SettlementDate=es.SettlementDate,SettlementAmount=es.SettlementAmount,Status=case when es.Status ='Resigned' then 1  when es.Status ='Service Terminated' then 2 else 0 end,Deactivated =case when isnull(es.Deactivated,e.Deactivated)='yes' then 1 else 0 end
-  from Employees e LEFT OUTER JOIN Employees m ON e.ReportingToId = m.Id inner join  #TempExcelStructure es on e.EmployeeCode=es.[Employee Code]  left join Designations d on es.Designation=d.[Name] left join Locations l on es.[Location]=l.[Name]
+  from Employees e  inner join #TempExcelStructure es on e.EmployeeCode=es.[Employee Code] inner join Employees m on es.[Reporting To] = m.Name  left join Designations d on es.Designation=d.[Name] left join Locations l on es.[Location]=l.[Name]
   left join ApprovalLimitProfiles ap on es.[Authorization Profile]= ap.[Name]  left join ExpenseProfiles ep on es.[Expense Profile]=ep.Name
-  left join Team t on es.Teams=t.TeamName  left join OvertimeRule o on es.[Overtime Rule]=o.[Name]  where es.[Employee Code] ='" + row["Employee Code"] + "'";
+  left join Team t on es.Teams=t.TeamName  left join OvertimeRule o on es.[Overtime Rule]=o.[Name] where es.[Employee Code] ='" + row["Employee Code"] + "'";
 
                                         command.ExecuteNonQuery();
                                         UpdateCount = UpdateCount + 1;
