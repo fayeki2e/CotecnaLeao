@@ -218,7 +218,7 @@ namespace Cotecna.Areas.BulkUploads.Controllers
 	[Authorization Profile] [nvarchar](max) NULL,
 	[Expense Profile] [nvarchar](max) NULL,
 	[Teams] [nvarchar](max) NULL,
-	[Account Number] [bigint] NULL,
+	[Account Number] [nvarchar](max) NULL,
 	[Reporting To] [nvarchar](max) NULL,
 	[Email] [nvarchar](max) NULL,
 	[Gender] [nvarchar](max) NULL,
@@ -249,7 +249,7 @@ Deactivated nvarchar(20) null
 	[Authorization Profile] [nvarchar](max) NULL,
 	[Expense Profile] [nvarchar](max) NULL,
 	[Teams] [nvarchar](max) NULL,
-	[Account Number] [bigint] NULL,
+	[Account Number] [nvarchar](max) NULL,
 	[Reporting To] [nvarchar](max) NULL,
 	[Email] [nvarchar](max) NULL,
 	[Gender] [nvarchar](max) NULL,
@@ -458,8 +458,8 @@ Gender,[Date Of Joining],[Date Of Birth],[Overtime Rule],[Can Apply Mission Leav
   DateOfBirth=isnull(convert(datetime,es.[Date Of Birth],105),e.DateOfBirth),OvertimeMultiplierId=isnull(o.OvertimeMultiplier,e.OvertimeMultiplierId),CanApplyMissionLeaves=case when isnull(es.[Can Apply Mission Leaves],e.CanApplyMissionLeaves)='yes' then 1 else 0 end,
   CanCreateForexRequests= case when isnull(es.[Can Create Forex Requests],e.CanCreateForexRequests)='yes' then 1 else 0 end,CanHoldCreditCard= case when isnull(es.[Can have Credit Card],e.CanHoldCreditCard)='yes' then 1 else 0 end ,
   ISHr=case when isnull(es.[Is Hr],e.IsHr)='yes' then 1 else 0 end,OnFieldEmployee=case when isnull(es.[On Field Employee],e.OnFieldEmployee)='yes' then 1 else 0 end,SpecificWeeklyOff= case when isnull(es.[Specific Weekly-Off],e.SpecificWeeklyOff)='yes' then 1 else 0 end,  Modified_Date=GETDATE()
-,LastWorkingDate=es.LastWorkingDate,ResignationDate=es.ResignationDate,SettlementDate=es.SettlementDate,SettlementAmount=es.SettlementAmount,Status=case when es.Status ='Resigned' then 1  when es.Status ='Service Terminated' then 2 else 0 end,Deactivated =case when isnull(es.Deactivated,e.Deactivated)='yes' then 1 else 0 end
-  from Employees e  inner join #TempExcelStructure es on e.EmployeeCode=es.[Employee Code] left join Employees m on es.[Reporting To] = m.Name  left join Designations d on es.Designation=d.[Name] left join Locations l on es.[Location]=l.[Name]
+,LastWorkingDate=isnull(es.LastWorkingDate,e.LastWorkingDate),ResignationDate=isnull(es.ResignationDate,e.ResignationDate),SettlementDate=isnull(es.SettlementDate,e.SettlementDate),SettlementAmount=isnull(es.SettlementAmount,0),Status=case when es.Status ='Resigned' then 1  when es.Status ='Service Terminated' then 2 else 0 end,Deactivated =case when isnull(es.Deactivated,e.Deactivated)='yes' then 1 else 0 end
+  from Employees e  left join #TempExcelStructure es on e.EmployeeCode=es.[Employee Code] left join Employees m on es.[Reporting To] = m.Name  left join Designations d on es.Designation=d.[Name] left join Locations l on es.[Location]=l.[Name]
   left join ApprovalLimitProfiles ap on es.[Authorization Profile]= ap.[Name]  left join ExpenseProfiles ep on es.[Expense Profile]=ep.Name
   left join Team t on es.Teams=t.TeamName  left join OvertimeRule o on es.[Overtime Rule]=o.[Name] where e.EmployeeCode ='" + row["Employee Code"] + "'";
 
