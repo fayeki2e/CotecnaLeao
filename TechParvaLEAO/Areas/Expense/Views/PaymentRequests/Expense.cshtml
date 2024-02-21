@@ -4,7 +4,7 @@
     ViewBag.Title = "Expense";
 }
 
-<form asp-action="Expense" id="ExpenseForm" enctype="multipart/form-data" method="post">
+<form asp-action="Expense" id="ExpenseForm" enctype="multipart/form-data">
     <div class="container-fluid">
         <div class="animated fadeIn">
             <div class="row">
@@ -273,8 +273,8 @@
                                     </table>
 
                                     <div style="padding:10px 0; text-align:left">
-                                        @*<input id="submit" type="submit" value="Submit" class="btn btn-success" style="padding:10px 20px" onclick="validate_expense(event);" />*@
-                                        <button id="submitButton" onclick="validate_expense(event)" class="btn btn-success" style="padding:10px 20px" >Submit</button>
+                                        <input id="submit" type="submit" value="Submit" class="btn btn-success" style="padding:10px 20px" onclick="validate_expense(event);" />
+                                       @*  <button id="submitButton" onclick="validate_expense(event)" class="btn btn-success" style="padding:10px 20px" >Submit</button> *@
                                         <input id="btn_preview" type="submit" value="Preview" class="btn btn-warning" style="padding:10px 20px" onclick="show_preview(event)" />
                                     </div>
                                     <img src="/img/Loader.gif" id="img" style="display:none" />

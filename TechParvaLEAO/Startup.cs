@@ -109,6 +109,8 @@ namespace TechParvaLEAO
             services.AddScoped<IAuditLogServices, AuditLog>();
 
             services.AddScoped<UploadService, UploadService>();
+            services.AddScoped<SharePoint_service, SharePoint_service>();
+            services.AddScoped<SharePointOptions, SharePointOptions>();
             services.AddAutoMapper(typeof(Startup));
             services.AddSession(options =>
                 options.IdleTimeout = TimeSpan.FromMinutes(30)

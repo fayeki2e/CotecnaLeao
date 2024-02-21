@@ -360,6 +360,23 @@ namespace TechParvaLEAO.Areas.Expense.Services
 
         }
 
+        public bool CheckTodaysPaymentRequest(Employee employee,double amount)
+        {
+            var query = _context.Get<PaymentRequest>(p => p.EmployeeId == employee.Id &&
+               p.Type == PaymentRequestType.REIMBURSEMENT.ToString() && p.PaymentRequestCreatedDate.ToString("dd/M/yyyy") == DateTime.Today.ToString("dd/M/yyyy") && p.Amount == amount,              
+                q => q.OrderByDescending(s => s.PaymentRequestCreatedDate));
+           // return query;
+
+            if(query.ToList().Count >=1)
+            {
+                return true;
+            }else
+            {
+                return false;
+            }
+
+        }
+
         public IEnumerable<PaymentRequest> GetOnBehalfAdvanceDashboard(Employee employee)
         {
             //p.Status == PaymentRequestStatus.PENDING.ToString() ||
