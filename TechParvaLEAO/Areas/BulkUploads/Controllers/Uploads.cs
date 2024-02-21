@@ -340,13 +340,13 @@ Deactivated nvarchar(20) null
                                     {
                                         command.CommandText = @"INSERT into Employees(EmployeeCode,Name,DesignationId,LocationId,AuthorizationProfileId,ExpenseProfileId,TeamId,AccountNumber,ReportingToId,Email,
 Gender,DateOfJoining,DateOfBirth,OvertimeMultiplierId,CanApplyMissionLeaves,CanCreateForexRequests,CanHoldCreditCard,IsHr,OnFieldEmployee,SpecificWeeklyOff,LastWorkingDate,ResignationDate,SettlementDate,SettlementAmount,Status,Deactivated,Created_Date)
-select [Employee Code],Employee,d.Id,l.Id,ap.Id,ep.Id,t.Id,[Account Number],e.ReportingToId,es.Email,
+select [Employee Code],Employee,d.Id,l.Id,ap.Id,ep.Id,t.Id,[Account Number],m.Id,es.Email,
 es.Gender, convert(datetime,[Date Of Joining],105),convert(datetime,[Date Of Birth],105),o.OvertimeMultiplier,case when[Can Apply Mission Leaves]='yes' then 1 else 0 end,case when [Can Create Forex Requests]='yes' then 1 else 0 end,
 case when [Can have Credit Card] ='yes' then 1 else 0 end,case when[Is Hr] ='yes' then 1 else 0 end,case when[On Field Employee]='yes' then 1 else 0 end, case when [Specific Weekly-Off] ='yes' then 1 else 0 end,es.LastWorkingDate,es.ResignationDate,es.SettlementDate,es.SettlementAmount
 ,case when es.Status ='Resigned' then 1  when es.Status ='Service Terminated' then 2 else 0 end,case when isnull(es.Deactivated,'no') ='yes' then 1 else 0 end,GETDATE()
-  from Employees e  inner join #TempExcelStructure es on e.EmployeeCode=es.[Employee Code] inner join Employees m on es.[Reporting To] = m.Name  left join Designations d on es.Designation=d.[Name] left join Locations l on es.[Location]=l.[Name]
+ from #TempExcelStructure es  left join Employees m on es.[Reporting To] = m.Name  left join Designations d on es.Designation=d.[Name] left join Locations l on es.[Location]=l.[Name]
   left join ApprovalLimitProfiles ap on es.[Authorization Profile]= ap.[Name]  left join ExpenseProfiles ep on es.[Expense Profile]=ep.Name
-  left join Team t on es.Teams=t.TeamName  left join OvertimeRule o on es.[Overtime Rule]=o.[Name]   where [Employee Code] ='" + row["Employee Code"] + "'";
+  left join Team t on es.Teams=t.TeamName  left join OvertimeRule o on es.[Overtime Rule]=o.[Name]  where  es.[Employee Code] ='" + row["Employee Code"] + "'";
 
                                         command.ExecuteNonQuery();
                                         InsertCount = InsertCount + 1;
@@ -354,7 +354,7 @@ case when [Can have Credit Card] ='yes' then 1 else 0 end,case when[Is Hr] ='yes
                                        // Employee employee = new Employee();
                                         //var employee = await _context.Employees.Where(m => m.EmployeeCode =row["Employee Code"].ToString());
                                         var employee = _context.Employees.Where(m => m.EmployeeCode == row["Employee Code"].ToString()).FirstOrDefault();
-                                      //  employee.EmployeeCode = row["Employee Code"].ToString();
+                                        //  employee.EmployeeCode = row["Employee Code"].ToString();
                                         //employee.Name = row["Employee"].ToString();
                                         //employee.DesignationId = 1;
                                         //employee.LocationId = 1;
@@ -380,55 +380,58 @@ case when [Can have Credit Card] ='yes' then 1 else 0 end,case when[Is Hr] ='yes
                                         //_context.Add(employee);
                                         //await _context.SaveChangesAsync();
 
-                                        if (employee.Email != null && !"".Equals(employee.Email))
+                                        if (employee != null)
                                         {
-                                            await userManager.CreateAsync(new ApplicationUser
+                                            if (employee.Email != null && !"".Equals(employee.Email))
                                             {
-                                                Email = employee.Email,
-                                                UserName = employee.EmployeeCode,
-                                                EmployeeProfileId = employee.Id
-                                            }, "Cotecna@123"); ;
+                                                await userManager.CreateAsync(new ApplicationUser
+                                                {
+                                                    Email = employee.Email,
+                                                    UserName = employee.EmployeeCode,
+                                                    EmployeeProfileId = employee.Id
+                                                }, "Cotecna@123"); ;
 
-                                            ApplicationUser user = await userManager.FindByNameAsync(employee.EmployeeCode);
-                                           // var user = await _userManager.FindByIdAsync(userId);
-                                            if (user == null)
-                                            {
-                                                ViewBag.ErrorMessage = $"User with Id = {user.UserName} cannot be found";
-                                                return View("NotFound");
-                                            }
-                                            var roles = await userManager.GetRolesAsync(user);
+                                                ApplicationUser user = await userManager.FindByNameAsync(employee.EmployeeCode);
+                                                // var user = await _userManager.FindByIdAsync(userId);
+                                                if (user == null)
+                                                {
+                                                    ViewBag.ErrorMessage = $"User with Id = {user.UserName} cannot be found";
+                                                    return View("NotFound");
+                                                }
+                                                var roles = await userManager.GetRolesAsync(user);
 
-                                            var result = await userManager.RemoveFromRolesAsync(user, roles);
-                                            if (!result.Succeeded)
-                                            {
-                                                ModelState.AddModelError("", "Cannot remove user existing roles");
-                                                //return View(model);
-                                            }
-                                            var model = new List<UserRolesViewModel>();
-                                           
+                                                var result = await userManager.RemoveFromRolesAsync(user, roles);
+                                                if (!result.Succeeded)
+                                                {
+                                                    ModelState.AddModelError("", "Cannot remove user existing roles");
+                                                    //return View(model);
+                                                }
+                                                var model = new List<UserRolesViewModel>();
+
                                                 var role = _roleManager.Roles.FirstOrDefault();
                                                 var userRolesViewModel = new UserRolesViewModel
                                                 {
                                                     RoleId = role.NormalizedName,
                                                     RoleName = role.NormalizedName
                                                 };
-                                               
+
                                                 userRolesViewModel.IsSelected = true;
                                                 model.Add(userRolesViewModel);
-                                            
-                                            result = await userManager.AddToRolesAsync(user,
-                                                model.Where(x => x.IsSelected).Select(y => y.RoleId));
-                                            if (!result.Succeeded)
-                                            {
-                                                ModelState.AddModelError("", "Cannot add selected roles to user");
-                                                //return View(model);
+
+                                                result = await userManager.AddToRolesAsync(user,
+                                                    model.Where(x => x.IsSelected).Select(y => y.RoleId));
+                                                if (!result.Succeeded)
+                                                {
+                                                    ModelState.AddModelError("", "Cannot add selected roles to user");
+                                                    //return View(model);
+                                                }
                                             }
+                                            //string test = row["Email"].ToString();
+                                            //string FNAme = test.Substring(0, test.IndexOf("."));
+                                            //string LNAMe= test.Substring(test.IndexOf(".") + 1, test.IndexOf("@") - test.IndexOf(".") - 1);
+
+                                            sendEmail(row["Email"].ToString(), row["Employee Code"].ToString(), employee);
                                         }
-                                        //string test = row["Email"].ToString();
-                                        //string FNAme = test.Substring(0, test.IndexOf("."));
-                                        //string LNAMe= test.Substring(test.IndexOf(".") + 1, test.IndexOf("@") - test.IndexOf(".") - 1);
-                                       
-                                        sendEmail(row["Email"].ToString(), row["Employee Code"].ToString(),employee);
                                     }
                                     catch (Exception ex)
                                     {
@@ -456,9 +459,9 @@ Gender,[Date Of Joining],[Date Of Birth],[Overtime Rule],[Can Apply Mission Leav
   CanCreateForexRequests= case when isnull(es.[Can Create Forex Requests],e.CanCreateForexRequests)='yes' then 1 else 0 end,CanHoldCreditCard= case when isnull(es.[Can have Credit Card],e.CanHoldCreditCard)='yes' then 1 else 0 end ,
   ISHr=case when isnull(es.[Is Hr],e.IsHr)='yes' then 1 else 0 end,OnFieldEmployee=case when isnull(es.[On Field Employee],e.OnFieldEmployee)='yes' then 1 else 0 end,SpecificWeeklyOff= case when isnull(es.[Specific Weekly-Off],e.SpecificWeeklyOff)='yes' then 1 else 0 end,  Modified_Date=GETDATE()
 ,LastWorkingDate=es.LastWorkingDate,ResignationDate=es.ResignationDate,SettlementDate=es.SettlementDate,SettlementAmount=es.SettlementAmount,Status=case when es.Status ='Resigned' then 1  when es.Status ='Service Terminated' then 2 else 0 end,Deactivated =case when isnull(es.Deactivated,e.Deactivated)='yes' then 1 else 0 end
-  from Employees e  inner join #TempExcelStructure es on e.EmployeeCode=es.[Employee Code] inner join Employees m on es.[Reporting To] = m.Name  left join Designations d on es.Designation=d.[Name] left join Locations l on es.[Location]=l.[Name]
+  from Employees e  inner join #TempExcelStructure es on e.EmployeeCode=es.[Employee Code] left join Employees m on es.[Reporting To] = m.Name  left join Designations d on es.Designation=d.[Name] left join Locations l on es.[Location]=l.[Name]
   left join ApprovalLimitProfiles ap on es.[Authorization Profile]= ap.[Name]  left join ExpenseProfiles ep on es.[Expense Profile]=ep.Name
-  left join Team t on es.Teams=t.TeamName  left join OvertimeRule o on es.[Overtime Rule]=o.[Name] where es.[Employee Code] ='" + row["Employee Code"] + "'";
+  left join Team t on es.Teams=t.TeamName  left join OvertimeRule o on es.[Overtime Rule]=o.[Name] where e.EmployeeCode ='" + row["Employee Code"] + "'";
 
                                         command.ExecuteNonQuery();
                                         UpdateCount = UpdateCount + 1;
