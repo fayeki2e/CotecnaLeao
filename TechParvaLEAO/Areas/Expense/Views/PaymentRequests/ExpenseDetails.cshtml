@@ -150,14 +150,15 @@
                     @if (
                     string.Equals(Model.Status, PaymentRequestStatus.APPROVED.ToString()) ||
                     string.Equals(Model.Status, PaymentRequestStatus.POSTED.ToString()) ||
-                    string.Equals(Model.Status, PaymentRequestStatus.PAID.ToString())
+                    string.Equals(Model.Status, PaymentRequestStatus.PAID.ToString()) ||
+                    string.Equals(Model.Status, PaymentRequestStatus.REJECTED.ToString())
                     )
                     {
-                        @Html.DisplayFor(model => model.PaymentRequestActionedBy.Name)
+                        <b>@Html.DisplayFor(model => model.Status)</b> @Html.DisplayFor(model => model.PaymentRequestActionedBy.Name)
                     }
                     else
                     {
-                        <b>Not Yet Approved</b>
+                        <b>@Html.DisplayFor(model => model.Status)</b>
                     }
                 </td>
             </tr>
