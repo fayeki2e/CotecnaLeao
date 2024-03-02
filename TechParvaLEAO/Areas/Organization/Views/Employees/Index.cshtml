@@ -324,15 +324,15 @@ const gridInstance = $('#dataGrid').dxDataGrid({
       filterOperations: ["contains", "=",">","<"],
       visible: true,
     },
-    {
-        caption: 'Roles',
-      dataField: 'roles',
-      datatype: 'string',
-      allowFiltering: true,
-       allowSearch: true,
-      filterOperations: ["contains", "=",">","<"],
-      visible: true,
-    },
+    //{
+    //    caption: 'Roles',
+    //  dataField: 'roles',
+    //  datatype: 'string',
+    //  allowFiltering: true,
+    //   allowSearch: true,
+    //  filterOperations: ["contains", "=",">","<"],
+    //  visible: true,
+    //},
     
     {
         caption: 'Created By',
@@ -475,28 +475,28 @@ const gridInstance = $('#dataGrid').dxDataGrid({
         toolbar: {
       items: [
                 'groupPanel',
-                {
-                    widget: 'dxButton',
-                    location: 'after',
-                    options: {
-                        icon: 'exportexcel',
-                        text: 'Export to Excel Employee Template',
-                        onClick() {
-                            const workbook = new ExcelJS.Workbook();
-                            const worksheet = workbook.addWorksheet('Template');
-                            DevExpress.excelExporter.exportDataGrid({
-                                component: gridInstance,
-                                worksheet,
-                                autoFilterEnabled: true,
-                            }).then(() => {
-                                workbook.xlsx.writeBuffer().then((buffer) => {
-                                    saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'EmployeeTemplate.xlsx');
-                                });
-                            });
+                //{
+                //    widget: 'dxButton',
+                //    location: 'after',
+                //    options: {
+                //        icon: 'exportexcel',
+                //        text: 'Export to Excel Employee Template',
+                //        onClick() {
+                //            const workbook = new ExcelJS.Workbook();
+                //            const worksheet = workbook.addWorksheet('Template');
+                //            DevExpress.excelExporter.exportDataGrid({
+                //                component: gridInstance,
+                //                worksheet,
+                //                autoFilterEnabled: true,
+                //            }).then(() => {
+                //                workbook.xlsx.writeBuffer().then((buffer) => {
+                //                    saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'EmployeeTemplate.xlsx');
+                //                });
+                //            });
 
-                        },
-                    },
-                },
+                //        },
+                //    },
+                //},
         {
           widget: 'dxButton',
           location: 'after',
@@ -524,7 +524,7 @@ const gridInstance = $('#dataGrid').dxDataGrid({
             text: 'Export to Excel',
             onClick() {
           const workbook = new ExcelJS.Workbook();
-        const worksheet = workbook.addWorksheet('DateWiseleave');
+        const worksheet = workbook.addWorksheet('Employees');
 
 
 
@@ -534,7 +534,7 @@ const gridInstance = $('#dataGrid').dxDataGrid({
         autoFilterEnabled: true,
       }).then(() => {
         workbook.xlsx.writeBuffer().then((buffer) => {
-          saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'DateWiseleave.xlsx');
+          saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'EmployeesReport.xlsx');
         });
       });
 

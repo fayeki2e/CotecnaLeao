@@ -338,15 +338,12 @@ Deactivated nvarchar(20) null
                                 {
                                     try
                                     {
-                                        command.CommandText = @"INSERT into Employees(EmployeeCode,Name,DesignationId,LocationId,AuthorizationProfileId,ExpenseProfileId,TeamId,AccountNumber,ReportingToId,Email,
-Gender,DateOfJoining,DateOfBirth,OvertimeMultiplierId,CanApplyMissionLeaves,CanCreateForexRequests,CanHoldCreditCard,IsHr,OnFieldEmployee,SpecificWeeklyOff,LastWorkingDate,ResignationDate,SettlementDate,SettlementAmount,Status,Deactivated,Created_Date)
-select [Employee Code],Employee,d.Id,l.Id,ap.Id,ep.Id,t.Id,[Account Number],m.Id,es.Email,
+                                        command.CommandText = @"INSERT into Employees(EmployeeCode,Name,DesignationId,LocationId,AuthorizationProfileId,ExpenseProfileId,teamlist,AccountNumber,ReportingToId,Email,
+Gender,DateOfJoining,DateOfBirth,OvertimeMultiplierId,CanApplyMissionLeaves,CanCreateForexRequests,CanHoldCreditCard,IsHr,OnFieldEmployee,SpecificWeeklyOff,LastWorkingDate,ResignationDate,SettlementDate,SettlementAmount,Status,Deactivated,Created_Date,Created_By)
+select  es.[Employee Code],Employee,min(d.Id)as deptId,min(l.Id) as LocId,ap.Id,ep.Id,t.Id,es.[Account Number],min(m.Id) as ManagerId,es.Email,
 es.Gender, convert(datetime,[Date Of Joining],105),convert(datetime,[Date Of Birth],105),o.OvertimeMultiplier,case when[Can Apply Mission Leaves]='yes' then 1 else 0 end,case when [Can Create Forex Requests]='yes' then 1 else 0 end,
 case when [Can have Credit Card] ='yes' then 1 else 0 end,case when[Is Hr] ='yes' then 1 else 0 end,case when[On Field Employee]='yes' then 1 else 0 end, case when [Specific Weekly-Off] ='yes' then 1 else 0 end,es.LastWorkingDate,es.ResignationDate,es.SettlementDate,es.SettlementAmount
-,case when es.Status ='Resigned' then 1  when es.Status ='Service Terminated' then 2 else 0 end,case when isnull(es.Deactivated,'no') ='yes' then 1 else 0 end,GETDATE()
- from #TempExcelStructure es  left join Employees m on es.[Reporting To] = m.Name  left join Designations d on es.Designation=d.[Name] left join Locations l on es.[Location]=l.[Name]
-  left join ApprovalLimitProfiles ap on es.[Authorization Profile]= ap.[Name]  left join ExpenseProfiles ep on es.[Expense Profile]=ep.Name
-  left join Team t on es.Teams=t.TeamName  left join OvertimeRule o on es.[Overtime Rule]=o.[Name]  where  es.[Employee Code] ='" + row["Employee Code"] + "'";
+,case when es.Status ='Resigned' then 1  when es.Status ='Service Terminated' then 2 else 0 end,case when isnull(es.Deactivated,'no') ='yes' then 1 else 0 end,GETDATE(),'" + User.Identity.Name + "' from #TempExcelStructure es  left join Employees m on es.[Reporting To] = m.Name  left join Designations d on es.Designation=d.[Name] left join Locations l on es.[Location]=l.[Name] left join ApprovalLimitProfiles ap on es.[Authorization Profile]= ap.[Name]  left join ExpenseProfiles ep on es.[Expense Profile]=ep.Name left join Team t on es.Teams=t.TeamName  left join OvertimeRule o on es.[Overtime Rule]=o.[Name]  where es.[Employee Code] = '" + row["Employee Code"] + "' group by es.[Employee Code],Employee,ap.id,ep.id,t.id,es.[Account Number],es.Email,es.Gender,es.[Date of Joining],es.[Date of Birth],o.OvertimeMultiplier,[Can Apply Mission Leaves],es.[Can Create Forex Requests],[Can have Credit card],[Is Hr],[On Field Employee],[Specific Weekly-Off],es.LastWorkingDate,es.ResignationDate,es.SettlementDate,es.SettlementAmount,es.Status,es.Deactivated";
 
                                         command.ExecuteNonQuery();
                                         InsertCount = InsertCount + 1;
@@ -354,31 +351,14 @@ case when [Can have Credit Card] ='yes' then 1 else 0 end,case when[Is Hr] ='yes
                                        // Employee employee = new Employee();
                                         //var employee = await _context.Employees.Where(m => m.EmployeeCode =row["Employee Code"].ToString());
                                         var employee = _context.Employees.Where(m => m.EmployeeCode == row["Employee Code"].ToString()).FirstOrDefault();
-                                        //  employee.EmployeeCode = row["Employee Code"].ToString();
-                                        //employee.Name = row["Employee"].ToString();
-                                        //employee.DesignationId = 1;
-                                        //employee.LocationId = 1;
-                                        //employee.AuthorizationProfileId = 1;
-                                        //employee.ExpenseProfileId = 1;
-                                        //employee.TeamId = 1;
-                                        //employee.AccountNumber= row["Account Number"].ToString();
-                                        //employee.ReportingToId = 12;
-                                        //employee.Email = row["Email"].ToString();
-                                        //employee.Gender = row["Gender"].ToString();
-                                        //employee.DateOfBirth = Convert.ToDateTime(row["Date of Birth"]);
-                                        //employee.DateOfJoining=Convert.ToDateTime(row["Date of Joining"]);
-                                        //employee.OvertimeMultiplierId = 1;
-                                        //employee.CanApplyMissionLeaves = (row["Can Apply Mission Leaves"].ToString() == "yes") ? true:false ;
-                                        //employee.CanCreateForexRequests = (row["Can Create Forex Requests"].ToString() == "yes") ? true : false;
-                                        //employee.CanHoldCreditCard = (row["Can have Credit card"].ToString() == "yes") ? true : false;
-                                        //employee.IsHr = (row["Is Hr"].ToString() == "yes") ? true : false;
-                                        //employee.OnFieldEmployee = (row["On Field Employee"].ToString() == "yes") ? true : false;
-                                        //employee.SpecificWeeklyOff = (row["Specific Weekly-Off"].ToString() == "yes") ? true : false;
-                                        //employee.Created_Date = DateTime.Now;
-                                        //employee.Created_by = User.Identity.Name;
+                                        if (employee != null) {
+                                            if (employee.LocationId !=0 || employee.LocationId != null) {
+                                                command.CommandText = @"insert into LeaveCreditAndUtilization values("+employee.Id+",null,null,1,25,1,5,30,null,null,null,4)";
 
-                                        //_context.Add(employee);
-                                        //await _context.SaveChangesAsync();
+                                                command.ExecuteNonQuery();
+                                            }
+                                        }
+                                    
 
                                         if (employee != null)
                                         {
@@ -457,11 +437,7 @@ Gender,[Date Of Joining],[Date Of Birth],[Overtime Rule],[Can Apply Mission Leav
   AccountNumber=isnull(es.[Account Number],e.AccountNumber),ReportingToId=isnull(m.Id,e.ReportingToId),Email=isnull(es.Email,e.Email),Gender=isnull(es.Gender,e.Gender),DateOfJoining=isnull(convert(datetime,es.[Date Of Joining],105),e.DateOfJoining),
   DateOfBirth=isnull(convert(datetime,es.[Date Of Birth],105),e.DateOfBirth),OvertimeMultiplierId=isnull(o.OvertimeMultiplier,e.OvertimeMultiplierId),CanApplyMissionLeaves=case when isnull(es.[Can Apply Mission Leaves],e.CanApplyMissionLeaves)='yes' then 1 else 0 end,
   CanCreateForexRequests= case when isnull(es.[Can Create Forex Requests],e.CanCreateForexRequests)='yes' then 1 else 0 end,CanHoldCreditCard= case when isnull(es.[Can have Credit Card],e.CanHoldCreditCard)='yes' then 1 else 0 end ,
-  ISHr=case when isnull(es.[Is Hr],e.IsHr)='yes' then 1 else 0 end,OnFieldEmployee=case when isnull(es.[On Field Employee],e.OnFieldEmployee)='yes' then 1 else 0 end,SpecificWeeklyOff= case when isnull(es.[Specific Weekly-Off],e.SpecificWeeklyOff)='yes' then 1 else 0 end,  Modified_Date=GETDATE()
-,LastWorkingDate=isnull(es.LastWorkingDate,e.LastWorkingDate),ResignationDate=isnull(es.ResignationDate,e.ResignationDate),SettlementDate=isnull(es.SettlementDate,e.SettlementDate),SettlementAmount=isnull(es.SettlementAmount,0),Status=case when es.Status ='Resigned' then 1  when es.Status ='Service Terminated' then 2 else 0 end,Deactivated =case when isnull(es.Deactivated,e.Deactivated)='yes' then 1 else 0 end
-  from Employees e  left join #TempExcelStructure es on e.EmployeeCode=es.[Employee Code] left join Employees m on es.[Reporting To] = m.Name  left join Designations d on es.Designation=d.[Name] left join Locations l on es.[Location]=l.[Name]
-  left join ApprovalLimitProfiles ap on es.[Authorization Profile]= ap.[Name]  left join ExpenseProfiles ep on es.[Expense Profile]=ep.Name
-  left join Team t on es.Teams=t.TeamName  left join OvertimeRule o on es.[Overtime Rule]=o.[Name] where e.EmployeeCode ='" + row["Employee Code"] + "'";
+  ISHr=case when isnull(es.[Is Hr],e.IsHr)='yes' then 1 else 0 end,OnFieldEmployee=case when isnull(es.[On Field Employee],e.OnFieldEmployee)='yes' then 1 else 0 end,SpecificWeeklyOff= case when isnull(es.[Specific Weekly-Off],e.SpecificWeeklyOff)='yes' then 1 else 0 end,  Modified_Date=GETDATE(),Modified_By='" + User.Identity.Name + "' ,LastWorkingDate=isnull(es.LastWorkingDate,e.LastWorkingDate),ResignationDate=isnull(es.ResignationDate,e.ResignationDate),SettlementDate=isnull(es.SettlementDate,e.SettlementDate),SettlementAmount=isnull(es.SettlementAmount,0),Status=case when es.Status ='Resigned' then 1  when es.Status ='Service Terminated' then 2 else 0 end,Deactivated =case when isnull(es.Deactivated,e.Deactivated)='yes' then 1 else 0 end from Employees e  left join #TempExcelStructure es on e.EmployeeCode=es.[Employee Code] left join Employees m on es.[Reporting To] = m.Name  left join Designations d on es.Designation=d.[Name] left join Locations l on es.[Location]=l.[Name] left join ApprovalLimitProfiles ap on es.[Authorization Profile]= ap.[Name]  left join ExpenseProfiles ep on es.[Expense Profile]=ep.Name left join Team t on es.Teams=t.TeamName  left join OvertimeRule o on es.[Overtime Rule]=o.[Name] where e.EmployeeCode ='" + row["Employee Code"] + "'";
 
                                         command.ExecuteNonQuery();
                                         UpdateCount = UpdateCount + 1;
