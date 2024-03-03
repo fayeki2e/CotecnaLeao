@@ -14,6 +14,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Newtonsoft.Json;
 using AutoMapper;
+using System.Data.SqlClient;
+using System.Data;
 
 namespace TechParvaLEAO.Areas.Expense.Services
 {
@@ -63,7 +65,7 @@ namespace TechParvaLEAO.Areas.Expense.Services
             this.dbContext = dbContext;
         }
         
-        private IEnumerable<PaymentRequest> ApplySearch(IEnumerable<PaymentRequest> query, PaymentRequestSearchViewModel searchModel)
+        public IEnumerable<PaymentRequest> ApplySearch(IEnumerable<PaymentRequest> query, PaymentRequestSearchViewModel searchModel)
         {
             if (searchModel == null) return query;
 
@@ -572,16 +574,44 @@ namespace TechParvaLEAO.Areas.Expense.Services
             var query = _context.Get<PaymentRequest>(p => 
                    p.Type == PaymentRequestType.REIMBURSEMENT.ToString(),
             q => q.OrderByDescending(s => s.ActionDate));
+
+           
             if (string.IsNullOrEmpty(searchModel.Status))
             {
                 query = query.Where(p =>
                 (p.Status == PaymentRequestStatus.APPROVED.ToString() ||
                 p.Status == PaymentRequestStatus.POSTED.ToString() ||
-                p.Status == PaymentRequestStatus.PAID.ToString()));
+                p.Status == PaymentRequestStatus.PAID.ToString() || p.Status == PaymentRequestStatus.APPROVED_ESCALATED.ToString()));
             }
             query = ApplySearch(query, searchModel);
             return query;           
         }
+
+        //public IEnumerable<PaymentRequest> GetFinanceApprovedExpenseList_new(Employee employee, PaymentRequestSearchViewModel searchModel)
+        //{
+
+        //    try
+        //    {
+        //            SqlCommand cmd = new SqlCommand("sp_BulkInsert_EmployeeDetails", dbConnection.Get_DB_Connection());
+        //            System.Data.Common.DbDataReader sqlReader;
+        //            cmd.Parameters.Add("@Action", SqlDbType.NVarChar).Value = "Download";
+        //            cmd.CommandType = CommandType.StoredProcedure;
+        //            sqlReader = (System.Data.Common.DbDataReader)cmd.ExecuteReader();
+        //            var result = _context.PaymentRequests.FromSql("dbo.sp_GetBalancePayable_Report");
+
+        //            return result.ToList();
+        //            IEnumerable<PaymentRequest> paymentdetails = context.Translate<PaymentRequest>(sqlReader).ToList();
+        //            return paymentdetails;
+                
+                
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+
+
+        //}
         public IEnumerable<PaymentRequest> GetFinanceDashboardApprovedExpenseList(Employee employee, PaymentRequestSearchViewModel searchModel)
         {
             //&& p.ActionDate.Value.Date == DateTime.Now.Date

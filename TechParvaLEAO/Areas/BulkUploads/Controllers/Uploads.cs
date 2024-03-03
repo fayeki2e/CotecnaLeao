@@ -63,13 +63,14 @@ namespace Cotecna.Areas.BulkUploads.Controllers
         //private readonly LeaveRequestServices _leaveRequestServices;
         UploadStatusViewModel uploadViewModel = new UploadStatusViewModel();
         UploadStatusViewModel dashboardViewModel = new UploadStatusViewModel();
+        private readonly LeaveRequestServices leaveRequestServices;
         //  private IWebHostEnvironment Environment;
 
         public UploadsController(IEmailService emailService,
             IEmailViewRender emailViewRenderer,
             IHostingEnvironment env,
             IOptions<EmailSenderOptions> emailOptions,
-            IAuditLogServices auditlog, ILogger<UploadsController> logger, IConfiguration _configuration, UploadService uploadService, ApplicationDbContext context, IEmployeeServices employeeServices, IEmailSenderEnhance emailSender, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+            IAuditLogServices auditlog, ILogger<UploadsController> logger, IConfiguration _configuration, UploadService uploadService,LeaveRequestServices leaveservice, ApplicationDbContext context, IEmployeeServices employeeServices, IEmailSenderEnhance emailSender, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             this.emailOptions = emailOptions.Value;
             this.emailService = emailService;
@@ -85,7 +86,7 @@ namespace Cotecna.Areas.BulkUploads.Controllers
             this._emailSender = emailSender;
             this.userManager = userManager;
             this._roleManager = roleManager;
-         
+            this.leaveRequestServices = leaveservice;
         }
 
         private SmtpClient CreateSmtpClient()
@@ -353,7 +354,8 @@ case when [Can have Credit Card] ='yes' then 1 else 0 end,case when[Is Hr] ='yes
                                         var employee = _context.Employees.Where(m => m.EmployeeCode == row["Employee Code"].ToString()).FirstOrDefault();
                                         if (employee != null) {
                                             if (employee.LocationId !=0 || employee.LocationId != null) {
-                                                command.CommandText = @"insert into LeaveCreditAndUtilization values("+employee.Id+",null,null,1,25,1,5,30,null,null,null,4)";
+                                                var leaveAccountingPeriod = leaveRequestServices.GetAccountingPeriod(DateTime.Today);
+                                                command.CommandText = @"insert into LeaveCreditAndUtilization values("+employee.Id+",null,null,1,25,1,5,30,null,null,null,"+leaveAccountingPeriod.Id+")";
 
                                                 command.ExecuteNonQuery();
                                             }

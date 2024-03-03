@@ -31,6 +31,7 @@ using Microsoft.AspNetCore.Hosting;
 using TechParvaLEAO.Service;
 using TechParvaLEAO.Services;
 using System.Globalization;
+using System.Data.SqlClient;
 
 namespace TechParvaLEAO.Areas.Expense.Controllers
 {
@@ -809,7 +810,25 @@ namespace TechParvaLEAO.Areas.Expense.Controllers
         {
 
             ViewData["Currency"] = new SelectList(repository.Get<Currency>(e => e.Deactivated == false), "Name", "Name");
-            return View("FinancePendingExpenseList", ToPagedList(paymentRequestService.GetFinanceApprovedExpenseList(GetEmployee(), paymentRequestSearchViewModel), id));
+            //return View("FinancePendingExpenseList", ToPagedList(paymentRequestService.GetFinanceApprovedExpenseList(GetEmployee(), paymentRequestSearchViewModel), id));
+            //added by Priya
+            SqlCommand cmd = new SqlCommand();
+            SqlParameter Action = new SqlParameter("@Action", "Search");
+            // cmd.Parameters.AddWithValue("@Action", "Search"); SqlParameter Action = new SqlParameter("@Action", "Search");
+            SqlParameter Status = new SqlParameter("@Status", paymentRequestSearchViewModel.Status ?? (object)DBNull.Value);
+            SqlParameter RNUmber = new SqlParameter("@RequestNumber", paymentRequestSearchViewModel.RequestNumber ?? (object)DBNull.Value);
+            SqlParameter EName = new SqlParameter("@EName", paymentRequestSearchViewModel.EmployeeName ?? (object)DBNull.Value);
+            SqlParameter EmployeeCode = new SqlParameter("@EmployeeCode", paymentRequestSearchViewModel.EmployeeCode ?? (object)DBNull.Value);
+            SqlParameter FromAmount = new SqlParameter("@FromAmount", paymentRequestSearchViewModel.FromAmount ?? (object)DBNull.Value);
+            SqlParameter ToAmount = new SqlParameter("@ToAmount", paymentRequestSearchViewModel.ToAmount ?? (object)DBNull.Value);
+            SqlParameter FromDate = new SqlParameter("@FromDate", paymentRequestSearchViewModel.FromDate ?? (object)DBNull.Value);
+            SqlParameter ToDate = new SqlParameter("@ToDate", paymentRequestSearchViewModel.ToDate ?? (object)DBNull.Value);
+            SqlParameter Currency = new SqlParameter("@Currency", paymentRequestSearchViewModel.Currency ?? (object)DBNull.Value);
+            //IEnumerable<PaymentRequest> result = context.PaymentRequests.FromSql("Execute GetFinanceApprovedExpenseList @Action,@Status,@RequestNumber",Action,Status,RNUmber,EName,EmployeeCode,FromAmount,ToAmount,FromDate,ToDate,Currency);
+            var result = context.PaymentRequests.FromSql("Execute GetFinanceApprovedExpenseList @Action,@Status,@RequestNumber,@EName,@EmployeeCode,@FromAmount,@ToAmount,@FromDate,@ToDate,@Currency", Action, Status, RNUmber, EName, EmployeeCode, FromAmount, ToAmount, FromDate, ToDate, Currency);
+            return View("FinancePendingExpenseList", ToPagedList(result, id));
+
+
         }
 
         /*
@@ -1141,7 +1160,23 @@ namespace TechParvaLEAO.Areas.Expense.Controllers
         [Authorize(Roles = AuthorizationRoles.FINANCE)]
         public FileContentResult FinanceExpenseExportPaymentsCSV(int[] id, [Bind]PaymentRequestSearchViewModel paymentRequestSearchViewModel)
         {
-            var result = paymentRequestService.GetFinanceApprovedExpenseList(GetEmployee(), paymentRequestSearchViewModel);
+            //commneted below line by Priya
+            //   var result = paymentRequestService.GetFinanceApprovedExpenseList(GetEmployee(), paymentRequestSearchViewModel);
+            //  result = paymentRequestService.ApplySearch(result, paymentRequestSearchViewModel);
+            SqlCommand cmd = new SqlCommand();
+            SqlParameter Action = new SqlParameter("@Action", "Search");
+            // cmd.Parameters.AddWithValue("@Action", "Search"); SqlParameter Action = new SqlParameter("@Action", "Search");
+            SqlParameter Status = new SqlParameter("@Status", paymentRequestSearchViewModel.Status ?? (object)DBNull.Value);
+            SqlParameter RNUmber = new SqlParameter("@RequestNumber", paymentRequestSearchViewModel.RequestNumber ?? (object)DBNull.Value);
+            SqlParameter EName = new SqlParameter("@EName", paymentRequestSearchViewModel.EmployeeName ?? (object)DBNull.Value);
+            SqlParameter EmployeeCode = new SqlParameter("@EmployeeCode", paymentRequestSearchViewModel.EmployeeCode ?? (object)DBNull.Value);
+            SqlParameter FromAmount = new SqlParameter("@FromAmount", paymentRequestSearchViewModel.FromAmount ?? (object)DBNull.Value);
+            SqlParameter ToAmount = new SqlParameter("@ToAmount", paymentRequestSearchViewModel.ToAmount ?? (object)DBNull.Value);
+            SqlParameter FromDate = new SqlParameter("@FromDate", paymentRequestSearchViewModel.FromDate ?? (object)DBNull.Value);
+            SqlParameter ToDate = new SqlParameter("@ToDate", paymentRequestSearchViewModel.ToDate ?? (object)DBNull.Value);
+            SqlParameter Currency = new SqlParameter("@Currency", paymentRequestSearchViewModel.Currency ?? (object)DBNull.Value);
+          var result = context.PaymentRequests.FromSql("Execute GetFinanceApprovedExpenseList @Action,@Status,@RequestNumber,@EName,@EmployeeCode,@FromAmount,@ToAmount,@FromDate,@ToDate,@Currency", Action, Status, RNUmber, EName, EmployeeCode, FromAmount, ToAmount, FromDate, ToDate, Currency);
+
             var loggedInEmployeeId = GetEmployee().Id;
             var data = new List<ExpenseDataExportViewModel>();
             int recordNumber = 1;
