@@ -1165,53 +1165,54 @@ namespace TechParvaLEAO.Areas.Expense.Controllers
             //commneted below line by Priya
             //   var result = paymentRequestService.GetFinanceApprovedExpenseList(GetEmployee(), paymentRequestSearchViewModel);
             //  result = paymentRequestService.ApplySearch(result, paymentRequestSearchViewModel);
-
-            var loggedInEmployeeId = GetEmployee().Id;
-            SqlCommand cmd = new SqlCommand();
-            SqlParameter Action = new SqlParameter("@Action", "Download");
-            // cmd.Parameters.AddWithValue("@Action", "Search"); SqlParameter Action = new SqlParameter("@Action", "Search");
-            SqlParameter Status = new SqlParameter("@Status", paymentRequestSearchViewModel.Status ?? (object)DBNull.Value);
-            SqlParameter logInEmployeeId = new SqlParameter("@loggedInEmployeeId",loggedInEmployeeId);
-            SqlParameter RNUmber = new SqlParameter("@RequestNumber", paymentRequestSearchViewModel.RequestNumber ?? (object)DBNull.Value);
-            SqlParameter EName = new SqlParameter("@EName", paymentRequestSearchViewModel.EmployeeName ?? (object)DBNull.Value);
-            SqlParameter EmployeeCode = new SqlParameter("@EmployeeCode", paymentRequestSearchViewModel.EmployeeCode ?? (object)DBNull.Value);
-            SqlParameter FromAmount = new SqlParameter("@FromAmount", paymentRequestSearchViewModel.FromAmount ?? (object)DBNull.Value);
-            SqlParameter ToAmount = new SqlParameter("@ToAmount", paymentRequestSearchViewModel.ToAmount ?? (object)DBNull.Value);
-            SqlParameter FromDate = new SqlParameter("@FromDate", paymentRequestSearchViewModel.FromDate ?? (object)DBNull.Value);
-            SqlParameter ToDate = new SqlParameter("@ToDate", paymentRequestSearchViewModel.ToDate ?? (object)DBNull.Value);
-            SqlParameter Currency = new SqlParameter("@Currency", paymentRequestSearchViewModel.Currency ?? (object)DBNull.Value);
-          var result = context.PaymentRequests.FromSql("Execute GetFinanceApprovedExpenseList @Action,@Status,@loggedInEmployeeId,@RequestNumber,@EName,@EmployeeCode,@FromAmount,@ToAmount,@FromDate,@ToDate,@Currency", Action, Status,logInEmployeeId, RNUmber, EName, EmployeeCode, FromAmount, ToAmount, FromDate, ToDate, Currency);
-
-            var data = new List<ExpenseDataExportViewModel>();
-            int recordNumber = 1;
-            foreach (var item in result)
+            try
             {
-                if (item.LineItems.Count() > 0)
+                var loggedInEmployeeId = GetEmployee().Id;
+                SqlCommand cmd = new SqlCommand();
+                SqlParameter Action = new SqlParameter("@Action", "Download");
+                // cmd.Parameters.AddWithValue("@Action", "Search"); SqlParameter Action = new SqlParameter("@Action", "Search");
+                SqlParameter Status = new SqlParameter("@Status", paymentRequestSearchViewModel.Status ?? (object)DBNull.Value);
+                SqlParameter logInEmployeeId = new SqlParameter("@loggedInEmployeeId", loggedInEmployeeId);
+                SqlParameter RNUmber = new SqlParameter("@RequestNumber", paymentRequestSearchViewModel.RequestNumber ?? (object)DBNull.Value);
+                SqlParameter EName = new SqlParameter("@EName", paymentRequestSearchViewModel.EmployeeName ?? (object)DBNull.Value);
+                SqlParameter EmployeeCode = new SqlParameter("@EmployeeCode", paymentRequestSearchViewModel.EmployeeCode ?? (object)DBNull.Value);
+                SqlParameter FromAmount = new SqlParameter("@FromAmount", paymentRequestSearchViewModel.FromAmount ?? (object)DBNull.Value);
+                SqlParameter ToAmount = new SqlParameter("@ToAmount", paymentRequestSearchViewModel.ToAmount ?? (object)DBNull.Value);
+                SqlParameter FromDate = new SqlParameter("@FromDate", paymentRequestSearchViewModel.FromDate ?? (object)DBNull.Value);
+                SqlParameter ToDate = new SqlParameter("@ToDate", paymentRequestSearchViewModel.ToDate ?? (object)DBNull.Value);
+                SqlParameter Currency = new SqlParameter("@Currency", paymentRequestSearchViewModel.Currency ?? (object)DBNull.Value);
+                var result = context.PaymentRequests.FromSql("Execute GetFinanceApprovedExpenseList @Action,@Status,@loggedInEmployeeId,@RequestNumber,@EName,@EmployeeCode,@FromAmount,@ToAmount,@FromDate,@ToDate,@Currency", Action, Status, logInEmployeeId, RNUmber, EName, EmployeeCode, FromAmount, ToAmount, FromDate, ToDate, Currency);
+
+                var data = new List<ExpenseDataExportViewModel>();
+                int recordNumber = 1;
+                foreach (var item in result)
                 {
-                    //if (item.PostedById == null && paymentRequestSearchViewModel.Status== "APPROVED")
-                    //{
-                    //    item.PostedById = loggedInEmployeeId;
-                    //    item.PostedOn = DateTime.Now;
-                    //    item.Status = PaymentRequestStatus.POSTED.ToString();
-                    //    item.DownloadedDate = DateTime.Now;//.ToString("dd-MM-yyyy");
-                    //    PaymentRequestApprovalAction approvalActions = new PaymentRequestApprovalAction
-                    //    {
-                    //        ActionById = loggedInEmployeeId,
-                    //        PaymentRequest = item,
-                    //        Timestamp = DateTime.Now,
-                    //        Action = PaymentRequestActions.POSTED.ToString(),
-                    //        Type = PaymentRequestType.REIMBURSEMENT.ToString()
-                    //    };
-                    //    context.Entry<PaymentRequest>(item).State = EntityState.Modified;
-                    //    context.Entry<PaymentRequestApprovalAction>(approvalActions).State = EntityState.Added;
-                    //}
-                    foreach (var l in item.LineItems)
+                    if (item.LineItems.Count() > 0)
                     {
-                       
+                        //if (item.PostedById == null && paymentRequestSearchViewModel.Status== "APPROVED")
+                        //{
+                        //    item.PostedById = loggedInEmployeeId;
+                        //    item.PostedOn = DateTime.Now;
+                        //    item.Status = PaymentRequestStatus.POSTED.ToString();
+                        //    item.DownloadedDate = DateTime.Now;//.ToString("dd-MM-yyyy");
+                        //    PaymentRequestApprovalAction approvalActions = new PaymentRequestApprovalAction
+                        //    {
+                        //        ActionById = loggedInEmployeeId,
+                        //        PaymentRequest = item,
+                        //        Timestamp = DateTime.Now,
+                        //        Action = PaymentRequestActions.POSTED.ToString(),
+                        //        Type = PaymentRequestType.REIMBURSEMENT.ToString()
+                        //    };
+                        //    context.Entry<PaymentRequest>(item).State = EntityState.Modified;
+                        //    context.Entry<PaymentRequestApprovalAction>(approvalActions).State = EntityState.Added;
+                        //}
+                        foreach (var l in item.LineItems)
+                        {
+
                             data.Add(new ExpenseDataExportViewModel
                             {
                                 EmployeeCode = item.Employee.EmployeeCode,
-                                PostingDate =(item.ActionDate.HasValue)? item.ActionDate.Value.ToString("dd-MM-yyyy"):"",
+                                PostingDate = (item.ActionDate.HasValue) ? item.ActionDate.Value.ToString("dd-MM-yyyy") : "",
                                 DocumentDate = item.PaymentRequestCreatedDate.ToString("dd-MM-yyyy"),
                                 //   PostingDate = DateTime.ParseExact(item.ActionDate.Value.ToString("dd-MMM-yyyy"), "dd-MMM-yyyy", CultureInfo.InvariantCulture),
                                 DocumentNumber = recordNumber,
@@ -1229,19 +1230,26 @@ namespace TechParvaLEAO.Areas.Expense.Controllers
                                 LineDescription = l.VoucherDescription,
                                 Dimension3 = item.CreditCard ? "CREDITCARD" : "",
                                 Dimension4 = PaymentRequestStatus.PAID.ToString().Equals(item.Status) ? "PAID" : "",
-                                Dimension7 = (item.DownloadedDate.HasValue)? item.DownloadedDate.ToString():"",
-                                Dimension8 = item.CurrencyId != 1 ? item.AdvancePaymentRequest.RequestNumber : ""
+                                Dimension7 = (item.DownloadedDate.HasValue) ? item.DownloadedDate.ToString() : "",
+                                Dimension8 = item.CurrencyId != 1 ? (item.AdvancePaymentRequest !=null)?item.AdvancePaymentRequest.RequestNumber:"" : ""
                             });
+                        }
                     }
+                    recordNumber++;
                 }
-                recordNumber++;
+
+                var writer = new StringWriter();
+                var csv = new CsvWriter(writer);
+                csv.WriteRecords(data);
+                //  context.SaveChanges();
+                return File(Encoding.ASCII.GetBytes(writer.ToString()), "text/csv", "FinanceExpenseToNavigen.csv");
             }
-            
-            var writer = new StringWriter();
-            var csv = new CsvWriter(writer);
-            csv.WriteRecords(data);
-          //  context.SaveChanges();
-            return File(Encoding.ASCII.GetBytes(writer.ToString()), "text/csv", "FinanceExpenseToNavigen.csv");
+            catch (Exception ex )
+            {
+
+               // throw ex;
+            }
+          
         }
 
         [Authorize(Roles = AuthorizationRoles.FINANCE)]
