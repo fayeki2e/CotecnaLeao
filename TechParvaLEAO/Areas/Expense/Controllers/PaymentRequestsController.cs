@@ -32,6 +32,7 @@ using TechParvaLEAO.Service;
 using TechParvaLEAO.Services;
 using System.Globalization;
 using System.Data.SqlClient;
+using DocumentFormat.OpenXml.Bibliography;
 
 namespace TechParvaLEAO.Areas.Expense.Controllers
 {
@@ -1246,10 +1247,11 @@ namespace TechParvaLEAO.Areas.Expense.Controllers
             }
             catch (Exception ex )
             {
+                return File(Encoding.ASCII.GetBytes(ex.ToString()), "text/csv", "FinanceExpenseToNavigen.csv");
 
-               // throw ex;
+                // throw ex;
             }
-          
+
         }
 
         [Authorize(Roles = AuthorizationRoles.FINANCE)]
