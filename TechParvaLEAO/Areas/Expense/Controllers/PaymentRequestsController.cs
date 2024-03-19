@@ -1246,8 +1246,7 @@ namespace TechParvaLEAO.Areas.Expense.Controllers
             }
             catch (Exception ex )
             {
-
-               // throw ex;
+                throw ex;
             }
           
         }
